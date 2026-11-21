@@ -1,6 +1,6 @@
 -- Jet: Pflichttests Lua-Studio-Format 2 (Format 2, Abschnitt 9, Tests 1–17) auf dem Mac, mit dem echten kern.lua.
 -- Aufruf aus dem Repo-Ordner:  /opt/homebrew/opt/lua@5.4/bin/lua test/format2-test.lua ["<Ordner Testdateien>"]
---   Ordner = «FrSky Koordination/Lua-Studio-Format 2 - Testdateien» (p*.lua und symbole/), wird nur gelesen.
+--   Ordner = the folder with the Lua-Studio format 2 test files (p*.lua und symbole/), wird nur gelesen.
 --   Ohne Angabe: Ordner aus der Umgebungsvariable JET_FORMAT2_TESTDATEIEN (Testdateien zum Lua-Studio-Format 2).
 -- Läuft in einer Kopie von src/jet in einem temporären Ordner. Die Testdateien nennen Elektro-Werte (lua:akku_proz …);
 -- der Test ersetzt sie durch Jet-Werte, sonst bleiben die Dateien gleich. Prüft je Testdatei: geladen / fehlend /

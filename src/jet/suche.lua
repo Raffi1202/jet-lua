@@ -1,4 +1,4 @@
--- Jet: Sensoren automatisch zuweisen (Vorgaben Sensorzuordnung, FrSky Koordination, 20.11.2026; Muster Elektro).
+-- Jet: Sensoren automatisch zuweisen (Vorgaben Sensorzuordnung, 20.11.2026; Muster Elektro).
 -- Füllt nur leere Felder; was von Hand gesetzt ist, bleibt.
 -- Stufe 1, Kennung: AppID + Teilwert -> Schlüssel (kennung.lua, gemeinsame Tabelle, dazu die Turbinen-AppIDs
 --   unten in TURBINE, die Ethos nicht selbst anlegt). Je Feld eine Rangfolge von Schlüsseln; der erste Schlüssel,

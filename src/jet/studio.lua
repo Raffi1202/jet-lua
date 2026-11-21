@@ -1,4 +1,4 @@
--- Jet: Studio-Datei je Modell lesen, prüfen und anwenden (Lua-Studio-Format v1, FrSky Koordination).
+-- Jet: Studio-Datei je Modell lesen, prüfen und anwenden (Lua-Studio-Format v1).
 -- Wird nur geladen, solange ein Modell geladen wird bzw. eine Studio-Datei gilt. Alles in Schritten: Der Kern ruft
 -- M.schritt(w) je wakeup auf, bis es «fertig» meldet (Befehlsgrenze am Sender).
 -- Dateien: SCRIPTS:/studio/<Kennung>.jet.lua (schreibt nur das Studio), .funke.lua (schreibt nur dieses Lua),
