@@ -34,3 +34,10 @@ Example of a Studio file, compact 784 × 316 (German display)
 
 ---
 [← Home](../Home.md) | [Previous](Alarms.md) | [Next →](FAQ.md)
+
+## Finding the Studio layout (from 0.5.0)
+
+- **Places:** Jet searches the Studio file in `SCRIPTS:/studio/`, `SD:/scripts/studio/` and `RADIO:/scripts/studio/`.
+- **Any name:** if the file name does not match the model name, choose the file in the widget menu under **«Studio layout»** (list with the place in brackets). «automatic (model name)» takes `ModelName.jet.lua` as before. The menu choice wins.
+- **Any window size:** without a view for exactly this size, Jet scales the most similar view and shows «Studio: view 800x480 adapted» for 5 seconds. Slots that get too small are shown as a number or left out.
+- **Hint line:** if Jet shows the default display although there is a file, the reason is shown at the bottom, e.g. «Studio: file faulty (…)» or «Studio: no matching view».

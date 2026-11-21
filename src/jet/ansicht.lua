@@ -199,7 +199,7 @@ function A.zeichne(w, L, Z, ans, ST)
   local SY = w.sym
   if SY then                                             -- Format 2: Schmuck nach dem Hintergrund, vor den Plätzen
     SY.bildAnfang()
-    if ans.roh then SY.deko(ans.roh, 0, 0, Z.C.titel) end
+    if ans.roh then SY.deko(ans.roh, 0, 0, Z.C.titel, ans.sk) end
   end
   for i, q in ipairs(ans.plaetze) do
     local ok, e = pcall(zeichnePlatz, w, L, Z, q, ST, i)

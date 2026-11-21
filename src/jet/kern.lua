@@ -1050,7 +1050,8 @@ local function testZustand(w, now)
     absch = w.absch and true or false, rahmen = w.rahmenHerst or false, mlRest = w.v.mlRest or false, proz = w.v.proz or false,
     nWechsel = #w.wechsel, suchHinweis = w.suchHinweis or false, widersp = w.widerspK or false,
     studio = w.studioZustand or "", studioFehler = w.studioFehler or 0, kennung = w.studioKennung or "",
-    studioHinweis = w.sHinweis or "", ansicht = (w.studio and w.L and w.studio.ansichten[w.L.W .. "x" .. w.L.H]) and true or false,
+    studioHinweis = w.sHinweis or "", sDauer = w.sDauer or "", studioQuelle = w.studioQuelle or "",
+    studioWahl = w.studioWahlArt or "", angepasst = w.angepasst or false, ansichtGenutzt = w.ansichtGenutzt or "", ansicht = (w.studio and w.L and w.studio.ansichten[w.L.W .. "x" .. w.L.H]) and true or false,
     tank = w.cfg.tank, egtW = w.cfg.egtW, egtA = w.cfg.egtA, ecuW = w.cfg.ecuW, ecuA = w.cfg.ecuA, kraftW = w.cfg.kraftW,
     kraftA = w.cfg.kraftA,
     symbole = (w.sym and not w.symOffen) and (select(1, w.sym.zaehler())) or 0 }   -- Format 2: geladene Symbole
@@ -1088,8 +1089,8 @@ local function symFrei(w)
 end
 
 -- Studio-Hinweis: Band unten (8 s), danach «!» oben rechts bis zum nächsten Modellwechsel; Text auch ins Log
-local function studioHinweis(w, text, now)
-  w.sHinweis, w.sHinweisBis, w.sAusruf = text, now + STUDIO_HINWEIS_S, true
+local function studioHinweis(w, text, now, dauer)
+  w.sHinweis, w.sHinweisBis, w.sAusruf = text, now + (dauer or STUDIO_HINWEIS_S), true
   print(tostring(w.name) .. ": " .. text)
 end
 
@@ -1097,6 +1098,30 @@ end
 -- Quellen suchen, Min/Max/Kurven führen, Änderungen aus dem Menü in .funke.lua schreiben und die Info-Datei.
 -- Die Sicherheitslogik (Abschaltung, Grenzwert-Alarme, Ansagen) bleibt im Kern; die Datei setzt nur Einstellungen
 -- und Grenzen und fügt Grenzen für weitere Werte hinzu.
+-- Ansicht für die aktuelle Fenstergrösse: genau passend, sonst einmal je Grösse umrechnen (R3); keine: Hinweiszeile
+local function ansichtPruefen(w, now)
+  local S, W, H, T = w.studio, w.L.W, w.L.H, w.T
+  local key = W .. "x" .. H
+  local a = S.ansichten[key]
+  if a == nil and not w.ansichtVersucht[key] then
+    w.ansichtVersucht[key] = true
+    a = STUDIO.anpassen(S.ansichten, W, H, function(b, h) return Z.layout(b, h).kh end)
+    if a then
+      S.ansichten[key] = a
+      local t = string.format(T.studioAngepasst, a.quelle)
+      if a.weg > 0 then t = t .. ", " .. string.format(T.studioWeg, tostring(a.weg)) end
+      studioHinweis(w, t, now, 5)
+    end
+  end
+  local gen = a and (a.angepasst and a.quelle or key) or ""
+  local dauer = (a == nil and w.seite == 1) and T.studioKeineAnsicht or nil
+  if gen ~= w.ansichtGenutzt or (a and a.angepasst or false) ~= w.angepasst or dauer ~= w.sDauerAnsicht then
+    w.ansichtGenutzt, w.angepasst, w.infoOffen = gen, a and a.angepasst or false, true
+    if w.sDauer == nil or w.sDauer == w.sDauerAnsicht then w.sDauer = dauer end
+    w.sDauerAnsicht = dauer
+  end
+end
+
 local function studioWecke(w, now)
   local T = w.T
   if STUDIO == nil then
@@ -1127,6 +1152,13 @@ local function studioWecke(w, now)
     if J.zustand ~= "geladen" then w.studio = nil end
     w.studioKennung = J.k
     w.studioFehler = 0
+    -- Woher die Datei kam (Info-Datei) und die bleibende Hinweiszeile, wenn trotz Datei der Standard gilt
+    w.studioQuelle, w.studioWahlArt = J.quelle or "", J.wahl or "auto"
+    w.sDauer, w.angepasst, w.ansichtGenutzt, w.ansichtVersucht = nil, false, "", {}
+    local dname = J.quelle and J.quelle:match("[^/]*$") or ""
+    if J.zustand == "kaputt" then w.sDauer = string.format(T.studioDateiFehler, dname)
+    elseif J.zustand == "zuNeu" then w.sDauer = T.studioZuNeu
+    elseif J.zustand == "fehlt" and J.wahl == "menue" then w.sDauer = string.format(T.studioDateiFehlt, dname) end
     if J.zustand == "geladen" then
       if J.roh then                                     -- Format 2: Symbole in eigenen wakeup prüfen und laden
         local okS, SY = pcall(lade, "studio_symbole.lua")
@@ -1152,6 +1184,7 @@ local function studioWecke(w, now)
     end
     return
   end
+  if w.studio and w.L then ansichtPruefen(w, now) end
   if w.studio then STUDIO.wecke(w, now) end
   if w.symOffen and w.sym then                          -- Symbole: Prüfen und Laden in Stücken (nie in paint)
     local ok, fertig = pcall(w.sym.schritt)
@@ -1218,7 +1251,7 @@ function K.wecke(w)
     lauf(w, now, dt)
     warnungen(w, now)
     ansagen(w, now)
-    if w.sHinweis and now >= w.sHinweisBis then w.sHinweis = nil end
+    if w.sHinweis and now >= w.sHinweisBis then w.sHinweis, w.infoOffen = nil, true end
     if not seiteDa(w, w.seite) then w.seite = 1 end
     if TEST and TEST.zustand then testZustand(w, now) end
     if w.hinweis and now >= w.hinweisBis then w.hinweis = nil end
@@ -1496,6 +1529,18 @@ function K.menue(w)
   end, function(id, arg)
     aktion(w, id, arg, os.clock())
   end, K)
+end
+
+-- Für das Menü: studio.lua (Dateiliste) und neu laden nach einer anderen Wahl der Studio-Datei
+function K.studioModul()
+  if STUDIO == nil then STUDIO = lade("studio.lua") end
+  return STUDIO
+end
+function K.studioNeu(w)
+  w.studio, w.studioFertig, w.studioJob, w.studioErg, w.studioF = nil, false, nil, nil, nil
+  w.sDauer, w.sDauerAnsicht, w.sHinweis = nil, nil, nil
+  symFrei(w)
+  grenzen(w)
 end
 
 function K.lies(w)

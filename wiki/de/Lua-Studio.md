@@ -34,3 +34,10 @@ Beispiel einer Studio-Datei kompakt 784 × 316
 
 ---
 [← Start](../Home.md) | [Zurück](Alarme.md) | [Weiter →](FAQ.md)
+
+## Studio-Layout finden (ab 0.5.0)
+
+- **Orte:** Jet sucht die Studio-Datei in `SCRIPTS:/studio/`, `SD:/scripts/studio/` und `RADIO:/scripts/studio/`.
+- **Name egal:** Passt der Dateiname nicht zum Modellnamen, im Widget-Menü unter **«Studio-Layout»** die Datei wählen (Liste mit Ort in Klammern). «automatisch (Modellname)» nimmt wie bisher `Modellname.jet.lua`. Die Wahl im Menü gewinnt.
+- **Fenstergrösse egal:** Gibt es keine Ansicht für genau diese Grösse, rechnet Jet die ähnlichste Ansicht um und zeigt 5 Sekunden «Studio: Ansicht 800x480 angepasst». Zu kleine Plätze werden als Zahl gezeigt oder weggelassen.
+- **Hinweiszeile:** Zeigt Jet trotz Datei die Standardanzeige, steht unten der Grund, z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».

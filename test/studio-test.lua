@@ -22,6 +22,8 @@ end
 -- Ethos-Umgebung: SCRIPTS:/ -> tmp/SCRIPTS/, relative Pfade -> Skriptordner
 local function pfad(p)
   if p:sub(1, 9) == "SCRIPTS:/" then return tmp .. "/SCRIPTS/" .. p:sub(10) end
+  if p:sub(1, 4) == "SD:/" then return tmp .. "/SD/" .. p:sub(5) end
+  if p:sub(1, 7) == "RADIO:/" then return tmp .. "/RADIO/" .. p:sub(8) end
   if p:sub(1, 1) == "/" then return p end
   return tmp .. "/jet/" .. p
 end
@@ -53,8 +55,8 @@ local ziel = tmp .. "/SCRIPTS/studio/TEST.jet.lua"
 
 -- ein ganzer Ladevorgang; Rückgabe Ergebnis, grösste Befehlszahl je Aufruf, Fehlertext (grStufe: Stufe dazu)
 local grStufe
-local function ganz()
-  local w = {}
+local function ganz(w0)
+  local w = w0 or {}
   local hoechst, r = 0, nil
   for _ = 1, 2000 do
     local n = 0
@@ -515,6 +517,49 @@ model.name = function() return "M\195\182we 1" end
 pruefe(ST.kennung() == "M__we_1", "Kennung «Möwe 1» -> M__we_1")
 model.name = function() return "" end
 pruefe(ST.kennung() == "modell", "Kennung leer -> modell")
+
+
+-- l) Studio-Layout sicher finden (0.5.0): Suchorte SCRIPTS: > SD: > RADIO:, Wahl im Menü, Umrechnen
+do
+  local inhalt = "return { format = 1, einstellungen = { tank = 4321 } }\n"
+  local function schreib(p, t) os.execute("mkdir -p '" .. p:match("(.*)/") .. "'") local x = io_open(p, "w") x:write(t) x:close() end
+  os_remove(ziel)
+  schreib(tmp .. "/RADIO/scripts/studio/TEST.jet.lua", inhalt)
+  local J = ganz({ testKennung = "TEST" })
+  pruefe(J and J.zustand == "geladen" and J.quelle == "RADIO:/scripts/studio/TEST.jet.lua" and J.wahl == "auto", "l) nur RADIO: gefunden, Quelle RADIO")
+  schreib(tmp .. "/SD/scripts/studio/TEST.jet.lua", inhalt)
+  J = ganz({ testKennung = "TEST" })
+  pruefe(J and J.quelle == "SD:/scripts/studio/TEST.jet.lua", "l) SD: vor RADIO:")
+  datei(inhalt)
+  J = ganz({ testKennung = "TEST" })
+  pruefe(J and J.quelle == "SCRIPTS:/studio/TEST.jet.lua", "l) SCRIPTS: zuerst")
+  schreib(tmp .. "/SD/scripts/studio/Falsch.jet.lua", inhalt)
+  J = ganz({ studioWahl = "SD:/scripts/studio/Falsch.jet.lua" })
+  pruefe(J and J.zustand == "geladen" and J.wahl == "menue" and J.quelle == "SD:/scripts/studio/Falsch.jet.lua", "l) Wahl im Menü gewinnt")
+  J = ganz({ studioWahl = "SD:/scripts/studio/Weg.jet.lua" })
+  pruefe(J and J.zustand == "fehlt" and J.wahl == "menue", "l) gewählte Datei fehlt: Zustand fehlt")
+  schreib(tmp .. "/SD/scripts/studio/Kaputt.jet.lua", "return { format = 1, a = os.exit }")
+  J = ganz({ studioWahl = "SD:/scripts/studio/Kaputt.jet.lua" })
+  pruefe(J and J.zustand == "kaputt", "l) gewählte Datei kaputt")
+  -- Umrechnen: 800x480 -> 784x316, Kopf 56 bzw. 33 px
+  local function kopf(b, h) return (h < b * 0.5) and 33 or 56 end
+  local A = { ["800x480"] = { breite = 800, hoehe = 480, plaetze = {
+    { x = 8, y = 64, b = 190, h = 198, darst = "ring", art = "lua", w = "lua:egt" },
+    { x = 8, y = 270, b = 232, h = 154, darst = "status", art = "lua", w = "lua:status" },
+    { x = 616, y = 375, b = 92, h = 52, darst = "zahl", art = "lua", w = "lua:hoehe" } } } }
+  local r = ST.anpassen(A, 784, 316, kopf)
+  local innen = true
+  for _, q in ipairs(r and r.plaetze or {}) do
+    if q.x < 0 or q.y < 33 or q.x + q.b > 784 or q.y + q.h > 316 then innen = false end
+  end
+  pruefe(r and r.angepasst and r.quelle == "800x480" and innen, "l) umgerechnet, alle Plätze unter der Kopfzeile in 784x316")
+  pruefe(r and r.plaetze[1].darst == "ring" and r.plaetze[2].darst == "status" and r.weg == 1 and #r.plaetze == 2, "l) grosse Plätze bleiben, zu kleine Zahl fällt weg (gezählt)")
+  A["784x316"] = { breite = 784, hoehe = 316, plaetze = {} }
+  r = ST.anpassen(A, 630, 258, kopf)
+  pruefe(r and r.quelle == "784x316", "l) ähnlichstes Seitenverhältnis gewählt")
+  pruefe(ST.anpassen({}, 640, 360, kopf) == nil, "l) ohne Ansicht: keine")
+  os_remove(ziel)
+end
 
 os.execute("rm -rf '" .. tmp .. "'")
 print = print_

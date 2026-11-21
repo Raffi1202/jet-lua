@@ -42,6 +42,24 @@ return function(w, F, fertig, suche, aktion, K)
       else frage(T.qStandard, T.qStandardZ, T.jaZurueck, "ja_standard") end
     end })
   end
+  -- Studio-Layout: automatisch (Datei nach Modellnamen) oder eine Datei aus SCRIPTS:, SD: und RADIO: (Liste nur hier)
+  local okL, ST = pcall(K.studioModul)
+  local dateien = okL and ST and ST.liste() or {}
+  local wahlen, akt = { { T.mLayoutAuto or "automatisch", 0 } }, 0
+  for i, d in ipairs(dateien) do
+    wahlen[#wahlen + 1] = { d[2], i }
+    if d[1] == w.studioWahl then akt = i end
+  end
+  if akt == 0 and type(w.studioWahl) == "string" and w.studioWahl ~= "" then   -- gewählt, aber nicht mehr da
+    dateien[#dateien + 1] = { w.studioWahl, w.studioWahl:match("[^/]*$") .. " (?)" }
+    akt = #dateien
+    wahlen[#wahlen + 1] = { dateien[akt][2], akt }
+  end
+  form.addChoiceField(form.addLine(T.mLayout or "Studio-Layout"), nil, wahlen, function() return akt end, function(v)
+    akt = v
+    w.studioWahl = v > 0 and dateien[v] and dateien[v][1] or ""
+    pcall(K.studioNeu, w)
+  end)
   -- Erkannter bzw. gewählter Hersteller
   local h = K.hersteller(w)
   local ht = h and T.hersteller and T.hersteller[h] or T.mNichts

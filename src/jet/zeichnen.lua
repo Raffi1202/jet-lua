@@ -348,11 +348,12 @@ end
 -- Studio-Hinweis (Lua-Studio-Format v1): ein Band unten, 24 Pixel hoch, dunkel, über den Plätzen; danach «!» oben
 -- rechts bis zum nächsten Modellwechsel
 function Z.studioHinweis(w, L)
-  if not w.sAusruf then return end
+  if not w.sAusruf and not w.sDauer then return end
   local C, W, H = Z.C, L.W, L.H
-  if w.sHinweis then
+  local t = w.sHinweis or w.sDauer       -- kurzer Hinweis, sonst die bleibende Zeile (Standard trotz Studio-Datei)
+  if t then
     Z.rechteck(0, H - 24, W, 24, C.dunkel)
-    Z.text(L, W / 2, H - 12, w.sHinweis, 14, C.orange, CENTERED, W - 8, true)
+    Z.text(L, W / 2, H - 12, t, 14, C.orange, CENTERED, W - 8, true)
   else
     local r = 9
     local ym = max(r + 2, floor(L.kh / 2))

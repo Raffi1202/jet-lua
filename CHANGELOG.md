@@ -4,6 +4,16 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.5.0 (2026-11-22)
+
+Studio layout is always found (Lua-Studio issue #1):
+- **Search places:** the Studio file is searched in `SCRIPTS:/studio/`, `SD:/scripts/studio/` and `RADIO:/scripts/studio/` (in this order, the same place only once). Changes on the radio (`.funke.lua`) and the info file stay in `SCRIPTS:/studio/`.
+- **Any file name:** new menu line **«Studio layout»**: «automatic (model name)» or any `*.jet.lua` of the three places. A choice in the menu wins over the model name. Stored at the end of the widget storage (storage FORMAT 2); an update from 0.4.0 keeps all sensors, the choice is «automatic».
+- **Any window size:** without an exact view, Jet takes the view with the most similar aspect ratio (tie: larger area) and scales all slots and decoration to the free area below its own header, once when loading. Slots that get too small are shown as a number, or left out and counted. Hint for 5 s: «Studio: view 800x480 adapted».
+- **Feedback:** if the default display is shown although a file was found or chosen, a line at the bottom tells why («Studio: file faulty (…)», «Studio: no matching view», «Studio: chosen file missing (…)»).
+- **Info file:** new fields at the end: `studioQuelle`, `studioWahl` (`auto`/`menue`), `ansichtGenutzt`, `angepasst`, `hinweis`.
+- Unchanged: Studio format 1/2, «no shutdown without aus», `beiMotorAus`, memory release, alarms and announcements.
+
 ## 0.4.0 (2026-11-21)
 
 Pre-release (public beta), tested in the Ethos simulator; transmitter test on the X18RS follows.

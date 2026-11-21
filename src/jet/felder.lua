@@ -173,8 +173,9 @@ M.folge = {
 -- Speicherformat der Quellen im Widget-Speicher: Nummer -> Zahl der Quellen in diesem Format.
 -- Kommt eine Quelle dazu: ans Ende von M.folge, FORMAT um eins erhöhen und hier eine Zeile anfügen. Alte Formate
 -- bleiben stehen, damit ein Update die Zuweisungen behält (Lehre Motoren ECU 1.2.0, 19.11.2026).
-M.FORMAT = 1
-M.FORMATE = { [1] = 22 }
+-- FORMAT 2 (0.5.0): nach den Quellen folgt die im Menü gewählte Studio-Datei (Pfad, "" = automatisch).
+M.FORMAT = 2
+M.FORMATE = { [1] = 22, [2] = 22 }
 -- Format der Datei daten/<Modell>.txt: 2 ab 0.1.1 (0.1.0 schrieb keine Nummer)
 M.DVER = 2
 
@@ -325,6 +326,7 @@ end
 function M.lies(w)
   local c = M.standard()
   w.cfg = c
+  w.studioWahl = ""
   local gefunden = false
   -- Quellen aus dem Widget-Speicher, in jedem bekannten Format
   if storage and storage.read then
@@ -339,7 +341,9 @@ function M.lies(w)
     if anz then
       local werte = {}
       for i = 1, anz do werte[i] = hol("q" .. i) end
+      local wahl = fmt >= 2 and hol("wahl") or ""
       if hol("ende") == fmt then
+        w.studioWahl = (type(wahl) == "string" and #wahl <= 120) and wahl or ""
         gefunden = true
         for i, name in ipairs(q) do
           if i <= anz then c[name] = istQuelle(werte[i]) and werte[i] or nil end
@@ -396,6 +400,7 @@ function M.schreibe(w)
     local v = c[name]
     pcall(storage.write, "q" .. i, istQuelle(v) and v or 0)
   end
+  pcall(storage.write, "wahl", type(w.studioWahl) == "string" and w.studioWahl or "")
   pcall(storage.write, "ende", M.FORMAT)
 end
 

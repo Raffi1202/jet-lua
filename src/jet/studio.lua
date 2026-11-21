@@ -1,8 +1,9 @@
 -- Jet: Studio-Datei je Modell lesen, prüfen und anwenden (Lua-Studio-Format v1).
 -- Wird nur geladen, solange ein Modell geladen wird bzw. eine Studio-Datei gilt. Alles in Schritten: Der Kern ruft
 -- M.schritt(w) je wakeup auf, bis es «fertig» meldet (Befehlsgrenze am Sender).
--- Dateien: SCRIPTS:/studio/<Kennung>.jet.lua (schreibt nur das Studio), .funke.lua (schreibt nur dieses Lua),
--- .info.json (schreibt nur dieses Lua, liest nur das Studio).
+-- Dateien: <Kennung>.jet.lua (schreibt nur das Studio; gesucht in SCRIPTS:/studio/, SD:/scripts/studio/,
+-- RADIO:/scripts/studio/ oder im Menü gewählt), SCRIPTS:/studio/<Kennung>.jet.funke.lua (schreibt nur dieses Lua),
+-- SCRIPTS:/studio/<Kennung>.jet.info.json (schreibt nur dieses Lua, liest nur das Studio).
 local M = {}
 local floor = math.floor
 
@@ -10,6 +11,35 @@ M.ORDNER = "SCRIPTS:/studio/"
 M.LUA = "jet"
 M.FORMAT = 2           -- höchstes Format, das diese Version liest (Format 2 seit 0.3.0)
 M.FORMATE = { 1, 2 }   -- für die Info-Datei
+-- Suchorte der Studio-Datei in dieser Reihenfolge. SCRIPTS: ist SD: oder RADIO:, je nach Skript-Speicherort;
+-- liegt Jet selbst unter SD:/scripts/jet (bzw. RADIO:), ist dieser Ort derselbe und wird nur einmal durchsucht.
+M.ORTE = { { "SCRIPTS:/studio/", "SCRIPTS" }, { "SD:/scripts/studio/", "SD" }, { "RADIO:/scripts/studio/", "RADIO" } }
+function M.orte()
+  local function da(p) local ok, f = pcall(io.open, p, "r") if ok and f then f:close() return true end return false end
+  local gleich = (da("SD:/scripts/jet/main.lua") and "SD") or (da("RADIO:/scripts/jet/main.lua") and "RADIO") or nil
+  local r = {}
+  for _, o in ipairs(M.ORTE) do
+    if o[2] ~= gleich then r[#r + 1] = o end
+  end
+  return r
+end
+
+-- Alle Studio-Dateien dieses Luas an allen Orten (für das Menü, nur beim Öffnen): { { pfad, anzeige }, ... }
+function M.liste()
+  local r, ende = {}, "." .. M.LUA .. ".lua"
+  for _, o in ipairs(M.orte()) do
+    local ok, l = pcall(system.listFiles, o[1])
+    if ok and type(l) == "table" then
+      for _, n in ipairs(l) do
+        if type(n) == "string" and #r < 40 and n:sub(-#ende) == ende and n:sub(-#ende - 6) ~= ".funke" .. ende then
+          r[#r + 1] = { o[1] .. n, n:sub(1, -#ende - 1) .. " (" .. o[2] .. ")" }
+        end
+      end
+    end
+  end
+  return r
+end
+
 M.MAX_EXTRA = 6        -- weitere Grenzen (Sensoren, Kanäle, nicht überwachte Lua-Werte), siehe Stufe 3 beim Anwenden
 
 -- ===== Referenz studioLaden, WÖRTLICH aus «Lua-Studio-Format v1 - Referenz studio_laden.lua» =====
@@ -437,6 +467,40 @@ local function pruefeAnsicht(J, i, a)
   return true
 end
 
+-- Ansicht für eine Fenstergrösse ohne eigene Ansicht (einmal je Grösse, im wakeup): die Ansicht mit dem ähnlichsten
+-- Seitenverhältnis, bei Gleichstand die grössere Fläche; Plätze proportional auf die freie Fläche unter der eigenen
+-- Kopfzeile. kopf(b, h) = Kopfzeilenhöhe dieses Luas bei dieser Fenstergrösse. Zu kleine Plätze werden «zahl», sind
+-- sie auch dafür zu klein, fallen sie weg (gezählt in .weg). Rückgabe: Ansicht oder nil (keine da)
+function M.anpassen(ansichten, W, H, kopf)
+  local best, bd, bf
+  for _, a in pairs(ansichten) do
+    if not a.angepasst then
+      local d = math.abs(math.log((a.breite / a.hoehe) / (W / H)))
+      local f = a.breite * a.hoehe
+      if best == nil or d < bd - 1e-9 or (d <= bd + 1e-9 and f > bf) then best, bd, bf = a, d, f end
+    end
+  end
+  if best == nil then return nil end
+  local kq, kz = kopf(best.breite, best.hoehe), kopf(W, H)
+  local fx, fy = W / best.breite, (H - kz) / (best.hoehe - kq)
+  local r = { breite = W, hoehe = H, plaetze = {}, roh = best.roh, angepasst = true, weg = 0,
+    quelle = best.breite .. "x" .. best.hoehe, sk = { fx = fx, fy = fy, kq = kq, kz = kz, W = W, H = H } }
+  local function mind(d, n) return floor(M.DARST[d][n] * W / 800 + 0.5) end
+  for _, q in ipairs(best.plaetze) do
+    local oben = math.max(q.y, kq)
+    local n = {}
+    for k, v in pairs(q) do n[k] = v end
+    n.x = floor(q.x * fx + 0.5)
+    n.y = floor(kz + (oben - kq) * fy + 0.5)
+    n.b = math.min(floor(q.b * fx + 0.5), W - n.x)
+    n.h = math.min(floor((q.y + q.h - oben) * fy + 0.5), H - n.y)
+    if n.darst ~= "zahl" and q.art ~= "leer" and (n.b < mind(n.darst, 1) or n.h < mind(n.darst, 2)) then n.darst = "zahl" end
+    if n.b < mind("zahl", 1) or n.h < mind("zahl", 2) then r.weg = r.weg + 1
+    else r.plaetze[#r.plaetze + 1] = n end
+  end
+  return r
+end
+
 -- ===== Ablauf beim Modellwechsel, ein Schritt je Aufruf =====
 -- Rückgabe: nil = läuft noch, sonst das Ergebnis { zustand = "fehlt"|"geladen"|"kaputt"|"zuNeu", ... }
 function M.schritt(w, F)
@@ -448,11 +512,22 @@ function M.schritt(w, F)
     w.studioJob = J
     return nil
   end
-  if J.stufe == 1 then                                   -- Studio-Datei laden
-    local d, grund = studioLaden(J.basis .. ".lua", M.FORMAT)
+  if J.stufe == 1 then                                   -- Studio-Datei suchen und laden
+    -- Gewählt im Menü gewinnt; sonst <Kennung>.jet.lua am ersten Ort, der sie hat
+    local d, grund
+    if type(w.studioWahl) == "string" and w.studioWahl ~= "" then
+      J.wahl, J.quelle = "menue", w.studioWahl
+      d, grund = studioLaden(w.studioWahl, M.FORMAT)
+    else
+      J.wahl, grund = "auto", "fehlt"
+      for _, o in ipairs(M.orte()) do
+        d, grund = studioLaden(o[1] .. J.datei, M.FORMAT)
+        if grund ~= "fehlt" then J.quelle = o[1] .. J.datei break end
+      end
+    end
     if not d then
       J.zustand = grund
-      if grund ~= "fehlt" then print("Jet: Studio-Datei " .. J.datei .. ": " .. grund) end
+      if grund ~= "fehlt" then print("Jet: Studio-Datei " .. tostring(J.quelle) .. ": " .. grund) end
       w.studioJob = nil
       return J
     end
@@ -686,7 +761,10 @@ function M.infoSchritt(w, version, formate)
     .. ',\n "funke": ' .. jtext(ver.board) .. ',\n "ethos": ' .. jtext(ver.version)
     .. ',\n "fenster": [' .. table.concat(fenster, ", ") .. '],\n "beiMotorAus": true,\n "studioDatei": ' .. jtext(st)
     .. ((w.studioFehler and w.studioFehler > 0) and (',\n "fehler": ' .. w.studioFehler) or "")
-    .. ',\n "sensoren": [\n  ' .. table.concat(I.s, ",\n  ") .. '\n ]\n}\n'
+    .. ',\n "sensoren": [\n  ' .. table.concat(I.s, ",\n  ") .. '\n ]'
+    .. ',\n "studioQuelle": ' .. jtext(w.studioQuelle or "") .. ',\n "studioWahl": ' .. jtext(w.studioWahlArt or "auto")
+    .. ',\n "ansichtGenutzt": ' .. jtext(w.ansichtGenutzt or "") .. ',\n "angepasst": ' .. tostring(w.angepasst == true)
+    .. ',\n "hinweis": ' .. jtext(w.sDauer or w.sHinweis or "") .. '\n}\n'
   w.infoJob = nil
   if t == w.infoAlt then return true end               -- nichts geändert: nicht schreiben (SD-Karte schonen)
   pcall(os.mkdir, "SCRIPTS:/studio")

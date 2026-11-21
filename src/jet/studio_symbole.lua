@@ -372,7 +372,8 @@ local JE_BILD_TEXT = 2       -- Texte je paint, die zum ersten Mal gemessen werd
 local function textVorbereiten(g)
   g.s = g.h >= 40 and FONT_XL or g.h >= 30 and FONT_L or g.h >= 22 and FONT_STD or g.h >= 16 and FONT_S or FONT_XS
   lcd.font(g.s)
-  local t = g.t
+  g.t0 = g.t0 or g.t
+  local t = g.t0
   if lcd.getTextSize(t) > g.b then
     local lo, hi = 0, #t - 1     -- längste passende Länge in [lo, hi]
     while lo < hi do
@@ -407,9 +408,36 @@ local function dekoRoh(liste, ox, oy, std)
   end
 end
 
-function S.deko(a, ox, oy, standardFarbe)
+-- Umgerechnete Ansicht (andere Fenstergrösse): Lage und Grösse einmal umrechnen, Symbole behalten ihre Grösse.
+-- Elemente in der Kopfzeile der Quelle oder ausserhalb der Fläche fallen weg.
+local skaliert = setmetatable({}, { __mode = "k" })
+local function skaliere(liste, sk)
+  local r = {}
+  for i = 1, #liste do
+    local g = liste[i]
+    if g.y >= sk.kq then
+      local n = {}
+      for k, v in pairs(g) do n[k] = v end
+      n.x, n.y = math.floor(g.x * sk.fx + 0.5), math.floor(sk.kz + (g.y - sk.kq) * sk.fy + 0.5)
+      if g.a ~= "symbol" and g.b then n.b = math.floor(g.b * sk.fx + 0.5) end
+      if (g.a == "linie" or g.a == "rahmen") and g.h then n.h = math.floor(g.h * sk.fy + 0.5) end
+      if g.a == "text" then n.s, n.t = nil, g.t0 or g.t end
+      local e = g.a == "symbol" and masken[g.k]
+      if e and e.k then n.x, n.y = math.min(n.x, sk.W - e.k), math.min(n.y, sk.H - e.k) end
+      r[#r + 1] = n
+    end
+  end
+  return r
+end
+
+function S.deko(a, ox, oy, standardFarbe, sk)
   if not daten or phase == 1 or type(a) ~= "table" then return end
   local liste = dekoListen[a]
+  if liste and not liste.n and sk then
+    local l2 = skaliert[liste]
+    if l2 == nil then l2 = skaliere(liste, sk) skaliert[liste] = l2 end
+    liste = l2
+  end
   -- Ansicht noch nicht fertig geprüft (S.schritt läuft noch) oder fremde Tabelle: noch keinen Schmuck zeichnen.
   -- Nie in paint prüfen (Befehlsgrenze).
   if not liste or liste.n then return end
