@@ -35,7 +35,7 @@
 | Project | What it does |
 |---|---|
 | [Electric](https://github.com/Raffi1202/electric-lua) | Ethos widget for electric models |
-| [Heli](https://github.com/Raffi1202/heli-lua) | Ethos widget for helicopters (Rotorflight) |
+| [Heli](https://github.com/Raffi1202/heli-lua) | Ethos widget for helicopters with telemetry (any flybarless system) |
 | [Glider](https://github.com/Raffi1202/glider-lua) | Ethos widget for gliders (vario, thermals) |
 | [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos widgets for gas engines |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC app to set up the widgets (Mac/Windows) |
@@ -45,7 +45,7 @@
 | Projekt | Wozu |
 |---|---|
 | [Electric](https://github.com/Raffi1202/electric-lua) | Ethos-Widget für Elektromodelle |
-| [Heli](https://github.com/Raffi1202/heli-lua) | Ethos-Widget für Helis (Rotorflight) |
+| [Heli](https://github.com/Raffi1202/heli-lua) | Ethos-Widget für Helis mit Telemetrie (jedes Flybarless-System) |
 | [Glider](https://github.com/Raffi1202/glider-lua) | Ethos-Widget für Segler (Vario, Thermik) |
 | [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos-Widgets für Verbrennungsmotoren |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC-Programm zum Einrichten der Widgets (Mac/Windows) |
