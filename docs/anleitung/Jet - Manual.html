@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Jet – Manual</title>
+<!--
+  ANLEITUNG zum Ausdrucken (A4). Aufbau und Stil sind in jedem Lua gleich (bauplan.md, Abschnitt Anleitung):
+  Kapitel in dieser Reihenfolge lassen, Beispieltexte ersetzen, nichts Leeres stehen lassen.
+  Danach jede Seite der PDF ansehen (Umbrüche, Bilder, Tabellen).
+  Nummern auf einem Bild: <span class="nr" style="left:12%;top:30%">1</span> innerhalb von <div class="bild">.
+-->
+<style>
+  @page { size: A4; margin: 16mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 10.5pt; line-height: 1.42; color: #1a1f2b; margin: 0; }
+  h1 { font-size: 24pt; margin: 0 0 2mm; }
+  h2 { font-size: 14.5pt; margin: 7mm 0 2.5mm; padding-bottom: 1mm; border-bottom: 1.5pt solid #1f4f96; color: #12305e; break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 4mm 0 1.5mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  ol, ul { margin: 0 0 2.5mm; padding-left: 6mm; }
+  li { margin-bottom: 1.2mm; break-inside: avoid; }
+  .unter { color: #56607a; font-size: 11pt; margin-bottom: 5mm; }
+  .bild { position: relative; width: 100%; margin: 3mm 0; break-inside: avoid; }
+  .bild img { width: 100%; display: block; border-radius: 2mm; border: 0.5pt solid #99a; }
+  .bild .t, .halb .t { font-size: 9pt; color: #56607a; margin-top: 1mm; }
+  .schmal { width: 72%; margin-left: auto; margin-right: auto; }
+  .halb { display: flex; gap: 5mm; break-inside: avoid; margin: 3mm 0; }
+  .halb > div { flex: 1; }
+  .halb img { width: 100%; display: block; border-radius: 1.5mm; border: 0.5pt solid #99a; }
+  .nr { position: absolute; width: 6.2mm; height: 6.2mm; margin: -3.1mm 0 0 -3.1mm; border-radius: 50%; background: #e11d48;
+        color: #fff; font-weight: 700; font-size: 9.5pt; line-height: 6.2mm; text-align: center; border: 0.6pt solid #fff; }
+  .n { display: inline-block; min-width: 5mm; height: 5mm; border-radius: 50%; background: #e11d48; color: #fff; font-weight: 700;
+       font-size: 8.5pt; line-height: 5mm; text-align: center; margin-right: 1mm; }
+  table { border-collapse: collapse; width: 100%; margin: 2mm 0 3mm; font-size: 9.6pt; }
+  tr { break-inside: avoid; }
+  th, td { border: 0.5pt solid #b6bccb; padding: 1.3mm 2mm; text-align: left; vertical-align: top; }
+  th { background: #e9eef8; }
+  .kasten { border: 1pt solid #d99a00; background: #fff7df; border-radius: 2mm; padding: 2.5mm 3.5mm; margin: 3mm 0; break-inside: avoid; }
+  .kasten.blau { border-color: #1f4f96; background: #eef3fb; }
+  .gruen { color: #15803d; font-weight: 700; } .orange { color: #b45309; font-weight: 700; } .rot { color: #b91c1c; font-weight: 700; }
+  .haken { list-style: none; padding-left: 0; }
+  .haken li::before { content: "☐  "; font-size: 12pt; }
+  .neu { break-before: page; }
+  .klein { font-size: 9pt; color: #56607a; }
+</style>
+</head>
+<body>
+
+<h1>Jet</h1>
+<div class="unter">Display for turbines · Manual · Version 0.4.0 · 21 Nov 2026</div>
+
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="Jet on the radio"></div>
+
+<p><b>Jet</b> is a display (a «widget») for FrSky radios running Ethos. On a full screen it shows RPM, exhaust gas
+temperature (EGT), fuel, ECU battery and the state of your turbine as text, plus fuel flow, pump, thrust, altitude, speed and
+signal. It watches the values in two stages, reports a shutdown with its reason, announces alarms and the fuel level and keeps
+a list of your runs. The pictures in this manual show the German display except where noted; the English display uses the same layout.</p>
+
+<div class="kasten">
+  <b>Test status:</b> Checked with the random test and in the Ethos simulator 26.2 (X18RS): full screen 800 × 480 directly,
+  640 × 360, 480 × 320 and 480 × 272 as well as the compact view 784 × 316, 630 × 258 and 472 × 210 simulated.
+  Radio test on a real X18RS with simulated JetCat telemetry passed (version 0.1.5, same code in 0.1.6: display, status, shutdown with reason with SF «on» and «off», EGT alarm, announcements «Turbine off», «Flameout», «Turbine running», «EGT high»). Not yet on a radio: announce switch with several parts, English announcements, vibration, turbines 2–4, Xicoy and SportECU. <b>Never</b> tested with a real turbine ECU, only with simulated telemetry.
+  Installing through FrSky Suite has not been tried yet.<br>
+  Still to be checked on a radio: whether the RPM is right without conversion (setting «RPM times»), whether Ethos creates the Xicoy
+  sensors by itself, the Physical IDs of JetCat turbines 2 to 4, and whether negative status codes arrive correctly through the sensor «Temp2».
+  The Lua-Studio settings file (new in 0.2.0) passed a radio test on an X18RS with 0.2.1 (loading, full view with 16 places, sensor places,
+  broken file). Not yet on a radio: file too new, changes on the radio and «Back», compact view and English with a Studio file, a self-made view. The symbols (Studio format 2, new in 0.3.0) passed the radio test on an X18RS (symbols, bold units, shutdown, EGT alarm); still open: load with very many symbols and decorations, missing symbol image.
+  The English status texts are the manufacturers' original texts. The voice files are only partly checked on a radio; if one is
+  missing, you hear a tone for «Turbine running», «Turbine off» and (with «Tone on alarm») the shutdown reason, otherwise nothing; an alarm always gives a beep. Jet needs about 144 KB of Lua memory, with a Studio file (measured in the simulator) about 100–115 KB more. When you switch to a model without Jet, Jet frees its memory down to about 5 KB (from 0.4.0, measured in the simulator).
+</div>
+
+<h2>1. What you need</h2>
+<ul class="haken">
+  <li>A FrSky radio with Ethos 26.2 and a colour display (list at the end).</li>
+  <li>A turbine with telemetry to the radio, through one of these: JetCat with its own telemetry adapter (turbine 1 to 4),
+      Xicoy with TeleX adapter, SportECU (e.g. ProJET Hornet III), VSpeak ECU converter (for Kingtech, Swiwin, PBS, evoJet,
+      Hornet/Behotec, Jakadofsky, JetCat). Other turbines work with the setting «manual».</li>
+  <li>The model's sensors already discovered (Model › Telemetry › Discover sensors).</li>
+  <li>Your tank size in ml, the type and cell count of your ECU battery.</li>
+  <li>A computer with FrSky Suite and a USB cable.</li>
+  <li>The file <code>Jet-0.4.0.zip</code>. It is inside <code>Jet-0.4.0-zum-Teilen.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+</ul>
+
+<h2>2. Install</h2>
+<ol>
+  <li>Switch the radio on and connect it to the computer with the USB cable.</li>
+  <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
+  <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
+  <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
+  <li>Select <code>Jet-0.4.0.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Unplug the cable and restart the radio.</li>
+</ol>
+<p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>jet</code> from the ZIP into
+<code>scripts</code>. If your radio loads scripts from the SD card (System › General › Storage location), it belongs in
+<code>scripts</code> on the SD card. Overwrite an existing folder, do not delete it.</p>
+
+<h2>3. Set up the screen</h2>
+<ol>
+  <li>Tap the <b>Screens</b> icon at the bottom (two rectangles).</li>
+  <li>Tap <b>+</b> at the top right.</li>
+  <li>Swipe down to the layout <b>Full screen</b> (one large field) and tap it. To keep the Ethos top and bottom
+  bars, choose the layout with <b>one field and the bars</b> instead (bottom centre of the layout grid); Jet then shows the compact view (chapter 5).</li>
+  <li>Tap the empty field, then <b>Widget</b>.</li>
+  <li>Select <b>Jet</b> in the list. The display appears at once.</li>
+</ol>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 01 Widget-Liste.png" alt="Widget list"></div>
+<p>You reach the widget menu any time through Model › Screens › select the screen › tap the widget.</p>
+
+<h2>4. Assign sensors</h2>
+<ol>
+  <li>Switch on receiver and ECU so that telemetry runs. The first time, Jet looks for the sensors by itself; a short blue note
+  «… sensors assigned automatically» appears at the bottom.</li>
+  <li>Open the menu. At the top, <b>Detected</b> shows the manufacturer Jet recognised from the sensors, e.g. «JetCat».
+  If it says «nothing yet», open the group <b>Manufacturer</b> and select it under <b>Manufacturer</b> yourself.</li>
+  <li>VSpeak converter only: in the group <b>Manufacturer</b>, select the turbine behind it under <b>ECU at VSpeak</b> (Kingtech, Swiwin,
+  PBS, evoJet, Hornet/Behotec, Jakadofsky, JetCat). Until then Detected shows «VSpeak - Select manufacturer» and the status only as «Code n».</li>
+  <li>JetCat, Xicoy and SportECU send part of their values with IDs for which Ethos creates no sensors
+  (JetCat 0x5000–0x53FF, SportECU fuel 0x0A10; for Xicoy 0x4400–0x4406 this is not yet checked on a radio). Jet only accepts values from the turbine's Physical ID. Jet reads these values from the telemetry itself;
+  you do not need to set anything. Their lines in the group <b>Sensors</b> (e.g. Status, Set RPM, Pump) may stay empty.</li>
+  <li>If other devices with the same IDs are connected to the receiver (e.g. an RPM sensor), tap <b>Reassign</b> next to
+  <b>Reassign turbine values</b> at the top, then <b>YES, REASSIGN</b>. Jet then takes the turbine's sensor (Physical ID 0x1B) for every
+  turbine value, if there is one; signal, altitude and speed stay unless their sensor was deleted. If you used
+  «Delete all sensors» in the model and discovered again, also tap <b>Reassign</b> once: Jet then takes all values from the new sensors.</li>
+  <li>Open the group <b>Sensors</b> and check every line. Select anything empty or wrong by hand. An empty line is allowed;
+  the field then shows a dash.</li>
+  <li>With <b>Find sensors (empty only)</b> › <b>Search</b> Jet later fills only the empty lines; your own choice stays.</li>
+  <li>The group <b>Check assignment</b> shows the chosen sensor of each line with Physical ID and AppID (e.g. «EngState1  P1B / 5004»).
+  If several identical sensors matched, a line below says «n sensors match, chosen: … - please check».</li>
+  <li>Open the group <b>Turbine</b> and set <b>Tank size</b>, <b>ECU battery type</b> and <b>ECU battery cells</b>.</li>
+</ol>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 02 Menue.png" alt="Top of the menu"></div>
+
+<h3>How Jet recognises the manufacturer</h3>
+<p>Jet looks at the AppID of the assigned sensors (an identification number you see under «Check assignment»). A manufacturer selected by hand always comes before the detected one.</p>
+<table>
+  <tr><th>Manufacturer / path</th><th>Detected by</th><th>Jet reads itself</th><th>Fuel</th></tr>
+  <tr><td>JetCat with own adapter</td><td>telemetry with ID 0x5000–0x53FF, otherwise 0x0210 (ECU battery) together with 0x0500 (RPM)</td><td>0x5000–0x53FF: status, set RPM, pump, remaining ml, flow, thrust, altitude, speed, shaft, current; turbines 2–4: RPM, EGT, fuel, ECU battery, status</td><td>% from the ECU, remaining ml</td></tr>
+  <tr><td>Xicoy with TeleX</td><td>telemetry with ID 0x4400–0x4406</td><td>all 7 values (EGT, RPM, throttle, battery, pump, fuel %, status)</td><td>% from the ECU</td></tr>
+  <tr><td>SportECU</td><td>telemetry with ID 0x0A10, otherwise 0x0410 together with 0x0900</td><td>fuel ml (0x0A10)</td><td>remaining ml, % from the tank size</td></tr>
+  <tr><td>VSpeak converter</td><td>0x0410 together with 0x0600</td><td>none, Ethos finds the sensors itself</td><td>ml, remaining or used depending on the ECU</td></tr>
+  <tr><td>manual</td><td>only selectable in the menu</td><td>none</td><td>remaining ml, % from the tank size</td></tr>
+</table>
+
+<table>
+  <tr><th>Line in the menu</th><th>Which sensor belongs there</th></tr>
+  <tr><td>RPM, Set RPM</td><td>Actual and set RPM of the turbine. Set RPM exists only with JetCat (EngSetRpm1).</td></tr>
+  <tr><td>EGT</td><td>Exhaust gas temperature, e.g. «EGTC» (Xicoy) or «Tmp1» (VSpeak).</td></tr>
+  <tr><td>ECU battery</td><td>Voltage of the turbine controller's battery, e.g. «VBAT» (Xicoy) or «A3» (VSpeak, SportECU).</td></tr>
+  <tr><td>Pump</td><td>Pump voltage, e.g. «EngPumpV1», «PUMP», «A4».</td></tr>
+  <tr><td>Status</td><td>Status code of the ECU, e.g. «EngState1», «STAT» or «Tmp2».</td></tr>
+  <tr><td>Fuel ml, Fuel %</td><td>Fuel in ml and in %. Leave empty what the ECU does not send.</td></tr>
+  <tr><td>Fuel flow, Thrust, Shaft RPM, ECU current</td><td>JetCat only (EngFuelFlow1, EngThrust1, EngShaftRpm1, EngCurrent1).</td></tr>
+  <tr><td>Altitude, Speed</td><td>From the ECU (JetCat), the vario or GPS.</td></tr>
+  <tr><td>Throttle % (sensor)</td><td>Throttle position from the ECU, e.g. «THRT» (Xicoy). Without a sensor Jet uses the throttle channel (group Switches).</td></tr>
+  <tr><td>RSSI, Receiver battery</td><td>Signal strength «RSSI» and receiver battery voltage, e.g. «RxBatt».</td></tr>
+</table>
+<p class="klein">Turbines 2 to 4 (JetCat) need no lines in the menu: Jet reads their values from the telemetry itself. A value read this way is valid for 5 seconds; if none arrives, the sensor from the menu applies again.</p>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 11 Xicoy nur Teil.png" alt="Xicoy"><div class="t">Xicoy: flow and speed missing (dash), one field shows THROTTLE</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 22 Kingtech VSpeak.png" alt="Kingtech"><div class="t">Kingtech at VSpeak: pump as power «PW»</div></div>
+</div>
+
+<h2 class="neu">5. The display</h2>
+<div class="bild">
+  <img src="../bilder-simulator/Jet - Sim 800x480 04 Normal.png" alt="Display">
+</div>
+<p class="klein">The picture shows the German display. The English titles are given in brackets.</p>
+<table>
+  <tr><th style="width:9mm">No.</th><th>Field (place)</th><th>What it shows</th></tr>
+  <tr><td>1</td><td>Model name (header left)</td><td>Name of the model in the radio. The header turns <span class="orange">orange</span> on a warning and <span class="rot">red</span> on an alarm or a shutdown.</td></tr>
+  <tr><td>2</td><td>Run time (header centre)</td><td>Duration of the current run in minutes:seconds. It runs while the turbine turns.</td></tr>
+  <tr><td>3</td><td>Turbine pill (header right)</td><td>State of the turbine: OFF grey, START blue, RUNNING green, SHUTDOWN red. Your own switches appear to the left as a green pill while they are on (e.g. «STABI», «FAHRWERK»).</td></tr>
+  <tr><td>4</td><td>Bars, battery icon (far right)</td><td>Signal strength (RSSI) in four steps and the radio battery.</td></tr>
+  <tr><td>5</td><td>DREHZAHL (RPM), gauge 1</td><td>RPM. The arc reaches the highest set or actual RPM in this run (starts again at each start) (or «RPM gauge up to»). Below in yellow SET (JetCat only) or MAX.</td></tr>
+  <tr><td>6</td><td>EGT, gauge 2</td><td>Exhaust gas temperature in °C, arc 350–800 °C. Below MAX = highest value in this run (starts again at each start).</td></tr>
+  <tr><td>7</td><td>KRAFTSTOFF (FUEL), gauge 3</td><td>Remaining fuel in %, below it remaining ml. The % comes from the ECU; without it Jet calculates from ml and tank size.</td></tr>
+  <tr><td>8</td><td>ECU-AKKU (ECU BATT), gauge 4</td><td>ECU battery voltage. The arc goes from empty to full for the ECU battery type and cell count. Below MIN.</td></tr>
+  <tr><td>9</td><td>STATUS (large, left)</td><td>State of the ECU as text, colour as the pill: green running, blue start, grey off/ready/cooling, red fault. Below «since 4:13» while it runs. Unknown code: «Code n». Tap it to see the last status changes (chapter 7).</td></tr>
+  <tr><td>10</td><td>«6 Läufe» («6 runs», bottom left)</td><td>Number of counted runs of this model. Tap it to open the run list.</td></tr>
+  <tr><td>11</td><td>FLUSS (FLOW) ml/min, field 1</td><td>Fuel flow in ml/min, below it fuel used in this run in ml.</td></tr>
+  <tr><td>12</td><td>PUMPE (PUMP), field 2</td><td>Pump voltage in V, below MAX. With Kingtech at VSpeak as power «PW».</td></tr>
+  <tr><td>13</td><td>SCHUB (THRUST), field 3</td><td>Thrust in N (JetCat only), below MAX.</td></tr>
+  <tr><td>14</td><td>HÖHE (ALTITUDE), field 4</td><td>Altitude in m, below MAX.</td></tr>
+  <tr><td>15</td><td>SPEED, field 5</td><td>Speed in km/h, below MAX.</td></tr>
+  <tr><td>16</td><td>EMPFANG (SIGNAL), field 6</td><td>RSSI in dB, below the receiver battery («RX 7.9V») and MIN. If your receiver sends RSSI in dBm (negative), it shows «dBm».</td></tr>
+</table>
+<p>A short grey dash instead of a number means: this value is not arriving right now or has no sensor.
+You can change what each gauge and field shows in the menu (chapter 8, group Fields).</p>
+<p><b>Fuel:</b> If the ECU sends only ml, Jet calculates the % from the <b>Tank size</b>. Whether the ml are the remaining fuel or the used fuel
+is set by <b>Fuel ml is</b>; default «by manufacturer». If the tank size is 0 and there is no %, the gauge shows «Set tank size» in orange.</p>
+<p><b>Several turbines:</b> With 2 to 4 turbines, EGT, FUEL and ECU BATT show the most critical value (highest EGT, least fuel, lowest battery);
+the title then carries e.g. «T2». Page 2 shows all turbines side by side (chapter 7).</p>
+
+<h3>Compact view</h3>
+<p>If you choose the layout with top and bottom bars (chapter 3), Jet notices this and shows a compact view:
+a narrow bar at the top with run time, pills and signal (model name and radio battery are in the Ethos header),
+below it the four gauges and eight fields: STATUS, field 1 to 6 and RUNS. Tapping RUNS opens the run list.
+Everything else works as in full screen.</p>
+<div class="bild"><img src="../bilder-simulator/Jet - Sim 784x316 33 Kompakt Normal.png" alt="Compact view"></div>
+<p class="klein">Compact view on X20 and X18RS (784 × 316). On X14 and X18 / Twin X Lite it is smaller.</p>
+
+<h2>6. Warnings and alarms</h2>
+<p>Every watched value has two limits: warning (orange) and alarm (red, frame, tone and announcement).
+You set both in the menu group <b>Limits (0 = off)</b>; 0 switches a limit off. Defaults:</p>
+<table>
+  <tr><th>Value</th><th>Warning (orange)</th><th>Alarm (red, tone, announcement)</th></tr>
+  <tr><td>EGT</td><td>above 720 °C</td><td>above 750 °C, «Warning! E G T high» and the number</td></tr>
+  <tr><td>Fuel</td><td>below 30 %</td><td>below 20 %, «Warning! Fuel reserve» without number</td></tr>
+  <tr><td>ECU cell (limit per cell × ECU battery cells)</td><td>below 3.70 V (with 2 cells 7.4 V)</td><td>below 3.50 V (with 2 cells 7.0 V), «Warning! E C U battery low» and the voltage</td></tr>
+  <tr><td>RX battery</td><td>off by default (0); e.g. 7.40 V for 2S LiPo</td><td>off by default (0); e.g. 7.00 V for 2S LiPo, «Warning! Receiver battery low» and the number</td></tr>
+  <tr><td>RSSI (for dBm values: limit = dBm + 120, e.g. 40 = -80 dBm)</td><td>below 45 dB</td><td>below 40 dB, «Warning! Signal low» and the number</td></tr>
+  <tr><td>Altitude</td><td>above 110 m</td><td>above 120 m, «Altitude» and the number</td></tr>
+  <tr><td>Speed</td><td>off</td><td>off; when set: «Speed» and the number</td></tr>
+</table>
+<p class="klein">The ECU cell limits are for LiPo. If you choose another ECU battery type and the limits are still at the default,
+Jet changes them to suit: LiFe 3.10/3.00 V, Li-Ion 3.40/3.20 V, NiMH 1.15/1.10 V.</p>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 05 Warnung.png" alt="Warning"><div class="t">Warning: header and value orange</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 06 Alarm.png" alt="Alarm"><div class="t">Alarm: red header, red frame, tone and announcement</div></div>
+</div>
+<p>A warning or alarm starts when the value has been beyond the limit for 1 second and ends when it has been fine again for
+3 seconds. An alarm beeps («Tone on alarm»), announces the value («Announce alarms») and repeats this every 10 seconds
+(«Repeat alarm every») as long as it lasts. A warning is announced only if «Announce warnings too» is on.
+There are always at least 3 seconds between two announcements. Without telemetry there are no warnings.</p>
+
+<h3>Alarm also with turbine off</h3>
+<p>By default all warnings and alarms also come when «Turbine off at» (default SF↑) is in the off position. In the menu group
+<b>Alarm also with turbine off</b> you can change this per value (EGT, fuel, ECU battery, receiver battery, RSSI, altitude, speed);
+<b>all</b> at the top switches all ticks at once. Without the tick this value stays silent while the switch is off: no tone, no
+announcement, no vibration, the top bar stays calm. The value itself still turns orange or red. If you switch back on and the value
+is still beyond its limit, the alarm comes at once. ECU error codes and shutdown reasons (e.g. «Flameout») always come, they cannot be
+deselected.</p>
+
+<h3>Contradicting sources</h3>
+<p>If Jet reads a value directly from the ECU telemetry (JetCat, Xicoy, SportECU) and the sensor set for this value in the
+menu shows something clearly different at the same time, Jet shows a warning: orange top bar and at the bottom a hint such as
+«EGT: ECU data and sensor disagree» (again every 30 seconds). This applies to EGT (more than 50 °C or 15 %), RPM (more than
+5000 rpm or 15 %), ECU battery (more than 0.5 V) and fuel (more than 10 %), once the difference lasts 3 seconds. Jet keeps
+showing the ECU value. Then check the assignment (menu › Check assignment), for example if a separate temperature sensor is
+assigned as EGT. No tone, no announcement.</p>
+
+<h3>Fuel in steps</h3>
+<p>When the fuel drops below 75, 50, 30, 10 and 5 %, the radio says «Fuel» and the number in percent, once each. At 10 and 5 % it also
+vibrates if «Vibration on alarm» is on. If you refuel and the value rises 5 % above a step, that step counts again.
+Switch off with «Fuel in steps».</p>
+
+<h3>Shutdown</h3>
+<p>If the ECU reports an error code when the turbine stops (e.g. «Low temp. Off»), or a running turbine stops while «Turbine off at» (default SF↑) is not on
+and the ECU itself does not report «off», this counts as a shutdown. An error code always counts, even if SF is already «off»: red header, pill SHUTDOWN, STATUS red with the ECU's text. The radio says «Turbine off» and about a second later the reason: «Flameout», «Out of fuel»,
+«Battery low», «Overtemperature», «Failsafe» or otherwise «Fault». For turbines 2 to 4 it says «Turbine two off» and so on. Vibration follows
+the setting; a tone comes here only if there is no voice file. This announcement always comes, even if «Announce alarms» is off. Without a status sensor or without a known status
+text, a flameout is when the RPM stays below «Idle from» for 2 seconds. The display stays red until the turbine starts again;
+SF does not clear it. If you flip SF only after the flameout, it still counts as a shutdown. Limit alarms (EGT, fuel, batteries, signal) also come with SF «off», unless you remove the tick «Alarm also with turbine off» for a value (see above).</p>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 20 Abschaltung Flammabriss.png" alt="Shutdown"></div>
+
+<h2 class="neu">7. Operation</h2>
+<h3>Detecting runs</h3>
+<p>A run starts as soon as the turbine turns: the ECU reports a start or running status, or, without a status sensor (or without a known
+status text), the RPM is above 1000. The run time at the top runs. When the turbine reaches «running» (green; without a status sensor: RPM
+from «Idle from», default 10000), the radio says «Turbine running». When you switch it off with «Turbine off at», it says «Turbine off»
+(both only if «Turbine running/off» is on).</p>
+<p>When the turbine has stood still for 5 seconds (RPM below 1000, no start or running status), the run ends and goes into the run list
+without a question. A run counts only from 30 seconds («Run counts from»); shorter runs, e.g. a failed start, are dropped.</p>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 21 Start.png" alt="Start"><div class="t">Start: pill START, status blue</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 26 Statusliste.png" alt="Status list"><div class="t">Tap STATUS: last status changes</div></div>
+</div>
+
+<h3>Last status changes</h3>
+<p>Tap the field STATUS. «LAST STATUS CHANGES» opens with the last 5 changes, each with the run time, newest at the top.
+<b>CLOSE</b> or one turn of the rotary encoder closes the window.</p>
+
+<h3>Turbines (page 2)</h3>
+<p>Only with 2 to 4 turbines: swipe left. One column per turbine with RPM, EGT, fuel, ECU battery and status. Values beyond the
+warning are orange, beyond the alarm red.</p>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 23 Turbinen 2.png" alt="Turbines"></div>
+
+<h3>Run list</h3>
+<p>Swipe left (twice with several turbines) or tap «n runs». The runs are on the right, newest at the top, the current one blue with
+«running». The column «End» shows «SF off», «Shutdown» (red) or «-». Tap a run: on the left you see Run time, Fuel used, Max. EGT, Max. RPM,
+Fuel at end, Max. altitude, Max. speed, Lowest ECU batt, End (after a shutdown with the ECU's text) and Turbines.</p>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 25 Flugliste.png" alt="Run list"></div>
+<ol>
+  <li>Delete one run: tap the run, <b>DELETE RUN n</b>, then <b>YES, DELETE</b>. «Run n deleted» appears at the bottom. Later numbers move up.</li>
+  <li>Delete all runs: <b>CLEAR LIST</b>, then <b>YES, DELETE</b>. «Run list cleared» appears at the bottom. The counter starts again at 1.</li>
+  <li><b>CANCEL</b> leaves everything as it is.</li>
+  <li>Back to the display: <b>&lt; BACK</b> or swipe right.</li>
+</ol>
+<p class="klein">The list keeps the last 20 runs and stays when you switch off. A run that was still open when you switched off
+goes into the list the next time you switch on.</p>
+
+<h3>End a run by hand</h3>
+<p>In the menu at the top, tap <b>End</b> next to <b>End run</b>. «End run?» appears with «It goes into the run list.».
+<b>YES, END</b> ends it and «Run ended» appears at the bottom. A new run starts only after the turbine has stood still once.</p>
+
+<h3>Announcement on a switch</h3>
+<p>When you switch <b>SG↓</b> on («Announce at»), the radio says «Fuel» with %, «Run time» with minutes and, if switched on, «Altitude»
+with metres. You choose what is announced in the group Announcements.</p>
+
+<h3>Radios without touch (X14, X10, X12)</h3>
+<p>The rotary encoder pages from the display to the Turbines page and to the run list. On the run list it selects runs; turning back
+before the first run returns to the display. At the top of the menu there are <b>End run</b>, <b>Delete run</b> (first choose the
+number at «Run no. to delete») and <b>Delete whole list</b>, each with a confirmation.</p>
+
+<h2 class="neu">8. All settings</h2>
+<p>Open the menu: Model › Screens › select the screen › tap the widget. Every change applies at once and is saved.</p>
+<table>
+  <tr><th>Group</th><th>Setting</th><th>Default</th><th>Range and effect</th></tr>
+  <tr><td>top</td><td>Studio file</td><td>none</td><td>Shows whether a file from Lua-Studio applies: none, loaded, broken or too new. Button <b>Reset</b> (asks first): with a file «Back to Studio settings», without a file «Back to defaults». See «Lua-Studio» below.</td></tr>
+  <tr><td>top</td><td>Detected</td><td>–</td><td>Shows the manufacturer that currently applies, or «nothing yet».</td></tr>
+  <tr><td>Sensors</td><td>17 lines</td><td>empty</td><td>See chapter 4. The first search runs by itself.</td></tr>
+  <tr><td rowspan="5">Manufacturer</td><td>Manufacturer</td><td>automatic</td><td>automatic, JetCat, Xicoy, SportECU, VSpeak converter, manual. Decides status texts and fuel.</td></tr>
+  <tr><td>ECU at VSpeak</td><td>not selected</td><td>Kingtech, Swiwin, PBS, evoJet, Hornet/Behotec, Jakadofsky, JetCat. VSpeak converter only.</td></tr>
+  <tr><td>Fuel ml is</td><td>by manufacturer</td><td>remaining or used. Select it yourself for Swiwin at VSpeak.</td></tr>
+  <tr><td>RPM times</td><td>1</td><td>1, 10 or 100. For ECUs that send the RPM divided; example: Ethos shows 9840, the ECU 98,400 → 10.</td></tr>
+  <tr><td>SportECU: Hornet texts</td><td>off</td><td>On: SportECU status codes as Hornet texts instead of «Code n».</td></tr>
+  <tr><td rowspan="5">Turbine</td><td>Tank size</td><td>0 ml</td><td>0 to 50,000 ml in steps of 50. For fuel % from ml. 0 = not set.</td></tr>
+  <tr><td>ECU battery type</td><td>LiPo</td><td>LiPo, LiFe, Li-Ion, NiMH. Sets the arc empty–full and the default limits.</td></tr>
+  <tr><td>ECU battery cells</td><td>2 S</td><td>1 to 6 cells.</td></tr>
+  <tr><td>Idle from</td><td>10000 U/min</td><td>500 to 200,000 RPM. Without a status sensor: from here the turbine counts as «running», 2 s below = flameout.</td></tr>
+  <tr><td>Run counts from</td><td>30 s</td><td>0 to 600 s. Shorter runs do not go into the list.</td></tr>
+  <tr><td rowspan="7">Limits (0 = off)</td><td>EGT warn above / EGT alarm above</td><td>720 / 750 °C</td><td>0 to 1200 °C, step 5.</td></tr>
+  <tr><td>Fuel warn below / Fuel alarm below</td><td>30 / 20 %</td><td>0 to 100 %.</td></tr>
+  <tr><td>ECU cell warn below / ECU cell alarm below</td><td>3.70 / 3.50 V</td><td>0 to 4.50 V per cell, step 0.05.</td></tr>
+  <tr><td>RX batt warn below / RX batt alarm below</td><td>0 / 0 (off)</td><td>0 to 20.00 V, step 0.10. Off by default because receivers run on 5 to 8.4 V; for 2S LiPo enter e.g. 7.40 / 7.00 V.</td></tr>
+  <tr><td>RSSI warning below / RSSI alarm below</td><td>45 / 40 dB</td><td>0 to 120 dB.</td></tr>
+  <tr><td>Altitude warn above / Altitude alarm above</td><td>110 / 120 m</td><td>0 to 5000 m.</td></tr>
+  <tr><td>Speed warn above / Speed alarm above</td><td>0 / 0 km/h (off)</td><td>0 to 1500 km/h, step 10.</td></tr>
+  <tr><td rowspan="5">Switches</td><td>Turbine off at</td><td>SF↑</td><td>Switch position in which the turbine is off. Stopping in this position is intended, no alarm, unless the ECU reports an error code.</td></tr>
+  <tr><td>Announce at</td><td>SG↓</td><td>Switch position for the announcement.</td></tr>
+  <tr><td>Switch 1 / Switch 2</td><td>empty</td><td>Your own switches, shown in the header while they are on.</td></tr>
+  <tr><td>Switch 1 name / Switch 2 name</td><td>STABI / FAHRWERK</td><td>At most 12 characters: letters, digits, space, dot, hyphen.</td></tr>
+  <tr><td>Throttle channel</td><td>empty</td><td>Throttle channel, for the field «Throttle %» when no throttle sensor is assigned.</td></tr>
+  <tr><td rowspan="10">Announcements</td><td>Announce alarms</td><td>on</td><td>Off: on alarm only tone and display.</td></tr>
+  <tr><td>Announce warnings too</td><td>off</td><td>On: the orange warning is announced as well.</td></tr>
+  <tr><td>Repeat alarm every</td><td>10 s</td><td>3 to 300 s.</td></tr>
+  <tr><td>Fuel in steps</td><td>on</td><td>Announcements at 75, 50, 30, 10 and 5 %.</td></tr>
+  <tr><td>«Turbine running/off»</td><td>on</td><td>Announcement on reaching «running» and on an intended stop.</td></tr>
+  <tr><td>Announce: fuel</td><td>on</td><td rowspan="3">What is said on the announcement switch.</td></tr>
+  <tr><td>Announce: run time</td><td>on</td></tr>
+  <tr><td>Announce: altitude</td><td>off</td></tr>
+  <tr><td>Tone on alarm</td><td>on</td><td>Beep before the alarm announcement; on a shutdown only if there is no voice file. If an alarm is not announced (or its voice file is missing), a beep always comes, even with this setting off. An alarm is only silent if its limit is switched off.</td></tr>
+  <tr><td>Vibration on alarm</td><td>off</td><td>The radio vibrates on alarm, shutdown and the fuel steps 10 and 5 %.</td></tr>
+  <tr><td rowspan="2">Fields</td><td>Gauge 1 to 4, Field 1 to 6</td><td>as in the picture</td><td>Content: empty, RPM, EGT, Fuel %, ECU battery, Status, Fuel flow, Pump, Thrust, Altitude, Speed, Signal, Throttle %, Shaft RPM, ECU current, Run time, Fuel ml, Receiver battery.</td></tr>
+  <tr><td>RPM gauge up to (0 = auto)</td><td>0</td><td>0 to 300,000, step 1000. End of the RPM arc; 0 = highest measured RPM.</td></tr>
+  <tr><td rowspan="2">Alarm also with turbine off</td><td>all</td><td>on</td><td>Switches all ticks below on or off at once. Above it the hint «Unticked: silent while turbine off».</td></tr>
+  <tr><td>EGT, Fuel, ECU battery, Receiver battery, RSSI, Altitude, Speed</td><td>on</td><td>Off: warning and alarm of this value stay silent while «Turbine off at» is off. Error codes and shutdown reasons always come. See chapter 6.</td></tr>
+  <tr><td>Display</td><td>Sprache / Language</td><td>as the radio</td><td>Deutsch or English for display, menu and announcements. The menu changes the next time you open it.</td></tr>
+</table>
+<p class="klein">On first start Jet sets «Turbine off at» and «Announce at» to SF↑ and SG↓ if these switches exist. The top of the menu also holds:
+Find sensors (empty only), Version, Detected, Reassign turbine values (after the question «Reassign turbine values?» it replaces every turbine value whose sensor is not on the turbine ID 0x1B, for example when another device sends the same RPM ID), End run, Run no. to delete, Delete run, Delete whole list.</p>
+
+<h3>Lua-Studio (settings file per model)</h3>
+<p>With the PC program <b>Lua-Studio</b> you design the display per model: for each field you choose the value,
+the style (number, ring, horizontal or vertical bar, trend, status), title, range, colours and an extra line (MIN,
+MAX or Ø over the run). From version 0.3.0 (Studio format 2) there are symbols too (e.g. turbine, impeller, tank,
+pump, temperature, battery), a bold unit and decoration (lines, frames). The symbols are images in
+<code>scripts/studio/symbole/</code>; if one is missing, Jet shows the place without it and reports «symbols missing». Files in
+the old format 1 still load. Settings and limits per model come on top. Lua-Studio creates the file
+<code>scripts/studio/modelname.jet.lua</code> on the SD card. The file name keeps only the letters A–Z and digits of
+the model name, everything else becomes <code>_</code> («Jet 1» becomes <code>Jet_1</code>); Lua-Studio works this out
+itself. Jet reads the file when the model is loaded.</p>
+<ul>
+  <li><b>Without this file</b> Jet works exactly as before, with no message.</li>
+  <li><b>By default</b> the view in Lua-Studio looks like Jet without a file: in full screen four gauges, STATUS and six
+  fields (RUNS stays fixed at the bottom left and opens the run list), in the compact view four gauges, STATUS and
+  seven fields including RUNS. Jet always draws the top bar itself.</li>
+  <li><b>With a file</b> its view applies only to the window size it was made for (e.g. full screen 800 × 480 or with
+  bars 784 × 316), and in full screen only on page 1. For other sizes Jet draws its built-in display.</li>
+  <li><b>Safety stays fixed:</b> the file cannot change the shutdown logic. «Turbine off» with its reason comes also with
+  SF «off», the top bar stays red until the turbine runs again, and limit alarms also apply with SF «off».
+  Only per limit may the file deselect this (<code>beiMotorAus = false</code>, in Lua-Studio the tick «also with motor off»);
+  in the menu it is called «Alarm also with turbine off». Error codes and shutdown reasons always come.</li>
+  <li><b>Limits</b> apply per value, whether and however it is shown. If a value is missing in the file, the factory
+  limit applies. A limit is only switched off if the file says so explicitly (<code>aus = true</code>). If the
+  direction does not fit the value, the factory limit applies as well, with a message. Limits also work for other
+  sensors, channels or non-monitored values, at most 6 per model (limits on missing sensors count too); Jet drops further ones with a message.</li>
+  <li><b>If you change</b> tank, limits or other settings in the menu on the radio, Jet writes this to its own file
+  <code>…jet.funke.lua</code>. The Lua-Studio file stays unchanged. Lua-Studio shows the differences and takes them
+  over if you want.</li>
+  <li><b>Menu › Studio file › Reset:</b> with a file «Back to Studio settings» (your changes on the radio are deleted),
+  without a file «Back to defaults» (factory settings and limits; sensors and runs stay). Both ask first.</li>
+  <li><b>Messages:</b> if the file is broken, too new or contains invalid entries, a band shows at the bottom for
+  8 seconds (e.g. «Studio file broken - default»), then an orange «!» at the top right. Jet always keeps running, if
+  in doubt with its built-in display.</li>
+  <li>Jet also writes the file <code>…jet.info.json</code> with model name, radio, window sizes and sensor list. Only
+  Lua-Studio reads it.</li>
+</ul>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 51 Studio-Datei.png" alt="Studio file full screen"><div class="t">Example of a Studio file, full screen 800 × 480 (German display)</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 784x316 50 Studio-Datei.png" alt="Studio file compact"><div class="t">Example of a Studio file, compact 784 × 316 (German display)</div></div>
+</div>
+
+<h2>9. Troubleshooting</h2>
+<table>
+  <tr><th>What you see</th><th>Cause</th><th>What to do</th></tr>
+  <tr><td>Dashes everywhere, run time 0:00</td><td>No telemetry</td><td>Switch on receiver and ECU. Check that the receiver is bound.</td></tr>
+  <tr><td>RPM, EGT, ECU battery or status show values of another device (e.g. RPM 8000 instead of 98400)</td><td>Another device sends the same ID (AppID) and was assigned</td><td>Menu top › <b>Reassign turbine values</b> › Reassign › «YES, REASSIGN». Then check «P1B» on these lines in «Check assignment».</td></tr>
+  <tr><td>Menu: Detected «nothing yet»</td><td>No turbine sensors assigned</td><td>Chapter 4: select the manufacturer, search. With JetCat, Xicoy and SportECU Jet detects the manufacturer as soon as telemetry from the turbine arrives.</td></tr>
+  <tr><td>STATUS shows «Code 27» or similar</td><td>Manufacturer or ECU at VSpeak not selected, or a code Jet does not know</td><td>Check Menu › Manufacturer. If it stays «Code n»: note the code and what the ECU shows and report it.</td></tr>
+  <tr><td>Orange «Set tank size» below FUEL</td><td>The ECU sends only ml, tank size is 0</td><td>Menu › Turbine › set Tank size.</td></tr>
+  <tr><td>Fuel % rises instead of falling</td><td>«Fuel ml is» does not match the ECU</td><td>Menu › Manufacturer › change «Fuel ml is».</td></tr>
+  <tr><td>RPM 10 or 100 times too small</td><td>The ECU sends the RPM divided</td><td>Menu › Manufacturer › «RPM times» to 10 or 100.</td></tr>
+  <tr><td>Red SHUTDOWN although you stopped it yourself</td><td>«Turbine off at» is not your switch</td><td>Menu › Switches › select the position at «Turbine off at».</td></tr>
+  <tr><td>Runs are not counted</td><td>Run shorter than «Run counts from», or no RPM without a status sensor</td><td>Check the RPM and Status sensors (chapter 4).</td></tr>
+  <tr><td>No Turbines page although you have 2</td><td>No telemetry from turbine 2</td><td>Check the slave address of the second ECU (2) and its telemetry adapter.</td></tr>
+  <tr><td>Only a beep and the number on alarm</td><td>The voice files are missing on the radio (folder <code>audio</code>)</td><td>Repeat chapter 2.</td></tr>
+  <tr><td>At the bottom «Studio file broken - default», «too new» or «n errors», then «!» at the top right</td><td>The Lua-Studio file is broken, made for a newer Jet version or contains invalid entries</td><td>Transfer it again from Lua-Studio or update Jet. The log says what exactly is wrong (one line per error).</td></tr>
+  <tr><td>Red text at the bottom left</td><td>Script error. The radio keeps working.</td><td>Take a photo of the text and report it: on GitHub under Issues, template «Fehler / Bug» (see TESTLEITFADEN.md in the repository).</td></tr>
+  <tr><td>The widget is missing from the list</td><td>Not installed or radio not restarted</td><td>Repeat chapter 2, restart the radio.</td></tr>
+</table>
+
+<h2>10. Update and remove</h2>
+<p><b>Update:</b> Install the new ZIP exactly as in chapter 2. Your settings, sensors, runs and counters stay.</p>
+<p><b>Remove:</b> First take the widget off the screen (Model › Screens), then uninstall it in FrSky Suite under Lua library. The Lua-Studio files are in <code>scripts/studio</code> and can be deleted there by hand.</p>
+
+<h2>11. Which radios</h2>
+<table>
+  <tr><th>Display</th><th>Radios</th><th>Status</th></tr>
+  <tr><td>800 × 480, touch</td><td>X20, X20S, X20HD, X20 Pro, X20R, X20RS, X18R, X18RS</td><td>in the simulator and on a real X18RS (simulated telemetry)</td></tr>
+  <tr><td>640 × 360, no touch</td><td>Twin X14, X14S</td><td>simulated</td></tr>
+  <tr><td>480 × 320, touch</td><td>X18, X18S, X18SE, Twin X Lite, Twin X Lite S</td><td>simulated</td></tr>
+  <tr><td>480 × 272, no touch</td><td>X10, X10S, X10 Express, X12S with Ethos</td><td>simulated</td></tr>
+</table>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): shortened titles</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="English"><div class="t">English: language in the menu or as the radio</div></div>
+</div>
+<p class="klein">Jet version 0.4.0 · 21 Nov 2026</p>
+
+</body>
+</html>

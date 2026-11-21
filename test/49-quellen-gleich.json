@@ -1,0 +1,34 @@
+{
+ "skripte": [
+  [
+   "src/jet",
+   "jet"
+  ]
+ ],
+ "widget": "jet",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/jet/kern.lua",
+   "local TEST = nil",
+   "local TEST = { zustand = true, modell = \"JET DEMO\", v = { aus = false }, sv = { egt = 640 }, cfg = { sprache = 1, tank = 3000, hersteller = 0 } }"
+  ]
+ ],
+ "schritte": [
+  {
+   "makro": "test/rahmen-makro-widerspruch.lua"
+  },
+  {
+   "zustand": {
+    "zustand": "ok",
+    "stufe": 0,
+    "aktiv": [],
+    "extra": {
+     "widersp": false,
+     "rahmen": 1
+    }
+   },
+   "max": 4000
+  }
+ ]
+}

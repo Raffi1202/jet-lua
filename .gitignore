@@ -1,0 +1,25 @@
+# macOS
+.DS_Store
+._*
+
+# Pakete für die FrSky Suite (entstehen aus src/, siehe README)
+dist/
+
+# Daten, die das Skript auf dem Sender selbst schreibt
+src/*/daten/
+
+# von Ethos übersetzte Skripte
+*.luac
+
+# Entwurf der Anleitung (nur zum Ansehen)
+docs/* ENTWURF.pdf
+
+# Zwischenstände der Simulator-Abläufe
+test/stand-*/
+
+# Local working notes, not published
+STAND.md
+
+# Interne Planungsblaetter, nur lokal
+docs/entwicklung/
+docs/konzept/

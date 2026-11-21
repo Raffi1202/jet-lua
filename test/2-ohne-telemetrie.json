@@ -1,0 +1,27 @@
+{
+ "skripte": [
+  [
+   "src/jet",
+   "jet"
+  ]
+ ],
+ "widget": "jet",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/jet/kern.lua",
+   "local TEST = nil",
+   "local TEST = { modell = \"JET DEMO\", zustand = true, tele = false, cfg = { sprache = 1, tank = 3000 } }"
+  ]
+ ],
+ "schritte": [
+  {
+   "zustand": {
+    "zustand": "keine"
+   }
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 800x480 03 ohne Telemetrie.png"
+  }
+ ]
+}

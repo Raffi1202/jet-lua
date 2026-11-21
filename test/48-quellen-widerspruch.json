@@ -1,0 +1,39 @@
+{
+ "skripte": [
+  [
+   "src/jet",
+   "jet"
+  ]
+ ],
+ "widget": "jet",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/jet/kern.lua",
+   "local TEST = nil",
+   "local TEST = { zustand = true, modell = \"JET DEMO\", v = { aus = false }, sv = { egt = 420 }, cfg = { sprache = 1, tank = 3000, hersteller = 0 } }"
+  ]
+ ],
+ "schritte": [
+  {
+   "makro": "test/rahmen-makro-widerspruch.lua"
+  },
+  {
+   "zustand": {
+    "zustand": "warnung",
+    "stufe": 1,
+    "aktiv": [
+     "quelleW"
+    ],
+    "extra": {
+     "widersp": "egt",
+     "rahmen": 1
+    }
+   },
+   "max": 4000
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 800x480 48 Quellen-Widerspruch.png"
+  }
+ ]
+}

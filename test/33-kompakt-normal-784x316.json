@@ -1,0 +1,40 @@
+{
+ "skripte": [
+  [
+   "src/jet",
+   "jet"
+  ]
+ ],
+ "widget": "jet",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/jet/kern.lua",
+   "local TEST = nil",
+   "local TEST = { modell = \"JET DEMO\", zustand = true, erkannt = 1, v = { rpm = 98400, soll = 98500, egt = 612, ecu = 7.9, pumpe = 0.92, status = 13, ml = 1920, proz = 64, fluss = 290, schub = 118, hoehe = 84, speed = 212, rssi = 78, rx = 7.9, aus = false }, cfg = { sprache = 1, tank = 3000 }, liste = { { 1, 412, 2480, 702, 121000, 17, 142, 285, 7.6, 1, -1, 1, 1 }, { 2, 125, 640, 690, 120500, 72, 95, 240, 7.8, 2, -10, 1, 1 }, { 3, 475, 2700, 698, 121200, 12, 150, 290, 7.6, 1, -1, 1, 1 }, { 4, 432, 2480, 702, 121000, 17, 142, 285, 7.6, 1, -1, 1, 1 }, { 5, 460, 2610, 695, 120800, 14, 138, 279, 7.7, 1, -1, 1, 1 } }, akt = { 6, 252, 1080, 655, 121000, 64, 131, 268, 7.8, ml0 = 3000 }, laeufe = 6, lief = true }"
+  ],
+  [
+   "scripts/jet/kern.lua",
+   "  local W, H = lcd.getWindowSize()",
+   "  local W, H = 784, 316"
+  ]
+ ],
+ "schritte": [
+  {
+   "zustand": {
+    "zustand": "ok",
+    "fenster": [
+     784,
+     316
+    ]
+   }
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 784x316 33 Kompakt Normal.png",
+   "schnitt": [
+    784,
+    316
+   ]
+  }
+ ]
+}

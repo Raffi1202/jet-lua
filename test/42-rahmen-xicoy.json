@@ -1,0 +1,37 @@
+{
+ "skripte": [
+  [
+   "src/jet",
+   "jet"
+  ]
+ ],
+ "widget": "jet",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/jet/kern.lua",
+   "local TEST = nil",
+   "local TEST = { zustand = true, modell = \"JET DEMO\", v = { aus = false }, cfg = { sprache = 1, tank = 3000, hersteller = 0 } }"
+  ]
+ ],
+ "schritte": [
+  {
+   "makro": "test/rahmen-makro-xicoy.lua"
+  },
+  {
+   "zustand": {
+    "extra": {
+     "erkannt": 2,
+     "statusText": "Läuft Vollgas",
+     "rahmen": 2,
+     "proz": 64,
+     "mlRest": 1920
+    }
+   },
+   "max": 8000
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 800x480 42 Rahmen Xicoy.png"
+  }
+ ]
+}

@@ -1,0 +1,53 @@
+{
+ "skripte": [
+  [
+   "src/jet",
+   "jet"
+  ]
+ ],
+ "widget": "jet",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/jet/kern.lua",
+   "local TEST = nil",
+   "local TEST = { zustand = true, modell = \"JET DEMO\", v = { aus = false }, cfg = { sprache = 1, tank = 3000, hersteller = 0 } }"
+  ]
+ ],
+ "schritte": [
+  {
+   "makro": "test/rahmen-makro.lua"
+  },
+  {
+   "zustand": {
+    "extra": {
+     "erkannt": 1,
+     "statusText": "Läuft",
+     "nTurb": 2,
+     "rahmen": 1,
+     "mlRest": 1920
+    }
+   },
+   "max": 8000
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 800x480 40 Rahmen JetCat.png"
+  },
+  {
+   "makro": "test/rahmen-makro-absch.lua"
+  },
+  {
+   "zustand": {
+    "extra": {
+     "absch": true,
+     "pille": 4,
+     "statusText": "Temperatur zu tief"
+    }
+   },
+   "max": 8000
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 800x480 41 Rahmen Abschaltung.png"
+  }
+ ]
+}

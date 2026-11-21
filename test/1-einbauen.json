@@ -1,0 +1,69 @@
+{
+ "skripte": [
+  [
+   "src/jet",
+   "jet"
+  ]
+ ],
+ "widget": "jet",
+ "abbild": false,
+ "ersetze": [],
+ "schritte": [
+  {
+   "taste": "DISP"
+  },
+  {
+   "tipp": [
+    400,
+    290
+   ]
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 800x480 02 Menue.png"
+  },
+  {
+   "tipp": [
+    610,
+    97
+   ]
+  },
+  {
+   "wisch": [
+    400,
+    360,
+    400,
+    150
+   ]
+  },
+  {
+   "wisch": [
+    400,
+    360,
+    400,
+    150
+   ]
+  },
+  {
+   "wisch": [
+    400,
+    360,
+    400,
+    150
+   ]
+  },
+  {
+   "wisch": [
+    400,
+    360,
+    400,
+    150
+   ]
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 800x480 01 Widget-Liste.png"
+  },
+  {
+   "taste": "RTN"
+  }
+ ]
+}

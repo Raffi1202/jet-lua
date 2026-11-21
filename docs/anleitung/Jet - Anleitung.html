@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Jet – Anleitung</title>
+<!--
+  ANLEITUNG zum Ausdrucken (A4). Aufbau und Stil sind in jedem Lua gleich (bauplan.md, Abschnitt Anleitung):
+  Kapitel in dieser Reihenfolge lassen, Beispieltexte ersetzen, nichts Leeres stehen lassen.
+  Danach jede Seite der PDF ansehen (Umbrüche, Bilder, Tabellen).
+  Nummern auf einem Bild: <span class="nr" style="left:12%;top:30%">1</span> innerhalb von <div class="bild">.
+-->
+<style>
+  @page { size: A4; margin: 16mm; }
+  * { box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Arial, sans-serif; font-size: 10.5pt; line-height: 1.42; color: #1a1f2b; margin: 0; }
+  h1 { font-size: 24pt; margin: 0 0 2mm; }
+  h2 { font-size: 14.5pt; margin: 7mm 0 2.5mm; padding-bottom: 1mm; border-bottom: 1.5pt solid #1f4f96; color: #12305e; break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 4mm 0 1.5mm; break-after: avoid; }
+  p { margin: 0 0 2.5mm; }
+  ol, ul { margin: 0 0 2.5mm; padding-left: 6mm; }
+  li { margin-bottom: 1.2mm; break-inside: avoid; }
+  .unter { color: #56607a; font-size: 11pt; margin-bottom: 5mm; }
+  .bild { position: relative; width: 100%; margin: 3mm 0; break-inside: avoid; }
+  .bild img { width: 100%; display: block; border-radius: 2mm; border: 0.5pt solid #99a; }
+  .bild .t, .halb .t { font-size: 9pt; color: #56607a; margin-top: 1mm; }
+  .schmal { width: 72%; margin-left: auto; margin-right: auto; }
+  .halb { display: flex; gap: 5mm; break-inside: avoid; margin: 3mm 0; }
+  .halb > div { flex: 1; }
+  .halb img { width: 100%; display: block; border-radius: 1.5mm; border: 0.5pt solid #99a; }
+  .nr { position: absolute; width: 6.2mm; height: 6.2mm; margin: -3.1mm 0 0 -3.1mm; border-radius: 50%; background: #e11d48;
+        color: #fff; font-weight: 700; font-size: 9.5pt; line-height: 6.2mm; text-align: center; border: 0.6pt solid #fff; }
+  .n { display: inline-block; min-width: 5mm; height: 5mm; border-radius: 50%; background: #e11d48; color: #fff; font-weight: 700;
+       font-size: 8.5pt; line-height: 5mm; text-align: center; margin-right: 1mm; }
+  table { border-collapse: collapse; width: 100%; margin: 2mm 0 3mm; font-size: 9.6pt; }
+  tr { break-inside: avoid; }
+  th, td { border: 0.5pt solid #b6bccb; padding: 1.3mm 2mm; text-align: left; vertical-align: top; }
+  th { background: #e9eef8; }
+  .kasten { border: 1pt solid #d99a00; background: #fff7df; border-radius: 2mm; padding: 2.5mm 3.5mm; margin: 3mm 0; break-inside: avoid; }
+  .kasten.blau { border-color: #1f4f96; background: #eef3fb; }
+  .gruen { color: #15803d; font-weight: 700; } .orange { color: #b45309; font-weight: 700; } .rot { color: #b91c1c; font-weight: 700; }
+  .haken { list-style: none; padding-left: 0; }
+  .haken li::before { content: "☐  "; font-size: 12pt; }
+  .neu { break-before: page; }
+  .klein { font-size: 9pt; color: #56607a; }
+</style>
+</head>
+<body>
+
+<h1>Jet</h1>
+<div class="unter">Anzeige für Turbinen · Anleitung · Version 0.4.0 · Stand 21.11.2026</div>
+
+<div class="bild schmal">
+  <img src="../bilder-simulator/Jet - Sim 800x480 04 Normal.png" alt="Jet auf dem Sender">
+</div>
+
+<p><b>Jet</b> ist eine Anzeige (ein «Widget») für FrSky-Sender mit Ethos. Sie zeigt auf einem ganzen Bildschirm
+Drehzahl, Abgastemperatur (EGT), Kraftstoff, ECU-Akku und den Zustand deiner Turbine als Text, dazu Fluss, Pumpe,
+Schub, Höhe, Geschwindigkeit und Empfang. Sie überwacht die Werte in zwei Stufen, meldet eine Abschaltung mit Grund,
+sagt Alarme und den Kraftstoff an und führt eine Liste deiner Läufe.</p>
+
+<div class="kasten">
+  <b>Stand der Erprobung:</b> Mit dem Zufallstest und im Ethos-Simulator 26.2 (X18RS) geprüft: Vollbild 800 × 480 direkt,
+  640 × 360, 480 × 320 und 480 × 272 sowie die Kompaktansicht 784 × 316, 630 × 258 und 472 × 210 nachgestellt.
+  Sendertest an einer echten X18RS mit simulierter JetCat-Telemetrie bestanden (Version 0.1.5, Code gleich in 0.1.6: Anzeige, Status, Abschaltung mit Grund bei SF «ein» und «aus», EGT-Alarm, Ansagen «Turbine aus», «Flammabriss», «Turbine läuft», «EGT hoch»). Noch nicht am Sender: Ansageschalter mit mehreren Teilen, englische Ansagen, Vibration, Turbine 2–4, Xicoy und SportECU. <b>Noch nie</b> mit einer echten Turbinen-ECU getestet, nur mit simulierter
+  Telemetrie. Die Installation über die FrSky Suite ist noch nicht ausprobiert.<br>
+  Am Sender noch zu prüfen: ob die Drehzahl ohne Umrechnung stimmt (Einstellung «Drehzahl mal»), ob Ethos die Xicoy-Sensoren
+  selbst anlegt, die Physical IDs der JetCat-Turbinen 2 bis 4 und ob negative Statuscodes über den Sensor «Temp2» richtig ankommen.
+  Die Einstellungsdatei aus Lua-Studio (neu in 0.2.0) hat mit 0.2.1 den Sendertest an der X18RS bestanden (laden, volle Ansicht mit 16 Plätzen, Sensor-Plätze,
+  kaputte Datei). Noch nicht am Sender: zu neue Datei, Änderungen an der Funke und «Zurück», Kompaktansicht und Englisch mit Studio-Datei, eine selbst gestaltete Ansicht. Die Symbole (Studio-Format 2, neu in 0.3.0) haben den Sendertest an der X18RS bestanden (Symbole, fette Einheiten, Abschaltung, EGT-Alarm); noch offen: Belastung mit sehr vielen Symbolen und Schmuck, fehlendes Symbolbild.
+  Die deutschen Statustexte sind eigene Übersetzungen der Herstellertexte. Die Sprachdateien sind erst teilweise am Sender abgehört;
+  fehlt eine Sprachdatei, kommt bei «Turbine läuft», «Turbine aus» und (mit «Ton bei Alarm») dem Abschaltgrund ein Ton, sonst bleibt es still; ein Alarm gibt immer einen Ton. Jet braucht rund 144 KB Lua-Speicher, mit Studio-Datei (im Simulator gemessen) rund 100–115 KB mehr. Wechselst du auf ein Modell ohne Jet, gibt Jet den Speicher bis auf rund 5 KB wieder frei (ab 0.4.0, im Simulator gemessen).
+</div>
+
+<h2>1. Was du brauchst</h2>
+<ul class="haken">
+  <li>Einen FrSky-Sender mit Ethos 26.2 und Farbdisplay (Liste am Schluss).</li>
+  <li>Eine Turbine mit Telemetrie zum Sender, über einen dieser Wege: JetCat mit eigenem Telemetrieadapter (Turbine 1 bis 4),
+      Xicoy mit TeleX-Adapter, SportECU (z. B. ProJET Hornet III), VSpeak-ECU-Converter (für Kingtech, Swiwin, PBS, evoJet,
+      Hornet/Behotec, Jakadofsky, JetCat). Andere Turbinen gehen mit der Einstellung «von Hand».</li>
+  <li>Am Modell die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).</li>
+  <li>Die Grösse deines Tanks in ml, die Art und Zellenzahl deines ECU-Akkus.</li>
+  <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
+  <li>Die Datei <code>Jet-0.4.0.zip</code>. Sie liegt neben dieser Anleitung in <code>Jet-0.4.0-zum-Teilen.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+</ul>
+
+<h2>2. Installieren</h2>
+<ol>
+  <li>Sender einschalten und mit dem USB-Kabel am Computer anschliessen.</li>
+  <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
+  <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
+  <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
+  <li>Wähle die Datei <code>Jet-0.4.0.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Ziehe das Kabel ab und starte den Sender neu.</li>
+</ol>
+<p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>jet</code> aus der ZIP in den
+Ordner <code>scripts</code> kopieren. Lädt dein Sender die Skripte von der SD-Karte (System › Allgemein › Speicherort),
+gehört er nach <code>scripts</code> auf der SD-Karte. Einen vorhandenen Ordner überschreiben, nicht löschen.</p>
+
+<h2>3. Bildschirm einrichten</h2>
+<ol>
+  <li>Tippe unten auf das Symbol <b>Bildschirme</b> (zwei Rechtecke).</li>
+  <li>Tippe oben rechts auf <b>+</b>.</li>
+  <li>Wische nach unten bis zum Layout <b>Vollbild</b> (ein einziges grosses Feld) und tippe es an. Willst du die
+  Ethos-Kopf- und Fussleiste behalten, wähle das Layout mit <b>einem Feld und den Leisten</b> (im Auswahlraster unten in der Mitte);
+  Jet zeigt dann die Kompaktansicht (Kapitel 5).</li>
+  <li>Tippe in das leere Feld, dann auf <b>Widget</b>.</li>
+  <li>Wähle in der Liste <b>Jet</b>. Die Anzeige erscheint sofort.</li>
+</ol>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 01 Widget-Liste.png" alt="Widget-Liste"></div>
+<p>Das Menü des Widgets erreichst du später jederzeit über Modell › Bildschirme › den Bildschirm wählen › Widget antippen.</p>
+
+<h2>4. Sensoren zuweisen</h2>
+<ol>
+  <li>Schalte Empfänger und ECU ein, damit die Telemetrie läuft. Beim ersten Mal sucht Jet die Sensoren selbst; unten erscheint kurz blau
+  «… Sensoren automatisch zugewiesen».</li>
+  <li>Öffne das Menü. Oben steht bei <b>Erkannt</b> der Hersteller, den Jet an den Sensoren erkannt hat, z. B. «JetCat».
+  Steht dort «noch nichts», öffne die Gruppe <b>Hersteller</b> und wähle ihn bei <b>Hersteller</b> selbst.</li>
+  <li>Nur beim VSpeak-Converter: Wähle in der Gruppe <b>Hersteller</b> bei <b>ECU am VSpeak</b> die Turbine dahinter (Kingtech, Swiwin,
+  PBS, evoJet, Hornet/Behotec, Jakadofsky, JetCat). Bis dahin steht bei Erkannt «VSpeak - Hersteller wählen» und der Status nur als «Code n».</li>
+  <li>JetCat, Xicoy und SportECU senden einen Teil ihrer Werte mit Kennungen, für die Ethos keine Sensoren anlegt
+  (JetCat 0x5000–0x53FF, SportECU-Kraftstoff 0x0A10; bei Xicoy 0x4400–0x4406 ist das noch nicht am Sender geprüft). Jet nimmt nur Werte von der Physical ID der Turbine an. Diese Werte liest Jet selbst aus der Telemetrie,
+  du musst dafür nichts einstellen. Ihre Zeilen in der Gruppe <b>Sensoren</b> (z. B. Status, Soll-Drehzahl, Pumpe) dürfen leer bleiben.</li>
+  <li>Hängen weitere Geräte mit denselben Kennungen am Empfänger (z. B. ein Drehzahlsensor), tippe oben bei
+  <b>Turbinenwerte neu zuordnen</b> auf <b>Neu</b> und dann <b>JA, NEU</b>. Jet nimmt dann für alle Turbinenwerte den Sensor der Turbine
+  (Physical ID 0x1B), sofern es einen gibt; Empfang, Höhe und Speed bleiben, ausser ihr Sensor ist gelöscht. Hast du im Modell
+  «Alle Sensoren löschen» und neu gesucht, mach danach ebenfalls einmal <b>Neu</b>: Jet holt dann alle Werte von den neuen Sensoren.</li>
+  <li>Öffne die Gruppe <b>Sensoren</b> und kontrolliere jede Zeile. Was leer oder falsch ist, wählst du von Hand. Eine leere Zeile ist
+  erlaubt, das Feld zeigt dann einen Strich.</li>
+  <li>Mit <b>Sensoren suchen (nur leere)</b> › <b>Suchen</b> füllt Jet später nur die leeren Zeilen, deine eigene Wahl bleibt.</li>
+  <li>In der Gruppe <b>Zuordnung prüfen</b> steht je Zeile der gewählte Sensor mit Physical ID und AppID (z. B. «EngState1  P1B / 5004»).
+  Passten mehrere gleiche Sensoren, steht darunter «n Sensoren passen, gewählt: … - bitte prüfen».</li>
+  <li>Öffne die Gruppe <b>Turbine</b> und stelle <b>Tankgrösse</b>, <b>ECU-Akkuart</b> und <b>ECU-Akku Zellen</b> ein.</li>
+</ol>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 02 Menue.png" alt="Menü oben"></div>
+
+<h3>Woran Jet den Hersteller erkennt</h3>
+<p>Jet schaut auf die AppID der zugewiesenen Sensoren (eine Kennnummer, die du unter «Zuordnung prüfen» siehst). Von Hand gewählt gilt immer vor erkannt.</p>
+<table>
+  <tr><th>Hersteller / Weg</th><th>Erkannt an</th><th>Liest Jet selbst</th><th>Kraftstoff</th></tr>
+  <tr><td>JetCat mit eigenem Adapter</td><td>Telemetrie mit Kennung 0x5000–0x53FF, sonst 0x0210 (ECU-Akku) zusammen mit 0x0500 (Drehzahl)</td><td>0x5000–0x53FF: Status, Soll-Drehzahl, Pumpe, Rest ml, Fluss, Schub, Höhe, Speed, Welle, Strom; Turbine 2–4: Drehzahl, EGT, Kraftstoff, ECU-Akku, Status</td><td>% von der ECU, Rest ml</td></tr>
+  <tr><td>Xicoy mit TeleX</td><td>Telemetrie mit Kennung 0x4400–0x4406</td><td>alle 7 Werte (EGT, Drehzahl, Gas, Akku, Pumpe, Kraftstoff %, Status)</td><td>% von der ECU</td></tr>
+  <tr><td>SportECU</td><td>Telemetrie mit Kennung 0x0A10, sonst 0x0410 zusammen mit 0x0900</td><td>Kraftstoff ml (0x0A10)</td><td>Rest ml, % über die Tankgrösse</td></tr>
+  <tr><td>VSpeak-Converter</td><td>0x0410 zusammen mit 0x0600</td><td>nichts, Ethos findet die Sensoren selbst</td><td>ml, Rest oder verbraucht je nach ECU</td></tr>
+  <tr><td>von Hand</td><td>nur im Menü wählbar</td><td>nichts</td><td>Rest ml, % über die Tankgrösse</td></tr>
+</table>
+
+<table>
+  <tr><th>Zeile im Menü</th><th>Welcher Sensor gehört hinein</th></tr>
+  <tr><td>Drehzahl, Soll-Drehzahl</td><td>Ist- und Soll-Drehzahl der Turbine. Soll gibt es nur bei JetCat (EngSetRpm1).</td></tr>
+  <tr><td>EGT</td><td>Abgastemperatur, z. B. «EGTC» (Xicoy) oder «Tmp1» (VSpeak).</td></tr>
+  <tr><td>ECU-Akku</td><td>Spannung des Akkus der Turbinensteuerung, z. B. «VBAT» (Xicoy) oder «A3» (VSpeak, SportECU).</td></tr>
+  <tr><td>Pumpe</td><td>Pumpenspannung, z. B. «EngPumpV1», «PUMP», «A4».</td></tr>
+  <tr><td>Status</td><td>Statuscode der ECU, z. B. «EngState1», «STAT» oder «Tmp2».</td></tr>
+  <tr><td>Kraftstoff ml, Kraftstoff %</td><td>Kraftstoff in ml und in %. Was die ECU nicht liefert, bleibt leer.</td></tr>
+  <tr><td>Kraftstofffluss, Schub, Wellen-Drehzahl, ECU-Strom</td><td>Nur JetCat (EngFuelFlow1, EngThrust1, EngShaftRpm1, EngCurrent1).</td></tr>
+  <tr><td>Höhe, Geschwindigkeit</td><td>Von der ECU (JetCat), vom Vario oder GPS.</td></tr>
+  <tr><td>Gas % (Sensor)</td><td>Gasstellung von der ECU, z. B. «THRT» (Xicoy). Ohne Sensor nimmt Jet den Gaskanal (Gruppe Schalter).</td></tr>
+  <tr><td>RSSI, Empfängerakku</td><td>Empfangsstärke «RSSI» und Spannung des Empfängerakkus, z. B. «RxBatt».</td></tr>
+</table>
+<p class="klein">Turbine 2 bis 4 (JetCat) brauchen keine Zeilen im Menü: Jet liest ihre Werte selbst aus der Telemetrie. Ein selbst gelesener Wert gilt 5 Sekunden; kommt keiner mehr, gilt wieder der Sensor aus dem Menü.</p>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 11 Xicoy nur Teil.png" alt="Xicoy"><div class="t">Xicoy: Fluss und Speed fehlen (Strich), ein Feld zeigt GAS</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 22 Kingtech VSpeak.png" alt="Kingtech"><div class="t">Kingtech am VSpeak: Pumpe als Leistung «PW»</div></div>
+</div>
+
+<h2 class="neu">5. Die Anzeige</h2>
+<div class="bild">
+  <img src="../bilder-simulator/Jet - Sim 800x480 04 Normal.png" alt="Anzeige">
+</div>
+<table>
+  <tr><th style="width:9mm">Nr.</th><th>Feld (Ort)</th><th>Was es zeigt</th></tr>
+  <tr><td>1</td><td>Modellname (Kopfzeile links)</td><td>Name des Modells im Sender. Die Kopfzeile wird <span class="orange">orange</span> bei einer Warnung und <span class="rot">rot</span> bei einem Alarm oder einer Abschaltung.</td></tr>
+  <tr><td>2</td><td>Laufzeit (Kopfzeile Mitte)</td><td>Dauer des laufenden Laufs in Minuten:Sekunden. Sie läuft, solange die Turbine dreht.</td></tr>
+  <tr><td>3</td><td>Turbinen-Pille (Kopfzeile rechts)</td><td>Zustand der Turbine: AUS grau, START blau, LÄUFT grün, ABSCHALTUNG rot. Links davon erscheinen deine eigenen Schalter als grüne Pille, solange sie eingeschaltet sind (z. B. «STABI», «FAHRWERK»).</td></tr>
+  <tr><td>4</td><td>Balken, Akkusymbol (ganz rechts)</td><td>Empfangsstärke (RSSI) in vier Stufen und der Akku des Senders.</td></tr>
+  <tr><td>5</td><td>DREHZAHL (Tacho 1)</td><td>Drehzahl in U/min. Der Bogen reicht bis zur höchsten Soll- oder Ist-Drehzahl in diesem Lauf (beginnt bei jedem Start neu) (oder bis «Tacho Drehzahl bis»). Darunter gelb SOLL (nur JetCat) oder HÖCHST.</td></tr>
+  <tr><td>6</td><td>EGT (Tacho 2)</td><td>Abgastemperatur in °C, Bogen 350–800 °C. Darunter HÖCHST = höchster Wert in diesem Lauf (beginnt bei jedem Start neu).</td></tr>
+  <tr><td>7</td><td>KRAFTSTOFF (Tacho 3)</td><td>Rest in %, darunter Rest in ml. Der %-Wert kommt von der ECU; fehlt er, rechnet Jet aus ml und Tankgrösse.</td></tr>
+  <tr><td>8</td><td>ECU-AKKU (Tacho 4)</td><td>Spannung des ECU-Akkus in Volt. Der Bogen geht von leer bis voll je ECU-Akkuart und Zellenzahl. Darunter TIEFST.</td></tr>
+  <tr><td>9</td><td>STATUS (gross, links)</td><td>Zustand der ECU als Text, Farbe wie die Pille: grün läuft, blau Start, grau aus/bereit/abkühlen, rot Fehler. Darunter «seit 4:13», solange sie läuft. Kennt Jet den Code nicht: «Code n». Antippen öffnet die letzten Statuswechsel (Kapitel 7).</td></tr>
+  <tr><td>10</td><td>«6 Läufe» (unten links)</td><td>Zahl der gezählten Läufe dieses Modells. Antippen öffnet die Flugliste.</td></tr>
+  <tr><td>11</td><td>FLUSS ml/min (Feld 1)</td><td>Kraftstofffluss in ml/min, darunter in diesem Lauf verbraucht in ml.</td></tr>
+  <tr><td>12</td><td>PUMPE (Feld 2)</td><td>Pumpenspannung in V, darunter HÖCHST. Bei Kingtech am VSpeak als Leistung «PW».</td></tr>
+  <tr><td>13</td><td>SCHUB (Feld 3)</td><td>Schub in N (nur JetCat), darunter HÖCHST.</td></tr>
+  <tr><td>14</td><td>HÖHE (Feld 4)</td><td>Höhe in m, darunter HÖCHST.</td></tr>
+  <tr><td>15</td><td>SPEED (Feld 5)</td><td>Geschwindigkeit in km/h, darunter HÖCHST.</td></tr>
+  <tr><td>16</td><td>EMPFANG (Feld 6)</td><td>RSSI in dB, darunter Empfängerakku («RX 7,9V») und TIEFST. Liefert dein Empfänger RSSI in dBm (negativ), steht «dBm».</td></tr>
+</table>
+<p>Ein kurzer grauer Strich statt einer Zahl heisst: Dieser Wert kommt gerade nicht an oder hat keinen Sensor.
+Was in welchem Tacho und Feld steht, kannst du im Menü ändern (Kapitel 8, Gruppe Felder).</p>
+<p><b>Kraftstoff:</b> Liefert die ECU nur ml, rechnet Jet die % aus der <b>Tankgrösse</b>. Ob die ml der Rest im Tank oder der Verbrauch
+sind, legt <b>Kraftstoff ml ist</b> fest; ab Werk «nach Hersteller». Ist die Tankgrösse 0 und fehlen die %, steht unter dem Tacho orange «Tankgrösse einstellen».</p>
+<p><b>Mehrere Turbinen:</b> Bei 2 bis 4 Turbinen zeigen EGT, KRAFTSTOFF und ECU-AKKU den kritischsten Wert (höchste EGT, wenigster Kraftstoff,
+tiefster Akku); hinter dem Titel steht dann z. B. «T2». Alle Turbinen nebeneinander zeigt Seite 2 (Kapitel 7).</p>
+
+<h3>Kompaktansicht</h3>
+<p>Wählst du das Layout mit Kopf- und Fussleiste (Kapitel 3), merkt Jet das selbst und zeigt eine kompakte Ansicht:
+oben eine schmale Leiste mit Laufzeit, Pillen und Empfang (Modellname und Senderakku stehen in der Ethos-Kopfzeile),
+darunter die vier Tachos und acht Felder: STATUS, Feld 1 bis 6 und LÄUFE. Antippen von LÄUFE öffnet die Flugliste.
+Alles andere geht wie im Vollbild.</p>
+<div class="bild"><img src="../bilder-simulator/Jet - Sim 784x316 33 Kompakt Normal.png" alt="Kompaktansicht"></div>
+<p class="klein">Kompaktansicht auf X20 und X18RS (784 × 316). Auf X14 und X18 / Twin X Lite ist sie entsprechend kleiner.</p>
+
+<h2>6. Warnungen und Alarme</h2>
+<p>Jeder überwachte Wert hat zwei Grenzen: Warnung (orange) und Alarm (rot, Rahmen, Ton und Ansage).
+Beide stellst du im Menü in der Gruppe <b>Grenzwerte (0 = aus)</b> ein, 0 schaltet eine Grenze aus. Die Werte ab Werk:</p>
+<table>
+  <tr><th>Wert</th><th>Warnung (orange)</th><th>Alarm (rot, Ton, Ansage)</th></tr>
+  <tr><td>EGT</td><td>über 720 °C</td><td>über 750 °C, «Achtung! Abgastemperatur hoch» und die Zahl</td></tr>
+  <tr><td>Kraftstoff</td><td>unter 30 %</td><td>unter 20 %, «Achtung! Kraftstoff Reserve» ohne Zahl</td></tr>
+  <tr><td>ECU-Zelle (Grenze je Zelle × ECU-Akku Zellen)</td><td>unter 3,70 V (bei 2 Zellen 7,4 V)</td><td>unter 3,50 V (bei 2 Zellen 7,0 V), «Achtung! Akku der Turbinensteuerung tief» und die Spannung</td></tr>
+  <tr><td>RX-Akku</td><td>ab Werk aus (0); z. B. 7,40 V bei 2S LiPo</td><td>ab Werk aus (0); z. B. 7,00 V bei 2S LiPo, «Achtung! Empfängerakku tief» und die Zahl</td></tr>
+  <tr><td>RSSI (bei dBm-Werten: Schwelle = dBm + 120, z. B. 40 = -80 dBm)</td><td>unter 45 dB</td><td>unter 40 dB, «Achtung! Empfang schwach» und die Zahl</td></tr>
+  <tr><td>Höhe</td><td>über 110 m</td><td>über 120 m, «Höhe» und die Zahl</td></tr>
+  <tr><td>Speed</td><td>aus</td><td>aus; gesetzt: «Geschwindigkeit» und die Zahl</td></tr>
+</table>
+<p class="klein">Die ECU-Zellen-Grenzen gelten für LiPo. Wählst du eine andere ECU-Akkuart und stehen die Grenzen noch auf dem
+Werkwert, stellt Jet sie passend um: LiFe 3,10/3,00 V, Li-Ion 3,40/3,20 V, NiMH 1,15/1,10 V.</p>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 05 Warnung.png" alt="Warnung"><div class="t">Warnung: Kopf und Wert orange</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 06 Alarm.png" alt="Alarm"><div class="t">Alarm: Kopf rot, roter Rahmen, Ton und Ansage</div></div>
+</div>
+<p>Eine Warnung oder ein Alarm gilt, wenn der Wert 1 Sekunde lang jenseits der Grenze liegt, und endet, wenn er 3 Sekunden
+lang wieder gut ist. Ein Alarm piept («Ton bei Alarm»), sagt den Wert an («Alarme ansagen») und wiederholt das alle 10 Sekunden
+(«Alarm wiederholen alle»), solange er besteht. Eine Warnung wird nur angesagt, wenn «Warnung auch ansagen» ein ist.
+Zwischen zwei Ansagen liegen immer mindestens 3 Sekunden. Ohne Telemetrie gibt es keine Warnungen.</p>
+
+<h3>Alarm auch bei Turbine aus</h3>
+<p>Ab Werk kommen alle Warnungen und Alarme auch dann, wenn «Turbine aus bei» (ab Werk SF↑) auf aus steht. Im Menü in der
+Gruppe <b>Alarm auch bei Turbine aus</b> kannst du das je Wert ändern (EGT, Kraftstoff, ECU-Akku, Empfängerakku, RSSI, Höhe, Speed),
+oben schaltet <b>alle</b> alle Haken auf einmal. Ohne Haken schweigt dieser Wert, solange der Schalter auf aus steht: kein Ton, keine
+Ansage, keine Vibration, die Kopfzeile bleibt ruhig. Der Wert selbst wird trotzdem orange bzw. rot. Schaltest du den Schalter wieder
+ein und der Wert liegt noch jenseits der Grenze, kommt der Alarm sofort. Fehlercodes der ECU und Abschaltgründe (z. B. «Flammabriss»)
+kommen immer, sie lassen sich nicht abwählen.</p>
+
+<h3>Widersprüchliche Quellen</h3>
+<p>Liest Jet einen Wert direkt aus der Telemetrie der ECU (JetCat, Xicoy, SportECU) und zeigt der Sensor, der im Menü
+für diesen Wert steht, gleichzeitig etwas deutlich anderes, meldet Jet eine Warnung: Kopfzeile orange und unten der Hinweis
+z. B. «EGT: ECU-Daten und Sensor weichen ab» (alle 30 Sekunden wieder). Das gilt für EGT (mehr als 50 °C bzw. 15 %),
+Drehzahl (mehr als 5000 U/min bzw. 15 %), ECU-Akku (mehr als 0,5 V) und Kraftstoff (mehr als 10 %), und erst wenn
+die Abweichung 3 Sekunden besteht. Angezeigt wird weiter der Wert der ECU. Prüfe dann die Zuordnung (Menü › Zuordnung prüfen),
+zum Beispiel wenn ein eigener Temperatursensor als EGT zugewiesen ist. Ohne Ton und Ansage.</p>
+
+<h3>Kraftstoff in Stufen</h3>
+<p>Fällt der Kraftstoff unter 75, 50, 30, 10 und 5 %, sagt der Sender je einmal «Kraftstoff» und die Zahl in Prozent. Bei 10 und 5 %
+vibriert er zusätzlich, wenn «Vibration bei Alarm» ein ist. Tankst du nach und der Wert steigt 5 % über eine Stufe, gilt sie wieder.
+Abschalten mit «Kraftstoff in Stufen».</p>
+
+<h3>Abschaltung</h3>
+<p>Meldet die ECU beim Ausgehen einen Fehlercode (z. B. «Temperatur zu tief»), oder geht eine laufende Turbine aus, ohne dass «Turbine aus bei»
+(ab Werk SF↑) eingeschaltet ist und ohne dass die ECU selbst «aus» meldet, gilt das als Abschaltung. Ein Fehlercode gilt immer, auch wenn SF schon auf «aus» steht: Kopf rot, Pille ABSCHALTUNG, STATUS rot mit dem Text der ECU. Der Sender sagt «Turbine aus» und gut eine Sekunde später den Grund:
+«Flammabriss», «Kraftstoff leer», «Akku tief», «Übertemperatur», «Failsafe» oder sonst «Störung». Bei Turbine 2 bis 4 heisst es
+«Turbine zwei aus» usw. Die Vibration folgt der Einstellung; einen Ton gibt es hier nur, wenn keine Sprachdatei da ist. Diese Ansage kommt immer, auch wenn «Alarme ansagen» aus ist.
+Ohne Statussensor oder ohne bekannten Statustext gilt als Flammabriss, wenn die Drehzahl 2 Sekunden unter «Leerlauf ab» liegt. Die Anzeige bleibt rot, bis die Turbine
+wieder startet; SF löscht sie nicht. Legst du SF erst nach dem Flammabriss um, bleibt es eine Abschaltung.
+Grenzwert-Alarme (EGT, Kraftstoff, Akkus, Empfang) kommen auch bei SF «aus», ausser du nimmst bei einem Wert den Haken «Alarm auch bei Turbine aus» weg (siehe oben).</p>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 20 Abschaltung Flammabriss.png" alt="Abschaltung"></div>
+
+<h2 class="neu">7. Bedienen</h2>
+<h3>Läufe erkennen</h3>
+<p>Ein Lauf beginnt, sobald die Turbine dreht: Die ECU meldet einen Start- oder Lauf-Status, oder ohne Statussensor (bzw. ohne bekannten Statustext) liegt die Drehzahl
+über 1000 U/min. Die Laufzeit oben läuft. Erreicht die Turbine «läuft» (grün; ohne Statussensor: Drehzahl ab «Leerlauf ab», ab Werk
+10 000 U/min), sagt der Sender «Turbine läuft». Schaltest du sie mit «Turbine aus bei» ab, sagt er «Turbine aus» (beides nur, wenn
+«Turbine läuft/aus» ein ist).</p>
+<p>Steht die Turbine 5 Sekunden (Drehzahl unter 1000 U/min, kein Start- oder Lauf-Status), endet der Lauf und kommt ohne Rückfrage in die
+Flugliste. Ein Lauf zählt erst ab 30 Sekunden («Lauf zählt ab»); kürzere Läufe, z. B. ein Fehlstart, fallen weg.</p>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 21 Start.png" alt="Start"><div class="t">Start: Pille START, Status blau</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 26 Statusliste.png" alt="Statusliste"><div class="t">STATUS antippen: letzte Statuswechsel</div></div>
+</div>
+
+<h3>Letzte Statuswechsel</h3>
+<p>Tippe auf das Feld STATUS. Es öffnet sich «LETZTE STATUSWECHSEL» mit den letzten 5 Wechseln, je mit der Laufzeit, der neuste oben.
+<b>SCHLIESSEN</b> oder eine Drehung am Drehrad schliesst das Fenster.</p>
+
+<h3>Turbinen (Seite 2)</h3>
+<p>Nur bei 2 bis 4 Turbinen: Wische nach links. Je Turbine eine Spalte mit Drehzahl, EGT, Kraftstoff, ECU-Akku und Status. Werte über der
+Warnung sind orange, über dem Alarm rot.</p>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 23 Turbinen 2.png" alt="Turbinen"></div>
+
+<h3>Flugliste</h3>
+<p>Wische nach links (bei mehreren Turbinen zweimal) oder tippe auf «n Läufe». Rechts stehen die Läufe, der neuste oben, der laufende
+blau mit «läuft». Die Spalte «Ende» zeigt «SF aus», «Abschaltung» (rot) oder «-». Tippe einen Lauf an: Links erscheinen Laufzeit,
+Verbraucht, Höchst-EGT, Höchst-Drehzahl, Kraftstoff am Ende, Höchste Höhe, Höchst-Speed, Tiefster ECU-Akku, Ende (bei einer Abschaltung
+mit dem Text der ECU) und Turbinen.</p>
+<div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 25 Flugliste.png" alt="Flugliste"></div>
+<ol>
+  <li>Einen Lauf löschen: Lauf antippen, <b>LAUF n LÖSCHEN</b>, dann <b>JA, LÖSCHEN</b>. Unten erscheint «Lauf n gelöscht». Die späteren Nummern rücken nach.</li>
+  <li>Alle Läufe löschen: <b>LISTE LÖSCHEN</b>, dann <b>JA, LÖSCHEN</b>. Unten erscheint «Flugliste gelöscht». Der Zähler beginnt wieder bei 1.</li>
+  <li>Mit <b>ABBRECHEN</b> bleibt alles, wie es ist.</li>
+  <li>Zurück zur Anzeige: <b>&lt; ZURÜCK</b> oder nach rechts wischen.</li>
+</ol>
+<p class="klein">Die Liste behält die letzten 20 Läufe und bleibt beim Ausschalten erhalten. Ein Lauf, der beim Ausschalten noch offen war,
+kommt beim nächsten Einschalten in die Liste.</p>
+
+<h3>Lauf von Hand beenden</h3>
+<p>Im Menü oben bei <b>Lauf beenden</b> auf <b>Beenden</b> tippen. Es erscheint «Lauf beenden?» mit «Er kommt in die Flugliste.».
+<b>JA, BEENDEN</b> beendet ihn, unten erscheint «Lauf beendet». Ein neuer Lauf beginnt erst, wenn die Turbine einmal gestanden hat.</p>
+
+<h3>Ansage auf Schalter</h3>
+<p>Schaltest du <b>SG↓</b> ein («Ansage bei»), sagt der Sender «Kraftstoff» mit %, «Laufzeit» mit Minuten und, wenn eingeschaltet, «Höhe»
+mit Metern. Was angesagt wird, wählst du in der Gruppe Ansagen.</p>
+
+<h3>Sender ohne Berührung (X14, X10, X12)</h3>
+<p>Das Drehrad blättert von der Anzeige zur Seite Turbinen und zur Flugliste. Auf der Flugliste wählst du damit Läufe; vor dem ersten Lauf
+zurückdrehen führt wieder zur Anzeige. Im Menü oben gibt es <b>Lauf beenden</b>, <b>Lauf löschen</b> (vorher bei «Lauf Nr. zum Löschen»
+die Nummer wählen) und <b>Ganze Liste löschen</b>, jeweils mit Rückfrage.</p>
+
+<h2 class="neu">8. Alle Einstellungen</h2>
+<p>Menü öffnen: Modell › Bildschirme › den Bildschirm wählen › Widget antippen. Jede Änderung gilt sofort und bleibt gespeichert.</p>
+<table>
+  <tr><th>Gruppe</th><th>Einstellung</th><th>Ab Werk</th><th>Bereich und Wirkung</th></tr>
+  <tr><td>oben</td><td>Studio-Datei</td><td>keine</td><td>Zeigt, ob eine Datei aus Lua-Studio gilt: keine, geladen, kaputt oder zu neu. Knopf <b>Zurück</b> (mit Rückfrage): mit Datei «Zurück auf Studio-Stand», ohne Datei «Zurück auf Standard». Siehe unten «Lua-Studio».</td></tr>
+  <tr><td>oben</td><td>Erkannt</td><td>–</td><td>Zeigt den Hersteller, der gerade gilt, oder «noch nichts».</td></tr>
+  <tr><td>Sensoren</td><td>17 Zeilen</td><td>leer</td><td>Siehe Kapitel 4. Die erste Suche läuft von selbst.</td></tr>
+  <tr><td rowspan="5">Hersteller</td><td>Hersteller</td><td>automatisch</td><td>automatisch, JetCat, Xicoy, SportECU, VSpeak-Converter, von Hand. Bestimmt Statustexte und Kraftstoff.</td></tr>
+  <tr><td>ECU am VSpeak</td><td>nicht gewählt</td><td>Kingtech, Swiwin, PBS, evoJet, Hornet/Behotec, Jakadofsky, JetCat. Nur für den VSpeak-Converter.</td></tr>
+  <tr><td>Kraftstoff ml ist</td><td>nach Hersteller</td><td>Rest im Tank oder verbraucht. Bei Swiwin am VSpeak selbst wählen.</td></tr>
+  <tr><td>Drehzahl mal</td><td>1</td><td>1, 10 oder 100. Für ECUs, die die Drehzahl geteilt senden; Beispiel: Ethos zeigt 9840, die ECU 98 400 → 10.</td></tr>
+  <tr><td>SportECU: Hornet-Texte</td><td>aus</td><td>Ein: Statuscodes der SportECU als Hornet-Texte statt «Code n».</td></tr>
+  <tr><td rowspan="5">Turbine</td><td>Tankgrösse</td><td>0 ml</td><td>0 bis 50 000 ml in 50er-Schritten. Für Kraftstoff % aus ml. 0 = nicht gesetzt.</td></tr>
+  <tr><td>ECU-Akkuart</td><td>LiPo</td><td>LiPo, LiFe, Li-Ion, NiMH. Bestimmt den Bogen leer–voll und die Werkwerte der Grenzen.</td></tr>
+  <tr><td>ECU-Akku Zellen</td><td>2 S</td><td>1 bis 6 Zellen.</td></tr>
+  <tr><td>Leerlauf ab</td><td>10000 U/min</td><td>500 bis 200 000 U/min. Ohne Statussensor: ab hier gilt die Turbine als «läuft», darunter 2 s = Flammabriss.</td></tr>
+  <tr><td>Lauf zählt ab</td><td>30 s</td><td>0 bis 600 s. Kürzere Läufe kommen nicht in die Liste.</td></tr>
+  <tr><td rowspan="7">Grenzwerte (0 = aus)</td><td>EGT Warnung über / Alarm über</td><td>720 / 750 °C</td><td>0 bis 1200 °C, Schritt 5.</td></tr>
+  <tr><td>Kraftstoff Warnung unter / Alarm unter</td><td>30 / 20 %</td><td>0 bis 100 %.</td></tr>
+  <tr><td>ECU-Zelle Warnung unter / Alarm unter</td><td>3,70 / 3,50 V</td><td>0 bis 4,50 V je Zelle, Schritt 0,05.</td></tr>
+  <tr><td>RX-Akku Warnung unter / Alarm unter</td><td>0 / 0 (aus)</td><td>0 bis 20,00 V, Schritt 0,10. Ab Werk aus, weil Empfänger mit 5 bis 8,4 V laufen; bei 2S LiPo z. B. 7,40 / 7,00 V eintragen.</td></tr>
+  <tr><td>RSSI Warnung unter / Alarm unter</td><td>45 / 40 dB</td><td>0 bis 120 dB.</td></tr>
+  <tr><td>Höhe Warnung über / Alarm über</td><td>110 / 120 m</td><td>0 bis 5000 m.</td></tr>
+  <tr><td>Speed Warnung über / Alarm über</td><td>0 / 0 km/h (aus)</td><td>0 bis 1500 km/h, Schritt 10.</td></tr>
+  <tr><td rowspan="5">Schalter</td><td>Turbine aus bei</td><td>SF↑</td><td>Schalterstellung, in der die Turbine aus ist. Abschalten in dieser Stellung gilt als gewollt, ohne Alarm, ausser die ECU meldet einen Fehlercode.</td></tr>
+  <tr><td>Ansage bei</td><td>SG↓</td><td>Schalterstellung für die Ansage.</td></tr>
+  <tr><td>Schalter 1 / Schalter 2</td><td>leer</td><td>Eigene Schalter, die in der Kopfzeile erscheinen, solange sie eingeschaltet sind.</td></tr>
+  <tr><td>Schalter 1 Name / Schalter 2 Name</td><td>STABI / FAHRWERK</td><td>Höchstens 12 Zeichen: Buchstaben, Ziffern, Leerzeichen, Punkt, Bindestrich.</td></tr>
+  <tr><td>Gaskanal</td><td>leer</td><td>Kanal des Gases, für das Feld «Gas %», wenn kein Gas-Sensor zugewiesen ist.</td></tr>
+  <tr><td rowspan="10">Ansagen</td><td>Alarme ansagen</td><td>ein</td><td>Aus: bei Alarm nur Ton und Anzeige.</td></tr>
+  <tr><td>Warnung auch ansagen</td><td>aus</td><td>Ein: auch die orange Warnung wird angesagt.</td></tr>
+  <tr><td>Alarm wiederholen alle</td><td>10 s</td><td>3 bis 300 s.</td></tr>
+  <tr><td>Kraftstoff in Stufen</td><td>ein</td><td>Ansagen bei 75, 50, 30, 10 und 5 %.</td></tr>
+  <tr><td>«Turbine läuft/aus»</td><td>ein</td><td>Ansage beim Erreichen von «läuft» und beim gewollten Abschalten.</td></tr>
+  <tr><td>Ansage: Kraftstoff</td><td>ein</td><td rowspan="3">Was auf dem Ansageschalter gesagt wird.</td></tr>
+  <tr><td>Ansage: Laufzeit</td><td>ein</td></tr>
+  <tr><td>Ansage: Höhe</td><td>aus</td></tr>
+  <tr><td>Ton bei Alarm</td><td>ein</td><td>Piepton vor der Alarm-Ansage; bei einer Abschaltung nur, wenn keine Sprachdatei da ist. Ist die Ansage eines Alarms aus (oder fehlt seine Sprachdatei), kommt trotzdem immer ein Ton, auch wenn diese Einstellung aus ist. Ganz still ist ein Alarm nur, wenn seine Grenze abgeschaltet ist.</td></tr>
+  <tr><td>Vibration bei Alarm</td><td>aus</td><td>Der Sender vibriert bei Alarm, Abschaltung und den Kraftstoffstufen 10 und 5 %.</td></tr>
+  <tr><td rowspan="2">Felder</td><td>Tacho 1 bis 4, Feld 1 bis 6</td><td>wie im Bild</td><td>Inhalt wählbar: leer, Drehzahl, EGT, Kraftstoff %, ECU-Akku, Status, Kraftstofffluss, Pumpe, Schub, Höhe, Speed, Empfang, Gas %, Welle, ECU-Strom, Laufzeit, Kraftstoff ml, Empfängerakku.</td></tr>
+  <tr><td>Tacho Drehzahl bis (0 = auto)</td><td>0</td><td>0 bis 300 000, Schritt 1000. Endwert des Drehzahlbogens; 0 = höchste gemessene Drehzahl.</td></tr>
+  <tr><td rowspan="2">Alarm auch bei Turbine aus</td><td>alle</td><td>ein</td><td>Schaltet alle Haken darunter auf einmal ein oder aus. Darüber der Hinweis «Ohne Haken: still, solange Turbine aus».</td></tr>
+  <tr><td>EGT, Kraftstoff, ECU-Akku, Empfängerakku, RSSI, Höhe, Speed</td><td>ein</td><td>Aus: Warnung und Alarm dieses Werts schweigen, solange «Turbine aus bei» auf aus steht. Fehlercodes und Abschaltgründe kommen immer. Siehe Kapitel 6.</td></tr>
+  <tr><td>Anzeige</td><td>Sprache / Language</td><td>wie der Sender</td><td>Deutsch oder English für Anzeige, Menü und Ansagen. Das Menü wechselt beim nächsten Öffnen.</td></tr>
+</table>
+<p class="klein">«Turbine aus bei» und «Ansage bei» setzt Jet beim ersten Start auf SF↑ und SG↓, wenn es diese Schalter gibt. Oben im Menü stehen ausserdem: Sensoren suchen (nur leere), Version, Erkannt, Turbinenwerte neu zuordnen (ersetzt nach der Rückfrage «Turbinenwerte neu zuordnen?» alle Turbinenwerte, deren Sensor nicht auf der Turbinen-ID 0x1B liegt, zum Beispiel wenn ein anderes Gerät dieselbe Drehzahl-ID sendet), Lauf beenden, Lauf Nr. zum Löschen, Lauf löschen, Ganze Liste löschen.</p>
+
+<h3>Lua-Studio (Einstellungsdatei je Modell)</h3>
+<p>Mit dem PC-Programm <b>Lua-Studio</b> gestaltest du die Anzeige je Modell frei: Für jeden Platz wählst du Wert,
+Darstellung (Zahl, Ring, Balken waagrecht oder senkrecht, Verlauf, Status), Titel, Bereich, Farben und Zusatzzeile
+(MIN, MAX oder Ø über den Lauf). Ab Version 0.3.0 (Studio-Format 2) kommen Symbole dazu (z. B. Turbine, Impeller, Tank,
+Pumpe, Temperatur, Akku), eine fette Einheit und Schmuck (Linien, Rahmen). Die Symbole liegen als Bilder in
+<code>scripts/studio/symbole/</code>; fehlt eines, zeigt Jet den Platz ohne Symbol und meldet «Symbole fehlen». Dateien im
+alten Format 1 laden weiter. Dazu kommen Einstellungen und Grenzwerte je Modell. Lua-Studio legt dafür auf der
+SD-Karte die Datei <code>scripts/studio/Modellname.jet.lua</code> an. Im Dateinamen stehen vom Modellnamen nur
+Buchstaben A–Z und Ziffern, alles andere wird zu <code>_</code> (aus «Jet 1» wird <code>Jet_1</code>); Lua-Studio
+rechnet das selbst. Jet liest die Datei beim Laden des Modells.</p>
+<ul>
+  <li><b>Ohne diese Datei</b> arbeitet Jet genau wie bisher, ohne Hinweis.</li>
+  <li><b>Ab Werk</b> sieht die Ansicht in Lua-Studio aus wie Jet ohne Datei: im Vollbild vier Tachos, STATUS und sechs
+  Felder (LÄUFE bleibt fest unten links und öffnet die Flugliste), in der Kompaktansicht vier Tachos, STATUS und
+  sieben Felder mit LÄUFE. Oben zeichnet Jet die Kopfleiste immer selbst.</li>
+  <li><b>Mit Datei</b> gilt ihre Ansicht nur für die Fenstergrösse, für die sie gemacht ist (z. B. Vollbild 800 × 480
+  oder mit Leisten 784 × 316), und im Vollbild nur auf Seite 1. Für andere Grössen zeichnet Jet seine eingebaute Anzeige.</li>
+  <li><b>Sicherheit bleibt fest:</b> Die Datei kann die Abschaltung nicht ändern. «Turbine aus» mit Grund kommt auch
+  bei SF «aus», der Kopf bleibt rot, bis die Turbine wieder läuft, und Grenzwert-Alarme gelten auch bei SF «aus».
+  Nur je Grenze darf die Datei das abwählen (<code>beiMotorAus = false</code>, in Lua-Studio der Haken «auch bei Motor aus»);
+  im Menü heisst er «Alarm auch bei Turbine aus». Fehlercodes und Abschaltgründe kommen immer.</li>
+  <li><b>Grenzwerte</b> gelten je Wert, egal ob und wie er angezeigt wird. Fehlt ein Wert in der Datei, gilt die
+  Werkgrenze. Eine Grenze geht nur aus, wenn die Datei das ausdrücklich so will (<code>aus = true</code>). Passt die
+  Richtung nicht zum Wert, gilt ebenfalls die Werkgrenze, mit Hinweis. Grenzen gehen auch für weitere Sensoren, Kanäle oder nicht überwachte Werte, höchstens 6 je Modell (auch solche auf fehlende Sensoren zählen mit); weitere verwirft Jet mit Hinweis.</li>
+  <li><b>Änderst du an der Funke</b> Tank, Grenzwerte oder andere Einstellungen im Menü, schreibt Jet das in eine
+  eigene Datei <code>…jet.funke.lua</code>. Die Datei von Lua-Studio bleibt unverändert. Lua-Studio zeigt die
+  Unterschiede und übernimmt sie auf Wunsch.</li>
+  <li><b>Menü › Studio-Datei › Zurück:</b> mit Datei «Zurück auf Studio-Stand» (deine Änderungen an der Funke werden
+  gelöscht), ohne Datei «Zurück auf Standard» (Einstellungen und Grenzwerte ab Werk; Sensoren und Läufe bleiben).
+  Beides fragt nach.</li>
+  <li><b>Hinweise:</b> Ist die Datei kaputt, zu neu oder enthält sie ungültige Angaben, steht 8 Sekunden lang unten
+  ein Band (z. B. «Studio-Datei kaputt - Standard»), danach oben rechts ein oranges «!». Jet läuft immer weiter, im
+  Zweifel mit der eingebauten Anzeige.</li>
+  <li>Jet schreibt dazu die Datei <code>…jet.info.json</code> mit Modellname, Sender, Fenstergrössen und Sensorliste.
+  Nur Lua-Studio liest sie.</li>
+</ul>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 51 Studio-Datei.png" alt="Studio-Datei Vollbild"><div class="t">Beispiel einer Studio-Datei im Vollbild 800 × 480</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 784x316 50 Studio-Datei.png" alt="Studio-Datei kompakt"><div class="t">Beispiel einer Studio-Datei kompakt 784 × 316</div></div>
+</div>
+
+<h2>9. Wenn etwas nicht geht</h2>
+<table>
+  <tr><th>Was du siehst</th><th>Ursache</th><th>Was du tust</th></tr>
+  <tr><td>Überall Striche, Laufzeit 0:00</td><td>Keine Telemetrie</td><td>Empfänger und ECU einschalten. Prüfen, ob der Empfänger verbunden ist.</td></tr>
+  <tr><td>Drehzahl, EGT, ECU-Akku oder Status zeigen Werte eines anderen Geräts (z. B. Drehzahl 8000 statt 98400)</td><td>Ein anderes Gerät sendet dieselbe Kennung (AppID) und wurde zugewiesen</td><td>Menü oben › <b>Turbinenwerte neu zuordnen</b> › Neu › «JA, NEU». Danach in «Zuordnung prüfen» bei diesen Zeilen «P1B» kontrollieren.</td></tr>
+  <tr><td>Menü: Erkannt «noch nichts»</td><td>Keine Turbinen-Sensoren zugewiesen</td><td>Kapitel 4: Hersteller wählen, Suchen. Bei JetCat, Xicoy und SportECU erkennt Jet den Hersteller, sobald Telemetrie der Turbine kommt.</td></tr>
+  <tr><td>STATUS zeigt «Code 27» o. ä.</td><td>Hersteller oder ECU am VSpeak nicht gewählt, oder ein Code, den Jet nicht kennt</td><td>Menü › Hersteller kontrollieren. Bleibt es bei «Code n»: Code und Anzeige der ECU notieren und melden.</td></tr>
+  <tr><td>Orange «Tankgrösse einstellen» unter KRAFTSTOFF</td><td>Die ECU liefert nur ml, Tankgrösse ist 0</td><td>Menü › Turbine › Tankgrösse einstellen.</td></tr>
+  <tr><td>Kraftstoff % steigt statt fällt</td><td>«Kraftstoff ml ist» passt nicht zur ECU</td><td>Menü › Hersteller › «Kraftstoff ml ist» umstellen.</td></tr>
+  <tr><td>Drehzahl 10- oder 100-mal zu klein</td><td>Die ECU sendet die Drehzahl geteilt</td><td>Menü › Hersteller › «Drehzahl mal» auf 10 oder 100.</td></tr>
+  <tr><td>Rot ABSCHALTUNG, obwohl du selbst abgestellt hast</td><td>«Turbine aus bei» ist nicht dein Schalter</td><td>Menü › Schalter › «Turbine aus bei» die Stellung wählen.</td></tr>
+  <tr><td>Läufe zählen nicht</td><td>Lauf kürzer als «Lauf zählt ab», oder ohne Statussensor keine Drehzahl</td><td>Sensoren Drehzahl und Status kontrollieren (Kapitel 4).</td></tr>
+  <tr><td>Keine Seite Turbinen, obwohl du 2 hast</td><td>Von Turbine 2 kommt keine Telemetrie</td><td>Slave-Adresse der zweiten ECU (2) und ihren Telemetrieadapter prüfen.</td></tr>
+  <tr><td>Bei Alarm nur ein Piepton und die Zahl</td><td>Die Sprachdateien fehlen auf dem Sender (Ordner <code>audio</code>)</td><td>Kapitel 2 wiederholen.</td></tr>
+  <tr><td>Unten «Studio-Datei kaputt - Standard», «zu neu» oder «n Fehler», danach oben rechts «!»</td><td>Die Datei von Lua-Studio ist kaputt, für eine neuere Jet-Version oder enthält ungültige Angaben</td><td>In Lua-Studio neu übertragen bzw. Jet aktualisieren. Was genau falsch ist, steht im Log (je Fehler eine Zeile).</td></tr>
+  <tr><td>Unten links steht roter Text</td><td>Fehler im Skript. Der Sender läuft normal weiter.</td><td>Text abfotografieren und als Fehler melden: auf GitHub unter Issues, Vorlage «Fehler / Bug» (siehe TESTLEITFADEN.md im Repo).</td></tr>
+  <tr><td>Das Widget fehlt in der Liste</td><td>Nicht installiert oder Sender nicht neu gestartet</td><td>Kapitel 2 wiederholen, Sender neu starten.</td></tr>
+</table>
+
+<h2>10. Aktualisieren und Entfernen</h2>
+<p><b>Aktualisieren:</b> Die neue ZIP genau wie in Kapitel 2 installieren. Deine Einstellungen, Sensoren, Läufe und Zähler bleiben erhalten.</p>
+<p><b>Entfernen:</b> Zuerst das Widget vom Bildschirm nehmen (Modell › Bildschirme), dann in der FrSky Suite unter Lua-Bibliothek deinstallieren. Die Dateien für Lua-Studio liegen in <code>scripts/studio</code> und können dort von Hand gelöscht werden.</p>
+
+<h2>11. Welche Sender</h2>
+<table>
+  <tr><th>Display</th><th>Sender</th><th>Stand</th></tr>
+  <tr><td>800 × 480, Berührung</td><td>X20, X20S, X20HD, X20 Pro, X20R, X20RS, X18R, X18RS</td><td>im Simulator und an einer echten X18RS (simulierte Telemetrie)</td></tr>
+  <tr><td>640 × 360, ohne Berührung</td><td>Twin X14, X14S</td><td>im Simulator nachgestellt</td></tr>
+  <tr><td>480 × 320, Berührung</td><td>X18, X18S, X18SE, Twin X Lite, Twin X Lite S</td><td>im Simulator nachgestellt</td></tr>
+  <tr><td>480 × 272, ohne Berührung</td><td>X10, X10S, X10 Express, X12S mit Ethos</td><td>im Simulator nachgestellt</td></tr>
+</table>
+<div class="halb">
+  <div><img src="../bilder-simulator/Jet - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
+  <div><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
+</div>
+<p class="klein">Jet Version 0.4.0 · 21.11.2026</p>
+
+</body>
+</html>

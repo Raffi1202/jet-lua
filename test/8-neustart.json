@@ -1,0 +1,31 @@
+{
+ "skripte": [
+  [
+   "src/jet",
+   "jet"
+  ]
+ ],
+ "widget": "jet",
+ "abbild": false,
+ "ersetze": [
+  [
+   "scripts/jet/kern.lua",
+   "local TEST = nil",
+   "local TEST = { zustand = true, modell = \"JET DEMO\" }"
+  ]
+ ],
+ "schritte": [
+  {
+   "zustand": {
+    "gelesen": true,
+    "extra": {
+     "nListe": 5
+    }
+   }
+  },
+  {
+   "bild": "docs/bilder-simulator/Jet - Sim 800x480 10 nach Neustart.png"
+  }
+ ],
+ "grundstand": "test/stand-mit-werten"
+}
