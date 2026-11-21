@@ -1,0 +1,15 @@
+name: Feature request
+description: An idea or wish for Jet.
+title: "[Idea] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why, and how would you use it?

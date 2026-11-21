@@ -1,0 +1,46 @@
+name: Bug report
+description: Something in Jet does not work as described in the README, the wiki or the manual.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: input
+    id: radio
+    attributes:
+      label: Radio
+      description: e.g. X18RS, X20S, Twin X Lite
+    validations:
+      required: true
+  - type: input
+    id: ethos
+    attributes:
+      label: Ethos version
+      description: e.g. 26.2.0
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Jet version
+    validations:
+      required: true
+  - type: input
+    id: testcase
+    attributes:
+      label: Test case number from TESTLEITFADEN.md (if any)
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect, what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Log lines, screenshots
+      description: Lines from the debug log of the FrSky Suite or the Lua log, screenshots of the radio screen. Please remove personal data.

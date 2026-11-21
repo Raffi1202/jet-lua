@@ -17,7 +17,7 @@ docs/* ENTWURF.pdf
 # Zwischenstände der Simulator-Abläufe
 test/stand-*/
 
-# Local working notes, not published
+# local working notes
 STAND.md
 
 # Interne Planungsblaetter, nur lokal

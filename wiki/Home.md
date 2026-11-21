@@ -34,10 +34,10 @@
 
 | Project | What it does |
 |---|---|
-| [Elektro](https://github.com/Raffi1202/elektro-lua) | Ethos widget for electric models |
-| [Heli RF](https://github.com/Raffi1202/heli-lua) | Ethos widget for Rotorflight helicopters |
-| [Segler](https://github.com/Raffi1202/segler-lua) | Ethos widget for gliders (vario, thermals) |
-| [Motoren ECU / Vergaser](https://github.com/Raffi1202/motoren-lua) | Ethos widgets for gas engines |
+| [Electric](https://github.com/Raffi1202/electric-lua) | Ethos widget for electric models |
+| [Heli](https://github.com/Raffi1202/heli-lua) | Ethos widget for helicopters (Rotorflight) |
+| [Glider](https://github.com/Raffi1202/glider-lua) | Ethos widget for gliders (vario, thermals) |
+| [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos widgets for gas engines |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC app to set up the widgets (Mac/Windows) |
 | [Telemetry simulator](https://github.com/Raffi1202/telemetrie-simulator) | ESP32-S3 that simulates FrSky telemetry sensors |
 | [Ethos model converter](https://github.com/Raffi1202/ethos-modell-konverter) | Move models between Ethos radios |
@@ -47,10 +47,10 @@
 
 | Projekt | Wozu |
 |---|---|
-| [Elektro](https://github.com/Raffi1202/elektro-lua) | Ethos-Widget für Elektroflieger |
-| [Heli RF](https://github.com/Raffi1202/heli-lua) | Ethos-Widget für Rotorflight-Helis |
-| [Segler](https://github.com/Raffi1202/segler-lua) | Ethos-Widget für Segler (Vario, Thermik) |
-| [Motoren ECU / Vergaser](https://github.com/Raffi1202/motoren-lua) | Ethos-Widgets für Verbrenner |
+| [Electric](https://github.com/Raffi1202/electric-lua) | Ethos-Widget für Elektromodelle |
+| [Heli](https://github.com/Raffi1202/heli-lua) | Ethos-Widget für Helis (Rotorflight) |
+| [Glider](https://github.com/Raffi1202/glider-lua) | Ethos-Widget für Segler (Vario, Thermik) |
+| [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos-Widgets für Verbrennungsmotoren |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC-Programm zum Einrichten der Widgets (Mac/Windows) |
 | [Telemetrie-Simulator](https://github.com/Raffi1202/telemetrie-simulator) | ESP32-S3, der FrSky-Telemetriesensoren nachbildet |
 | [Ethos-Modell-Konverter](https://github.com/Raffi1202/ethos-modell-konverter) | Modelle zwischen Ethos-Sendern übertragen |
