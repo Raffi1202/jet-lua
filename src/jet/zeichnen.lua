@@ -276,16 +276,22 @@ function Z.kopf(w, L)
   Z.rechteck(0, 0, W, kh, grund)
   local a = w.akt
   local zx, x
+  -- Studio-Hinweis in der eigenen Kopfzeile (verdeckt nie Werte): normal anstelle des Modellnamens, kompakt
+  -- anstelle der Flugzeit (bleibende Zeile im Wechsel mit der Flugzeit alle 3 s)
+  local hw = w.sHinweis or w.sDauer
   if L.kompakt then
+    if hw and not w.sHinweis and os.time() % 6 < 3 then hw = nil end
     -- schmale Leiste: Modellname und Senderakku stehen in der Ethos-Kopfzeile, hier nur Flugzeit, Pillen, Empfang
     local zb = Z.breite(L, "00:00", 34) + 16 * s
-    Z.text(L, 12 * s, kh / 2, Z.zeit(a and a[2] or 0), 34, C.weiss, LEFT, zb, true)
+    if hw then Z.text(L, 12 * s, kh / 2, hw, 16, C.orange, LEFT, W * 0.6 - 12 * s, true)
+    else Z.text(L, 12 * s, kh / 2, Z.zeit(a and a[2] or 0), 34, C.weiss, LEFT, zb, true) end
     zx = 12 * s + zb - 60 * s
     x = W - 12 * s
   else
     local name = tostring(w.modell or w.name)
     zx = W * 0.42
-    Z.text(L, 12 * s, kh / 2, name, 30, C.weiss, LEFT, zx - 60 * s - 12 * s, true)
+    if hw then Z.text(L, 12 * s, kh / 2, hw, 16, C.orange, LEFT, zx - 60 * s - 12 * s, true)
+    else Z.text(L, 12 * s, kh / 2, name, 30, C.weiss, LEFT, zx - 60 * s - 12 * s, true) end
     Z.text(L, zx, kh / 2, Z.zeit(a and a[2] or 0), 34, C.weiss, CENTERED, 120 * s)
     x = W - 12 * s
   end
@@ -348,19 +354,14 @@ end
 -- Studio-Hinweis (Lua-Studio-Format v1): ein Band unten, 24 Pixel hoch, dunkel, über den Plätzen; danach «!» oben
 -- rechts bis zum nächsten Modellwechsel
 function Z.studioHinweis(w, L)
-  if not w.sAusruf and not w.sDauer then return end
-  local C, W, H = Z.C, L.W, L.H
-  local t = w.sHinweis or w.sDauer       -- kurzer Hinweis, sonst die bleibende Zeile (Standard trotz Studio-Datei)
-  if t then
-    Z.rechteck(0, H - 24, W, 24, C.dunkel)
-    Z.text(L, W / 2, H - 12, t, 14, C.orange, CENTERED, W - 8, true)
-  else
-    local r = 9
-    local ym = max(r + 2, floor(L.kh / 2))
-    lcd.color(C.orange)
-    lcd.drawFilledCircle(W - r - 3, ym, r)
-    Z.text(L, W - r - 3, ym, "!", 14, C.dunkel, CENTERED, nil, true)
-  end
+  -- Der Text steht in der Kopfzeile (Z.kopf); hier nur das «!» oben rechts, wenn kein Text mehr steht
+  if not w.sAusruf or w.sHinweis or w.sDauer then return end
+  local C, W = Z.C, L.W
+  local r = 9
+  local ym = max(r + 2, floor(L.kh / 2))
+  lcd.color(C.orange)
+  lcd.drawFilledCircle(W - r - 3, ym, r)
+  Z.text(L, W - r - 3, ym, "!", 14, C.dunkel, CENTERED, nil, true)
 end
 
 -- Kurzer blauer Hinweis unten über der Seite (3 s)

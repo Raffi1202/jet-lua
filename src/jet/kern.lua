@@ -1090,7 +1090,8 @@ end
 
 -- Studio-Hinweis: Band unten (8 s), danach «!» oben rechts bis zum nächsten Modellwechsel; Text auch ins Log
 local function studioHinweis(w, text, now, dauer)
-  w.sHinweis, w.sHinweisBis, w.sAusruf = text, now + (dauer or STUDIO_HINWEIS_S), true
+  -- mit eigener Dauer (Ansicht angepasst): nur das Band, danach kein «!» (einmaliger Hinweis)
+  w.sHinweis, w.sHinweisBis, w.sAusruf = text, now + (dauer or STUDIO_HINWEIS_S), w.sAusruf or not dauer
   print(tostring(w.name) .. ": " .. text)
 end
 

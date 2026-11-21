@@ -20,7 +20,7 @@ Mit dem PC-Programm **Lua-Studio** gestaltest du die Anzeige je Modell frei: Fü
 
 - **Menü › Studio-Datei › Zurück:** mit Datei «Zurück auf Studio-Stand» (deine Änderungen an der Funke werden gelöscht), ohne Datei «Zurück auf Standard» (Einstellungen und Grenzwerte ab Werk; Sensoren und Läufe bleiben). Beides fragt nach.
 
-- **Hinweise:** Ist die Datei kaputt, zu neu oder enthält sie ungültige Angaben, steht 8 Sekunden lang unten ein Band (z. B. «Studio-Datei kaputt - Standard»), danach oben rechts ein oranges «!». Jet läuft immer weiter, im Zweifel mit der eingebauten Anzeige.
+- **Hinweise:** Ist die Datei kaputt, zu neu oder enthält sie ungültige Angaben, steht 8 Sekunden lang ein Hinweis in der Kopfzeile (z. B. «Studio-Datei kaputt - Standard»), danach oben rechts ein oranges «!». Jet läuft immer weiter, im Zweifel mit der eingebauten Anzeige.
 
 - Jet schreibt dazu die Datei `…jet.info.json` mit Modellname, Sender, Fenstergrössen und Sensorliste. Nur Lua-Studio liest sie.
 
@@ -40,4 +40,4 @@ Beispiel einer Studio-Datei kompakt 784 × 316
 - **Orte:** Jet sucht die Studio-Datei in `SCRIPTS:/studio/`, `SD:/scripts/studio/` und `RADIO:/scripts/studio/`.
 - **Name egal:** Passt der Dateiname nicht zum Modellnamen, im Widget-Menü unter **«Studio-Layout»** die Datei wählen (Liste mit Ort in Klammern). «automatisch (Modellname)» nimmt wie bisher `Modellname.jet.lua`. Die Wahl im Menü gewinnt.
 - **Fenstergrösse egal:** Gibt es keine Ansicht für genau diese Grösse, rechnet Jet die ähnlichste Ansicht um und zeigt 5 Sekunden «Studio: Ansicht 800x480 angepasst». Zu kleine Plätze werden als Zahl gezeigt oder weggelassen.
-- **Hinweiszeile:** Zeigt Jet trotz Datei die Standardanzeige, steht unten der Grund, z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».
+- **Hinweiszeile:** Zeigt Jet trotz Datei die Standardanzeige, steht der Grund in der Kopfzeile (anstelle des Modellnamens), z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».

@@ -20,7 +20,7 @@ With the PC program **Lua-Studio** you design the display per model: for each fi
 
 - **Menu › Studio file › Reset:** with a file «Back to Studio settings» (your changes on the radio are deleted), without a file «Back to defaults» (factory settings and limits; sensors and runs stay). Both ask first.
 
-- **Messages:** if the file is broken, too new or contains invalid entries, a band shows at the bottom for 8 seconds (e.g. «Studio file broken - default»), then an orange «!» at the top right. Jet always keeps running, if in doubt with its built-in display.
+- **Messages:** if the file is broken, too new or contains invalid entries, a hint shows in the header for 8 seconds (e.g. «Studio file broken - default»), then an orange «!» at the top right. Jet always keeps running, if in doubt with its built-in display.
 
 - Jet also writes the file `…jet.info.json` with model name, radio, window sizes and sensor list. Only Lua-Studio reads it.
 
@@ -40,4 +40,4 @@ Example of a Studio file, compact 784 × 316 (German display)
 - **Places:** Jet searches the Studio file in `SCRIPTS:/studio/`, `SD:/scripts/studio/` and `RADIO:/scripts/studio/`.
 - **Any name:** if the file name does not match the model name, choose the file in the widget menu under **«Studio layout»** (list with the place in brackets). «automatic (model name)» takes `ModelName.jet.lua` as before. The menu choice wins.
 - **Any window size:** without a view for exactly this size, Jet scales the most similar view and shows «Studio: view 800x480 adapted» for 5 seconds. Slots that get too small are shown as a number or left out.
-- **Hint line:** if Jet shows the default display although there is a file, the reason is shown at the bottom, e.g. «Studio: file faulty (…)» or «Studio: no matching view».
+- **Hint line:** if Jet shows the default display although there is a file, the reason is shown in the header (instead of the model name), e.g. «Studio: file faulty (…)» or «Studio: no matching view».

@@ -4,6 +4,15 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.5.1 (2026-11-22)
+
+- After the 5 s hint «Studio: view … adapted» no orange «!» stays in the header (the hint is one-off).
+- The ZIP for sharing is now called `Jet-0.5.1-share.zip`.
+- Studio hints («Studio: …») are shown in Jet's own header (instead of the model name; compact: instead of the flight time) and never cover values. The bottom band is gone.
+- Curves draw at most 40 lines per paint.
+- Test mode only: the info file leaves out the model path.
+- Instruction count (Mac count): base load without Studio 8523 per paint; only the stress files exceed the 10 000 guide value (p12_voll up to 13 817, 100 symbols up to 12 752), all other test files stay below 9 500. To be checked on the radio.
+
 ## 0.5.0 (2026-11-22)
 
 Studio layout is always found (Lua-Studio issue #1):

@@ -156,7 +156,7 @@ local faelle = {
 }
 local hoechstW, hoechstP = 0, 0
 for _, fa in ipairs(faelle) do
-  for _, fe in ipairs({ { 800, 480 }, { 784, 316 } }) do
+  for _, fe in ipairs({ { 800, 480 }, { 784, 316 }, { 640, 360 } }) do   -- 640x360: umgerechnete Ansicht (0.5.0)
     local w, maxW, maxP, z, absturz, _, ersterP, maxS = lauf(fa[1], fe)
     pruefe(not absturz and w.studioZustand == "geladen" and gleich(z, fa[2]),
       string.format("%s %dx%d: %s (erwartet %s)", fa[1], fe[1], fe[2], txt(z), txt(fa[2])))
@@ -280,7 +280,7 @@ do
   local a = io_open(quelle:gsub("src/jet$", "") .. "test/studio/format2.jet.lua", "rb")
   if a then
     local t = a:read("a") a:close()
-    for _, fe in ipairs({ { 800, 480 }, { 784, 316 } }) do
+    for _, fe in ipairs({ { 800, 480 }, { 784, 316 }, { 640, 360 } }) do   -- 640x360: umgerechnete Ansicht (0.5.0)
       local b = assert(io_open(ZIEL, "wb")) b:write(t) b:close()
       masken, zeilen = {}, {}
       W, H = fe[1], fe[2]

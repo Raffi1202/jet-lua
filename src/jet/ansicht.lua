@@ -163,7 +163,7 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
         local n = K.voll and 120 or K.n
         -- Befehle in paint: höchstens 60 Linien je Kurve (jeder zweite Punkt, der neueste immer), je Punkt nur
         -- zweimal floor (gemessen: 16 Plätze mit 2 vollen Kurven vorher ~12 500 Befehle für die Kurven)
-        local sp = n > 60 and 2 or 1
+        local sp = n > 80 and 3 or (n > 40 and 2 or 1)   -- höchstens 40 Linien je Kurve
         local dx, rng, p, basis = pb / 119, hi - lo, K.p, K.voll and K.n or 0
         lcd.color(fg)
         local lx, ly = nil, nil
