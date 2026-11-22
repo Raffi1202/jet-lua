@@ -47,7 +47,7 @@
 <body>
 
 <h1>Jet</h1>
-<div class="unter">Display for turbines · Manual · Version 0.6.0 · 21 Nov 2026</div>
+<div class="unter">Display for turbines · Manual · Version 0.6.1 · 22 Nov 2026</div>
 
 <div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="Jet on the radio"></div>
 
@@ -66,7 +66,7 @@ a list of your runs. The pictures in this manual show the German display except 
   The Lua-Studio settings file (new in 0.2.0) passed a radio test on an X18RS with 0.2.1 (loading, full view with 16 places, sensor places,
   broken file). Not yet on a radio: file too new, changes on the radio and «Back», compact view and English with a Studio file, a self-made view. The symbols (Studio format 2, new in 0.3.0) passed the radio test on an X18RS (symbols, bold units, shutdown, EGT alarm); still open: load with very many symbols and decorations, missing symbol image.
   The English status texts are the manufacturers' original texts. The voice files are only partly checked on a radio; if one is
-  missing, you hear a tone for «Turbine running», «Turbine off» and (with «Tone on alarm») the shutdown reason, otherwise nothing; an alarm always gives a beep. Jet needs about 144 KB of Lua memory, with a Studio file (measured in the simulator) about 100–115 KB more. When you switch to a model without Jet, Jet frees its memory down to about 5 KB (from 0.6.0, measured in the simulator).
+  missing, you hear a tone for «Turbine running», «Turbine off» and (with «Tone on alarm») the shutdown reason, otherwise nothing; an alarm always gives a beep. Jet needs about 144 KB of Lua memory, with a Studio file (measured in the simulator) about 100–115 KB more. When you switch to a model without Jet, Jet frees its memory down to about 5 KB (from 0.4.0, measured in the simulator).
 </div>
 
 <h2>1. What you need</h2>
@@ -78,7 +78,7 @@ a list of your runs. The pictures in this manual show the German display except 
   <li>The model's sensors already discovered (Model › Telemetry › Discover sensors).</li>
   <li>Your tank size in ml, the type and cell count of your ECU battery.</li>
   <li>A computer with FrSky Suite and a USB cable.</li>
-  <li>The file <code>Jet-0.6.0.zip</code>. It is inside <code>Jet-0.6.0-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+  <li>The file <code>Jet-0.6.1.zip</code>. It is inside <code>Jet-0.6.1-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
 </ul>
 
 <h2>2. Install</h2>
@@ -87,7 +87,7 @@ a list of your runs. The pictures in this manual show the German display except 
   <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
   <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
   <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
-  <li>Select <code>Jet-0.6.0.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Select <code>Jet-0.6.1.zip</code>. The Suite copies everything to the right place.</li>
   <li>Unplug the cable and restart the radio.</li>
 </ol>
 <p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>jet</code> from the ZIP into
@@ -253,7 +253,7 @@ text, a flameout is when the RPM stays below «Idle from» for 2 seconds. The di
 SF does not clear it. If you flip SF only after the flameout, it still counts as a shutdown. Limit alarms (EGT, fuel, batteries, signal) also come with SF «off», unless you remove the tick «Alarm also with turbine off» for a value (see above).</p>
 <div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 20 Abschaltung Flammabriss.png" alt="Shutdown"></div>
 
-<h3>Finding the Studio layout (from 0.6.0)</h3><ul><li><b>Places:</b> Jet searches the Studio file in <code>SCRIPTS:/studio/</code>, <code>SD:/scripts/studio/</code> and <code>RADIO:/scripts/studio/</code>.</li><li><b>Any name:</b> if the file name does not match the model name, choose the file in the widget menu under <b>«Studio layout»</b> (list with the place in brackets). «automatic (model name)» takes <code>ModelName.jet.lua</code> as before. The menu choice wins.</li><li><b>Any window size:</b> without a view for exactly this size, Jet scales the most similar view and shows «Studio: view 800x480 adapted» for 5 seconds. Slots that get too small are shown as a number or left out.</li><li><b>Hint line:</b> if Jet shows the default display although there is a file, the reason is shown in the header (instead of the model name), e.g. «Studio: file faulty (…)» or «Studio: no matching view».</li><li><b>No symbols since 0.6.0:</b> symbols in Studio files are silently ignored; decorations (lines, frames, texts) stay.</li></ul>
+<h3>Finding the Studio layout (from 0.5.0)</h3><ul><li><b>Places:</b> Jet searches the Studio file in <code>SCRIPTS:/studio/</code>, <code>SD:/scripts/studio/</code> and <code>RADIO:/scripts/studio/</code>.</li><li><b>Any name:</b> if the file name does not match the model name, choose the file in the widget menu under <b>«Studio layout»</b> (list with the place in brackets). «automatic (model name)» takes <code>ModelName.jet.lua</code> as before. The menu choice wins.</li><li><b>Any window size:</b> without a view for exactly this size, Jet scales the most similar view and shows «Studio: view 800x480 adapted» for 5 seconds. Slots that get too small are shown as a number or left out.</li><li><b>Hint line:</b> if Jet shows the default display although there is a file, the reason is shown in the header (instead of the model name), e.g. «Studio: file faulty (…)» or «Studio: no matching view».</li><li><b>No symbols since 0.6.0:</b> symbols in Studio files are silently ignored; decorations (lines, frames, texts) stay.</li></ul>
 <h2 class="neu">7. Operation</h2>
 <h3>Detecting runs</h3>
 <p>A run starts as soon as the turbine turns: the ECU reports a start or running status, or, without a status sensor (or without a known
@@ -424,7 +424,7 @@ itself. Jet reads the file when the model is loaded.</p>
   <div><img src="../bilder-simulator/Jet - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): shortened titles</div></div>
   <div><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="English"><div class="t">English: language in the menu or as the radio</div></div>
 </div>
-<p class="klein">Jet version 0.6.0 · 21 Nov 2026</p>
+<p class="klein">Jet version 0.6.1 · 22 Nov 2026</p>
 
 </body>
 </html>

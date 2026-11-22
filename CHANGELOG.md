@@ -4,6 +4,12 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.6.1 (2026-11-22)
+
+- Leftover symbol code removed (hint «symbols missing», which could no longer appear).
+- Reference `studio_symbole.lua` from Electric 0.8.1 (83f4c74), the same for all widgets; Jet only adds the scaling of decorations for other window sizes.
+- README: Lua-Studio line without symbols.
+
 ## 0.6.0 (2026-11-22)
 
 Symbols removed completely (decision 2026-11-22: less memory and processing time):

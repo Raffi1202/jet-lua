@@ -2,7 +2,7 @@
 
 [English](README.md) · **Deutsch** · Dokumentation: [Wiki (Deutsch)](wiki/de/Installation.md) · [Wiki (English)](wiki/en/Installation.md)
 
-> **Am PC einrichten mit [Lua-Studio](https://github.com/Raffi1202/lua-studio)**: Bildschirm einteilen, Werte, Alarme und Symbole wählen, auf die Funke übertragen.
+> **Am PC einrichten mit [Lua-Studio](https://github.com/Raffi1202/lua-studio)**: Bildschirm einteilen, Werte und Alarme wählen, auf die Funke übertragen.
 
 Ethos-Widget für Jets mit Turbine auf FrSky-Sendern mit Farbdisplay. Es zeigt auf einem Bildschirm Drehzahl,
 Abgastemperatur (EGT), Kraftstoff, ECU-Akku und den Zustand der Turbinensteuerung (ECU) als Text. Dazu kommen
@@ -28,7 +28,7 @@ Deutsch und Englisch.
 - **Lua-Studio (neu in 0.2.0):** Eine Einstellungsdatei je Modell aus dem PC-Programm Lua-Studio belegt die Plätze
   frei (Zahl, Ring, Balken, Verlauf oder Status, eigene Farben; ab 0.3.0 Format 2, Symbole ab 0.6.0 entfernt; früher Symbole wie Turbine,
   Tank, Pumpe, fetter Einheit und Schmuck) und setzt Einstellungen und Grenzwerte. Die
-  Sicherheitslogik bleibt fest: Abschaltung mit Grund auch bei SF «aus», Grenzwert-Alarme auch bei SF «aus» (ab 0.6.0
+  Sicherheitslogik bleibt fest: Abschaltung mit Grund auch bei SF «aus», Grenzwert-Alarme auch bei SF «aus» (ab 0.4.0
   je Wert abwählbar: «Alarm auch bei Turbine aus»). Ohne
   diese Datei läuft alles wie bisher.
 
@@ -40,7 +40,7 @@ Deutsch und Englisch.
 > 0.3.0 (Studio-Format 2 mit Symbolen) hat den Sendertest an der X18RS bestanden (Symbole, fette Einheiten, flüssig, kein
 > «Max instructions», Abschaltung −10, EGT-Alarm 780 °C); noch offen: Belastung mit sehr vielen Symbolen und Schmuck,
 > fehlendes Symbolbild. 0.3.1 ändert nur die Doku.
-> **0.6.0 (Vorabversion, nur im Simulator):** «Alarm auch bei Turbine aus» je Wert, Warnung bei widersprüchlichen
+> **0.4.0 (Vorabversion, nur im Simulator):** «Alarm auch bei Turbine aus» je Wert, Warnung bei widersprüchlichen
 > Quellen (ECU-Rahmen gegen Sensor), Speicher nach dem Modellwechsel frei (im Simulator 145 KB → 5 KB). Sendertest folgt.
 > Mit einer echten Turbinen-ECU noch nie getestet.
 
@@ -48,7 +48,7 @@ Deutsch und Englisch.
 
 ## Schnellstart in 5 Schritten
 
-1. `Jet-0.6.0.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
+1. `Jet-0.6.1.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
 2. Sender per USB anschliessen, am Sender **Ethos Suite** wählen, am Computer die **FrSky Suite** öffnen.
 3. Suite › **Lua-Bibliothek** › **Von lokaler ZIP installieren** › die ZIP wählen. Danach den Sender neu starten.
 4. Modell › Bildschirme › **+** › Layout **Vollbild** (oder mit Leisten) › ins Feld tippen › Widget **Jet**.
@@ -69,7 +69,7 @@ Ohne Suite geht es auch per USB-Speicher bzw. SD-Karte (Anleitung Kapitel 2).
 | Versionen | [`CHANGELOG.md`](CHANGELOG.md) |
 | Texte der Sprachansagen | [`docs/Sprachansagen.md`](docs/Sprachansagen.md) |
 
-## Sender und Stand der Erprobung (Version 0.6.0, 21.11.2026)
+## Sender und Stand der Erprobung (Version 0.6.1, 21.11.2026)
 
 | Display | Sender | Stand |
 |---|---|---|
@@ -81,7 +81,7 @@ Ohne Suite geht es auch per USB-Speicher bzw. SD-Karte (Anleitung Kapitel 2).
 **Getestet:** im Ethos-Simulator 26.2.0 laufen 44 Abläufe fehlerfrei (zwei mit echten S.Port-Rahmen: JetCat und Xicoy) (Vollbild und Kompaktansicht in allen Grössen,
 JetCat, Xicoy, Kingtech über VSpeak, Start, Lauf, Abschaltung, 2 und 4 Turbinen, Flugliste mit Löschen,
 Statuswechsel, Englisch, Neustart, mit 0.2.0 die Studio-Datei in 784 × 316 und 800 × 480, kaputt und zu neu, mit 0.3.0
-Format 2, mit 0.6.0 «Alarm auch bei Turbine aus» mit Schalter aus/ein und widersprüchliche Quellen),
+Format 2, mit 0.4.0 «Alarm auch bei Turbine aus» mit Schalter aus/ein und widersprüchliche Quellen),
 dazu auf dem Mac ein Zufallstest mit Unsinnswerten, ein Test der Sensorzuordnung mit mehreren Geräten gleicher AppID
 und mit 0.2.0 ein Test der Studio-Datei (kaputte und bösartige Dateien, `.funke.lua` schreiben).
 
@@ -100,7 +100,7 @@ in die reservierten Flächen (Kopfleiste, Knopf LÄUFE unten links im Vollbild);
 diese Flächen. 0.2.2 ändert nur die Doku.
 
 **Noch nicht getestet:**
-- 0.6.0 am echten Sender: «Alarm auch bei Turbine aus» (Haken ein/aus, Schalter aus/ein), Warnung bei widersprüchlichen
+- 0.4.0 am echten Sender: «Alarm auch bei Turbine aus» (Haken ein/aus, Schalter aus/ein), Warnung bei widersprüchlichen
   Quellen mit einem echten Temperatursensor 0x0400 (der Simulator legt aus Rahmen keine Sensoren an), Speicher nach dem
   Modellwechsel mit MemLog
 - am echten Sender mit Studio-Datei: zu neue Datei, Änderungen an der Funke (`.funke.lua`) und «Zurück», Kompaktansicht und Englisch mit Studio-Datei, eine selbst gestaltete Ansicht
@@ -117,7 +117,7 @@ diese Flächen. 0.2.2 ändert nur die Doku.
 - Die deutschen Statustexte sind eigene Übersetzungen der Hersteller-Kürzel. Der JetCat-eigene Adapter sendet
   vermutlich dieselben Codes wie der VSpeak-JetCat-Converter (nicht belegt).
 - Lua-Speicher rund 144 KB (0.1.6), mit Studio-Datei im Simulator rund 100–115 KB mehr. Nach dem Wechsel auf ein
-  Modell ohne Jet bleiben ab 0.6.0 rund 5 KB (Simulator, auch mit Studio-Datei und Symbolen). Mit vielen anderen
+  Modell ohne Jet bleiben ab 0.4.0 rund 5 KB (Simulator, auch mit Studio-Datei und Symbolen). Mit vielen anderen
   Lua-Widgets auf dem Sender kann er knapp werden.
 - Getestet ist nur Ethos 26.2.
 

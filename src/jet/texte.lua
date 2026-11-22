@@ -74,7 +74,6 @@ local TEXT = {
   studioWeg = { "%s Plätze zu klein", "%s slots too small" },
   mLayout = { "Studio-Layout", "Studio layout" },
   mLayoutAuto = { "automatisch (Modellname)", "automatic (model name)" },
-  symFehlen = { "Studio: %s Symbole fehlen", "Studio: %s symbols missing" },
   funkeVerworfen = { "Änderungen an der Funke verworfen", "Changes on the radio discarded" },
   funkeNicht = { "Änderung nicht gespeichert", "Change not saved" },
   studioZurueck = { "Zurück auf Studio-Stand", "Back to Studio settings" },

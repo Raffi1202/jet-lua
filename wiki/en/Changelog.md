@@ -4,7 +4,8 @@
 
 The full list is in [CHANGELOG.md](../../CHANGELOG.md) (German). Releases: [GitHub Releases](https://github.com/Raffi1202/jet-lua/releases).
 
-- **0.6.0** (pre-release): symbols removed completely (less memory and processing time).
+- **0.6.1** (pre-release): leftover symbol code removed, common reference file.
+- **0.6.0**: symbols removed completely (less memory and processing time).
 - **0.5.6**: symbols as high as the title text, menu line «Show symbols».
 - **0.5.5**: shortened slots above RUNS no longer overlap the row above.
 - **0.5.4**: common rule for «unit already in the title».

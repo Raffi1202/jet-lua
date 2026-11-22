@@ -6,37 +6,25 @@
 -- Reine Funktionen ohne debug, alles Riskante in pcall, schreibt keine Dateien.
 --
 -- Aufrufe (Format 2, Abschnitt 9):
---   S.start(daten)                  nach fertiger Feldprüfung; daten = geprüfte Studio-Datei oder nil.
---                                   Gibt alte Verweise frei. Nur bei daten.format == 2 gelten symbole, symbol, symbolPx,
---                                   einheitZeigen und deko; sonst überliest die Referenz sie (Bild wie v1).
---   S.schritt()                     in jedem wakeup, bis true. Prüft in Stücken (höchstens 8 Einträge je Aufruf):
---                                   1. Liste symbole, 2. Verweise symbol der Plätze, 3. deko jeder Ansicht,
---                                   4. Kopfprüfung und Laden (höchstens 4 Dateien je Aufruf). Nie in paint aufrufen.
+--   S.start(daten)                  nach fertiger Feldprüfung; daten = geprüfte Studio-Datei oder nil. Gibt alte Verweise
+--                                   frei. Nur bei daten.format == 2 gilt deko; sonst überliest die Referenz sie (Bild wie v1).
+--   S.schritt()                     in jedem wakeup, bis true. Prüft den Schmuck jeder Ansicht in Stücken (höchstens
+--                                   8 Elemente je Aufruf). Nie in paint aufrufen.
 --   S.bildAnfang()                  am Anfang jedes paint.
---   S.platz(p, x, y, farbe)         in paint je Platz, nach dem Kästchen und vor Titel und Wert.
---                                   p     = geprüfter Platz mit symbol, symbolPx, einheitZeigen (Felder nach 3.2);
---                                   p._einheit = Einheit des Werts als Text (nach v1 §6.4 angepasst, höchstens 8 Byte).
---                                           DER AUFRUFER SETZT p._einheit; nil oder "" bei zeit = true und bei Status.
---                                   x, y  = linke obere Ecke des Platzes auf dem Bildschirm;
---                                   farbe = Farbe des Werts (lcd.RGB), Alarm/Warnung/Stufe/farbe bzw. Zustandsfarbe.
---                                   Rückgabe 1: Einrückung ab x in px; der Titel beginnt dann bei x + Rückgabe 1
---                                   (= x + rand + kante + rand). 0 = Titel an der gewohnten Stelle des Luas.
---                                   Rückgabe 2: true = Einheit wie v1 neben dem Wert zeigen, false = nicht (fett oben
---                                   oder einheitZeigen = false).
---   S.einheitFett(text, x, y, farbe, kante)
---                                   zeichnet text fett ab x; mit kante (Kantenlänge des Symbols in px) senkrecht
---                                   mittig in der Höhe kante ab y, sonst oben bei y. Gibt die Breite in px zurück.
+--   S.platz(p)                      in paint je Platz. Rückgabe 1: Einrückung des Titels (immer 0). Rückgabe 2: true =
+--                                   Einheit wie v1 neben dem Wert zeigen, false = nicht (einheitZeigen = false).
 --   S.deko(ansicht, ox, oy, standardFarbe)
 --                                   in paint vor den Plätzen; ansicht = DIESELBE Tabelle aus daten.ansichten (keine Kopie),
 --                                   ox/oy = Fensterlage. Schmuck erscheint erst, wenn S.schritt die Ansicht geprüft hat;
 --                                   Texte werden höchstens 2 je paint zum ersten Mal gemessen (danach S.nochZuZeichnen).
 --                                   standardFarbe (optional) = Farbe des Luas für Elemente ohne gültige farbe, sonst weiss.
 --   S.freigeben()                   Modellwechsel und close: alle Verweise weg, collectgarbage("collect").
---   S.zaehler()                     gibt geladen, fehlend, verworfen zurück (Hinweis «Studio: n Symbole fehlen»).
---   S.nochZuZeichnen()              nach paint: true = Masken warten auf ihr erstes Zeichnen, dann lcd.invalidate().
+--   S.zaehler()                     gibt geladen, fehlend, verworfen zurück (geladen und fehlend immer 0, verworfen =
+--                                   ungültiger Schmuck).
+--   S.nochZuZeichnen()              nach paint: true = Texte warten auf ihre erste Messung, dann lcd.invalidate().
 --   S.B                             Displaybreite; nil = system.getVersion().lcdWidth. Nur zum Testen ausserhalb von
 --                                   Ethos von aussen setzen (vor S.start).
--- Jede verworfene oder fehlende Angabe gibt eine Zeile print("Studio-Symbol: …").
+-- Jede verworfene Angabe gibt eine Zeile print("Studio-Symbol: …") (Name der Meldung aus Gründen der Gleichheit belassen).
 
 local S = {}
 
@@ -197,7 +185,7 @@ local JE_BILD_TEXT = 2       -- Texte je paint, die zum ersten Mal gemessen werd
 local function textVorbereiten(g)
   g.s = g.h >= 40 and FONT_XL or g.h >= 30 and FONT_L or g.h >= 22 and FONT_STD or g.h >= 16 and FONT_S or FONT_XS
   lcd.font(g.s)
-  g.t0 = g.t0 or g.t
+  g.t0 = g.t0 or g.t           -- Originaltext merken: neu messen (andere Breite) kürzt immer vom Original
   local t = g.t0
   if lcd.getTextSize(t) > g.b then
     local lo, hi = 0, #t - 1     -- längste passende Länge in [lo, hi]

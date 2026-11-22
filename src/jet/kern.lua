@@ -1171,7 +1171,7 @@ local function studioWecke(w, now)
     elseif J.zustand == "zuNeu" then w.sDauer = T.studioZuNeu
     elseif J.zustand == "fehlt" and J.wahl == "menue" then w.sDauer = string.format(T.studioDateiFehlt, dname) end
     if J.zustand == "geladen" then
-      if J.roh then                                     -- Format 2: Symbole in eigenen wakeup prüfen und laden
+      if J.roh then                                     -- Format 2: Schmuck in eigenen wakeup prüfen (keine Symbole seit 0.6.0)
         local okS, SY = pcall(lade, "studio_symbole.lua")
         if okS and type(SY) == "table" then
           w.sym = SY
@@ -1197,13 +1197,9 @@ local function studioWecke(w, now)
   end
   if w.studio and w.L then ansichtPruefen(w, now) end
   if w.studio then STUDIO.wecke(w, now) end
-  if w.symOffen and w.sym then                          -- Symbole: Prüfen und Laden in Stücken (nie in paint)
+  if w.symOffen and w.sym then                          -- Schmuck: Prüfen in Stücken (nie in paint)
     local ok, fertig = pcall(w.sym.schritt)
-    if not ok or fertig then
-      w.symOffen = false
-      local okZ, _, fehlend = pcall(w.sym.zaehler)
-      if okZ and type(fehlend) == "number" and fehlend > 0 then studioHinweis(w, string.format(T.symFehlen, tostring(fehlend)), now) end
-    end
+    if not ok or fertig then w.symOffen = false end
   end
   if w.funkeOffen and w.studio and now - (w.tFunke or -100) >= 2 then
     w.funkeOffen, w.tFunke = false, now

@@ -2,7 +2,7 @@
 
 **English** · [Deutsch](README.de.md) · Documentation: [Wiki (English)](wiki/en/Installation.md) · [Wiki (Deutsch)](wiki/de/Installation.md)
 
-> **Configure on your PC with [Lua-Studio](https://github.com/Raffi1202/lua-studio)** – arrange the screen, choose values, alarms and symbols, then transfer to the radio. Download: [latest release](https://github.com/Raffi1202/lua-studio/releases/latest) · [Wiki](https://github.com/Raffi1202/lua-studio/tree/main/wiki)
+> **Configure on your PC with [Lua-Studio](https://github.com/Raffi1202/lua-studio)** – arrange the screen, choose values and alarms, then transfer to the radio. Download: [latest release](https://github.com/Raffi1202/lua-studio/releases/latest) · [Wiki](https://github.com/Raffi1202/lua-studio/tree/main/wiki)
 
 **Jet** is an Ethos widget (full screen or compact view with the Ethos bars) for turbine jets on FrSky radios with a
 colour display. It shows RPM, EGT, fuel, ECU battery and the ECU status as text, with two limits per value (warning
@@ -17,18 +17,18 @@ runs. Display, menu and voice are in German and English.
   sensors directly from the telemetry.
 - **Shutdown with reason:** «Turbine off» and the reason («Flameout», «Out of fuel», «Battery low» …) when the turbine
   stops without the turbine-off switch or with an ECU error code.
-- **Alarm also with turbine off** (new in 0.6.0): per value, on by default. ECU error codes and shutdown reasons always come.
-- **Contradicting sources** (new in 0.6.0): a warning if the assigned sensor clearly differs from the ECU telemetry.
+- **Alarm also with turbine off** (new in 0.4.0): per value, on by default. ECU error codes and shutdown reasons always come.
+- **Contradicting sources** (new in 0.4.0): a warning if the assigned sensor clearly differs from the ECU telemetry.
 - **Lua-Studio:** a settings file per model (`scripts/studio/<id>.jet.lua`) places values freely (number, ring, bar,
   trend or status, own colours; symbols were removed in 0.6.0) and sets settings and limits. Without it Jet shows its built-in display.
 
-**Status:** public pre-release (public beta). 0.6.0 is tested in the Ethos simulator (26.2.0); the transmitter test on
+**Status:** public pre-release (public beta). 0.6.1 is tested in the Ethos simulator (26.2.0); the transmitter test on
 the X18RS follows. Earlier versions passed radio tests on an X18RS with simulated JetCat telemetry. **Never tested with
 a real turbine ECU**: during your first runs rely on the GSU or ECU display, not on Jet's alarms. Use at your own risk.
 
 ## Quick start
 
-1. Download `Jet-0.6.0.zip` from the latest [release](https://github.com/Raffi1202/jet-lua/releases).
+1. Download `Jet-0.6.1.zip` from the latest [release](https://github.com/Raffi1202/jet-lua/releases).
 2. Connect the radio via USB, choose **Ethos Suite** on the radio and open the **FrSky Suite** on the computer.
 3. Suite › **Lua library** › **Install from local ZIP** › choose the ZIP. Restart the radio.
 4. Model › Screens › **+** › layout **Full screen** (or with bars) › tap the box › widget **Jet**.

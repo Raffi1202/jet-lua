@@ -4,7 +4,8 @@
 
 Die ganze Liste steht in [CHANGELOG.md](../../CHANGELOG.md). Releases: [GitHub Releases](https://github.com/Raffi1202/jet-lua/releases).
 
-- **0.6.0** (Vorabversion): Symbole ganz entfernt (weniger Speicher und Rechenzeit).
+- **0.6.1** (Vorabversion): restlicher Symbol-Code entfernt, einheitliche Referenzdatei.
+- **0.6.0**: Symbole ganz entfernt (weniger Speicher und Rechenzeit).
 - **0.5.6**: Symbole so hoch wie der Titeltext, Menüzeile «Symbole anzeigen».
 - **0.5.5**: gekürzte Plätze über «Läufe» überlappen die Reihe darüber nicht mehr.
 - **0.5.4**: gemeinsame Regel «Einheit steht schon im Titel».
