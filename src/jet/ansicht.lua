@@ -121,7 +121,8 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
       if q.s == "status" then local _, f = statusTF(w, C) sf = f else sf = C.grau end
     end
     ein, amWert = SY.platz(r, x0, y0, sf)
-    if not amWert or zeitOderStatus or (eh ~= "" and type(titel) == "string" and titel:find(eh, 1, true)) then eh = "" end
+    if not amWert or zeitOderStatus or (eh ~= "" and type(titel) == "string"
+      and (" " .. titel:gsub("[%(%)%[%]/,:]", " ") .. " "):find(" " .. eh .. " ", 1, true)) then eh = "" end
     -- Symbol nie grösser als der Titeltext: Titel so hoch wie das Symbol (höchstens ein Drittel des Platzes)
     if ein > 8 then th = min(ein - 8, max(th, h * 0.33)) end
   end

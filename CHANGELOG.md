@@ -4,6 +4,12 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.5.3 (2026-11-22)
+
+- Slots of a matching view that reach into Jet's own header are moved below it once when loading (like Heli).
+- «Unit already in the title» only counts as a whole word (no longer as part of another word).
+- Instruction count (Mac): paint up to 14 477 with the stress files (all rows are now drawn). To be checked on the radio.
+
 ## 0.5.2 (2026-11-22)
 
 Slot header like Electric 0.7.3 (wish from the radio test):

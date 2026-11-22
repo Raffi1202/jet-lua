@@ -1114,6 +1114,16 @@ local function ansichtPruefen(w, now)
       studioHinweis(w, t, now, 5)
     end
   end
+  -- 0.5.3: Plätze einer passenden Ansicht, die in die eigene Kopfzeile reichen, einmal darunter schieben (wie Heli)
+  if a and not a.angepasst and not a.kopfGeprueft then
+    a.kopfGeprueft = true
+    local kz, oben = w.L.kh, H
+    for _, q in ipairs(a.plaetze) do if q.y < oben then oben = q.y end end
+    if oben < kz then
+      local v = STUDIO.anpassen({ a }, W, H, function() return kz end, 0)
+      if v then v.angepasst, v.verschoben, v.kopfGeprueft = nil, true, true S.ansichten[key] = v a = v end
+    end
+  end
   local gen = a and (a.angepasst and a.quelle or key) or ""
   local dauer = (a == nil and w.seite == 1) and T.studioKeineAnsicht or nil
   if gen ~= w.ansichtGenutzt or (a and a.angepasst or false) ~= w.angepasst or dauer ~= w.sDauerAnsicht then

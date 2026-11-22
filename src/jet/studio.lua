@@ -471,7 +471,8 @@ end
 -- Seitenverhältnis, bei Gleichstand die grössere Fläche; Plätze proportional auf die freie Fläche unter der eigenen
 -- Kopfzeile. kopf(b, h) = Kopfzeilenhöhe dieses Luas bei dieser Fenstergrösse. Zu kleine Plätze werden «zahl», sind
 -- sie auch dafür zu klein, fallen sie weg (gezählt in .weg). Rückgabe: Ansicht oder nil (keine da)
-function M.anpassen(ansichten, W, H, kopf)
+-- kqFest: Kopfhöhe der Quelle fest vorgeben (0 = Plätze ab y 0 unter die Kopfzeile schieben, gleiche Grösse)
+function M.anpassen(ansichten, W, H, kopf, kqFest)
   local best, bd, bf
   for _, a in pairs(ansichten) do
     if not a.angepasst then
@@ -481,7 +482,7 @@ function M.anpassen(ansichten, W, H, kopf)
     end
   end
   if best == nil then return nil end
-  local kq, kz = kopf(best.breite, best.hoehe), kopf(W, H)
+  local kq, kz = kqFest or kopf(best.breite, best.hoehe), kopf(W, H)
   local fx, fy = W / best.breite, (H - kz) / (best.hoehe - kq)
   local r = { breite = W, hoehe = H, plaetze = {}, roh = best.roh, angepasst = true, weg = 0,
     quelle = best.breite .. "x" .. best.hoehe, sk = { fx = fx, fy = fy, kq = kq, kz = kz, W = W, H = H } }
