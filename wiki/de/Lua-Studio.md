@@ -43,3 +43,10 @@ Beispiel einer Studio-Datei kompakt 784 × 316
 - **Name egal:** Passt der Dateiname nicht zum Modellnamen, im Widget-Menü unter **«Studio-Layout»** die Datei wählen (Liste mit Ort in Klammern). «automatisch (Modellname)» nimmt wie bisher `Modellname.jet.lua`. Die Wahl im Menü gewinnt.
 - **Fenstergrösse egal:** Gibt es keine Ansicht für genau diese Grösse, rechnet Jet die ähnlichste Ansicht um und zeigt 5 Sekunden «Studio: Ansicht 800x480 angepasst». Zu kleine Plätze werden als Zahl gezeigt oder weggelassen.
 - **Hinweiszeile:** Zeigt Jet trotz Datei die Standardanzeige, steht der Grund in der Kopfzeile (anstelle des Modellnamens), z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».
+
+## Ein Layout für alle Modelle (ab 0.7.0)
+
+- Speichere das Layout in Lua-Studio «Für alle Modelle (Standard)». Es heisst dann `Standard.jet.lua` und liegt im selben Ordner wie die anderen Studio-Dateien.
+- Jet nimmt zuerst die Wahl im Menü «Studio-Layout», dann die Datei des Modells (`Modellname.jet.lua`), dann `Standard.jet.lua`.
+- Änderungen an der Funke bleiben je Modell.
+- Heisst ein Modell «Standard», gilt `Standard.jet.lua` als seine eigene Modelldatei.

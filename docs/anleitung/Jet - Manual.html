@@ -47,7 +47,7 @@
 <body>
 
 <h1>Jet</h1>
-<div class="unter">Display for turbines · Manual · Version 0.6.1 · 22 Nov 2026</div>
+<div class="unter">Display for turbines · Manual · Version 0.7.0 · 22 Nov 2026</div>
 
 <div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="Jet on the radio"></div>
 
@@ -78,7 +78,7 @@ a list of your runs. The pictures in this manual show the German display except 
   <li>The model's sensors already discovered (Model › Telemetry › Discover sensors).</li>
   <li>Your tank size in ml, the type and cell count of your ECU battery.</li>
   <li>A computer with FrSky Suite and a USB cable.</li>
-  <li>The file <code>Jet-0.6.1.zip</code>. It is inside <code>Jet-0.6.1-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+  <li>The file <code>Jet-0.7.0.zip</code>. It is inside <code>Jet-0.7.0-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
 </ul>
 
 <h2>2. Install</h2>
@@ -87,7 +87,7 @@ a list of your runs. The pictures in this manual show the German display except 
   <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
   <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
   <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
-  <li>Select <code>Jet-0.6.1.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Select <code>Jet-0.7.0.zip</code>. The Suite copies everything to the right place.</li>
   <li>Unplug the cable and restart the radio.</li>
 </ol>
 <p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>jet</code> from the ZIP into
@@ -254,6 +254,7 @@ SF does not clear it. If you flip SF only after the flameout, it still counts as
 <div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 20 Abschaltung Flammabriss.png" alt="Shutdown"></div>
 
 <h3>Finding the Studio layout (from 0.5.0)</h3><ul><li><b>Places:</b> Jet searches the Studio file in <code>SCRIPTS:/studio/</code>, <code>SD:/scripts/studio/</code> and <code>RADIO:/scripts/studio/</code>.</li><li><b>Any name:</b> if the file name does not match the model name, choose the file in the widget menu under <b>«Studio layout»</b> (list with the place in brackets). «automatic (model name)» takes <code>ModelName.jet.lua</code> as before. The menu choice wins.</li><li><b>Any window size:</b> without a view for exactly this size, Jet scales the most similar view and shows «Studio: view 800x480 adapted» for 5 seconds. Slots that get too small are shown as a number or left out.</li><li><b>Hint line:</b> if Jet shows the default display although there is a file, the reason is shown in the header (instead of the model name), e.g. «Studio: file faulty (…)» or «Studio: no matching view».</li><li><b>No symbols since 0.6.0:</b> symbols in Studio files are silently ignored; decorations (lines, frames, texts) stay.</li></ul>
+<h3>One layout for all models (from 0.7.0)</h3><ul><li>In Lua-Studio save the layout «For all models (Default)». It is then called <code>Standard.jet.lua</code> and lies in the same folder as the other Studio files.</li><li>Jet takes the choice in the menu «Studio layout» first, then the model file (<code>ModelName.jet.lua</code>), then <code>Standard.jet.lua</code>.</li><li>Changes on the radio stay per model.</li><li>If a model is called «Standard», <code>Standard.jet.lua</code> counts as its own model file.</li></ul>
 <h2 class="neu">7. Operation</h2>
 <h3>Detecting runs</h3>
 <p>A run starts as soon as the turbine turns: the ECU reports a start or running status, or, without a status sensor (or without a known
@@ -424,7 +425,7 @@ itself. Jet reads the file when the model is loaded.</p>
   <div><img src="../bilder-simulator/Jet - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): shortened titles</div></div>
   <div><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="English"><div class="t">English: language in the menu or as the radio</div></div>
 </div>
-<p class="klein">Jet version 0.6.1 · 22 Nov 2026</p>
+<p class="klein">Jet version 0.7.0 · 22 Nov 2026</p>
 
 </body>
 </html>

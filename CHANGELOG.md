@@ -4,6 +4,16 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.7.0 (2026-11-22)
+
+One layout for all models:
+- New file `Standard.jet.lua`, searched in the same three places. Order: choice in the menu «Studio layout», then the file of the model (`<ModelName>.jet.lua`), then `Standard.jet.lua`, otherwise the built-in display.
+- Menu «Studio layout»: entry «Default (all models)»; «automatic» shows in brackets what applies (model name or Default).
+- Changes on the radio stay per model (`<ModelName>.jet.funke.lua`), also with the default layout.
+- Info file: `studioWahl` can be `"standard"`.
+- A model named «Standard» uses `Standard.jet.lua` as its own model file.
+- No new storage format, update without loss.
+
 ## 0.6.1 (2026-11-22)
 
 - Leftover symbol code removed (hint «symbols missing», which could no longer appear).

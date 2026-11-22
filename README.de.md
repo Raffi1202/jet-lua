@@ -48,7 +48,7 @@ Deutsch und Englisch.
 
 ## Schnellstart in 5 Schritten
 
-1. `Jet-0.6.1.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
+1. `Jet-0.7.0.zip` aus dem neusten **Release** herunterladen (rechts auf der Repo-Seite unter «Releases»).
 2. Sender per USB anschliessen, am Sender **Ethos Suite** wählen, am Computer die **FrSky Suite** öffnen.
 3. Suite › **Lua-Bibliothek** › **Von lokaler ZIP installieren** › die ZIP wählen. Danach den Sender neu starten.
 4. Modell › Bildschirme › **+** › Layout **Vollbild** (oder mit Leisten) › ins Feld tippen › Widget **Jet**.
@@ -69,7 +69,7 @@ Ohne Suite geht es auch per USB-Speicher bzw. SD-Karte (Anleitung Kapitel 2).
 | Versionen | [`CHANGELOG.md`](CHANGELOG.md) |
 | Texte der Sprachansagen | [`docs/Sprachansagen.md`](docs/Sprachansagen.md) |
 
-## Sender und Stand der Erprobung (Version 0.6.1, 21.11.2026)
+## Sender und Stand der Erprobung (Version 0.7.0, 22.11.2026)
 
 | Display | Sender | Stand |
 |---|---|---|

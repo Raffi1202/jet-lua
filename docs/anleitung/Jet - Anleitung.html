@@ -47,7 +47,7 @@
 <body>
 
 <h1>Jet</h1>
-<div class="unter">Anzeige für Turbinen · Anleitung · Version 0.6.1 · Stand 22.11.2026</div>
+<div class="unter">Anzeige für Turbinen · Anleitung · Version 0.7.0 · Stand 22.11.2026</div>
 
 <div class="bild schmal">
   <img src="../bilder-simulator/Jet - Sim 800x480 04 Normal.png" alt="Jet auf dem Sender">
@@ -80,7 +80,7 @@ sagt Alarme und den Kraftstoff an und führt eine Liste deiner Läufe.</p>
   <li>Am Modell die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).</li>
   <li>Die Grösse deines Tanks in ml, die Art und Zellenzahl deines ECU-Akkus.</li>
   <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
-  <li>Die Datei <code>Jet-0.6.1.zip</code>. Sie liegt neben dieser Anleitung in <code>Jet-0.6.1-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+  <li>Die Datei <code>Jet-0.7.0.zip</code>. Sie liegt neben dieser Anleitung in <code>Jet-0.7.0-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
 </ul>
 
 <h2>2. Installieren</h2>
@@ -89,7 +89,7 @@ sagt Alarme und den Kraftstoff an und führt eine Liste deiner Läufe.</p>
   <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
   <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
   <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
-  <li>Wähle die Datei <code>Jet-0.6.1.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Wähle die Datei <code>Jet-0.7.0.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
   <li>Ziehe das Kabel ab und starte den Sender neu.</li>
 </ol>
 <p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>jet</code> aus der ZIP in den
@@ -257,6 +257,7 @@ Grenzwert-Alarme (EGT, Kraftstoff, Akkus, Empfang) kommen auch bei SF «aus», a
 <div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 20 Abschaltung Flammabriss.png" alt="Abschaltung"></div>
 
 <h3>Studio-Layout finden (ab 0.4.0)</h3><ul><li><b>Orte:</b> Jet sucht die Studio-Datei in <code>SCRIPTS:/studio/</code>, <code>SD:/scripts/studio/</code> und <code>RADIO:/scripts/studio/</code>.</li><li><b>Name egal:</b> Passt der Dateiname nicht zum Modellnamen, im Widget-Menü unter <b>«Studio-Layout»</b> die Datei wählen (Liste mit Ort in Klammern). «automatisch (Modellname)» nimmt wie bisher <code>Modellname.jet.lua</code>. Die Wahl im Menü gewinnt.</li><li><b>Fenstergrösse egal:</b> Gibt es keine Ansicht für genau diese Grösse, rechnet Jet die ähnlichste Ansicht um und zeigt 5 Sekunden «Studio: Ansicht 800x480 angepasst». Zu kleine Plätze werden als Zahl gezeigt oder weggelassen.</li><li><b>Hinweiszeile:</b> Zeigt Jet trotz Datei die Standardanzeige, steht der Grund in der Kopfzeile (anstelle des Modellnamens), z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».</li><li><b>Seit 0.6.0 keine Symbole:</b> Symbole in Studio-Dateien werden still überlesen, Schmuck (Linien, Rahmen, Texte) bleibt.</li></ul>
+<h3>Ein Layout für alle Modelle (ab 0.7.0)</h3><ul><li>Speichere das Layout in Lua-Studio «Für alle Modelle (Standard)». Es heisst dann <code>Standard.jet.lua</code> und liegt im selben Ordner wie die anderen Studio-Dateien.</li><li>Jet nimmt zuerst die Wahl im Menü «Studio-Layout», dann die Datei des Modells (<code>Modellname.jet.lua</code>), dann <code>Standard.jet.lua</code>.</li><li>Änderungen an der Funke bleiben je Modell.</li><li>Heisst ein Modell «Standard», gilt <code>Standard.jet.lua</code> als seine eigene Modelldatei.</li></ul>
 <h2 class="neu">7. Bedienen</h2>
 <h3>Läufe erkennen</h3>
 <p>Ein Lauf beginnt, sobald die Turbine dreht: Die ECU meldet einen Start- oder Lauf-Status, oder ohne Statussensor (bzw. ohne bekannten Statustext) liegt die Drehzahl
@@ -427,7 +428,7 @@ rechnet das selbst. Jet liest die Datei beim Laden des Modells.</p>
   <div><img src="../bilder-simulator/Jet - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
   <div><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
 </div>
-<p class="klein">Jet Version 0.6.1 · 22.11.2026</p>
+<p class="klein">Jet Version 0.7.0 · 22.11.2026</p>
 
 </body>
 </html>

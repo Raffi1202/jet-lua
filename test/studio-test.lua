@@ -561,6 +561,30 @@ do
   os_remove(ziel)
 end
 
+
+-- m) Standard-Layout für alle Modelle (0.7.0): Menüwahl > Modelldatei > Standard.jet.lua; .funke.lua je Modell
+do
+  local inhalt = "return { format = 1, einstellungen = { tank = 4321 } }\n"
+  local function schreib(p, t) os.execute("mkdir -p '" .. p:match("(.*)/") .. "'") local x = io_open(p, "w") x:write(t) x:close() end
+  os.execute("rm -rf '" .. tmp .. "/SD' '" .. tmp .. "/RADIO'")
+  os_remove(ziel)
+  schreib(tmp .. "/SD/scripts/studio/Standard.jet.lua", inhalt)
+  local J1 = ganz({ testKennung = "MODELL_A" })
+  local J2 = ganz({ testKennung = "MODELL_B" })
+  pruefe(J1 and J1.zustand == "geladen" and J1.wahl == "standard" and J1.quelle == "SD:/scripts/studio/Standard.jet.lua"
+    and J2 and J2.wahl == "standard", "m) S1: nur Standard: zwei Modelle laden Standard.jet.lua (wahl standard)")
+  pruefe(J1 and J1.basis == "SCRIPTS:/studio/MODELL_A.jet" and J2.basis == "SCRIPTS:/studio/MODELL_B.jet", "m) S4: .funke.lua bleibt je Modell (MODELL_A / MODELL_B)")
+  schreib(tmp .. "/SCRIPTS/studio/MODELL_A.jet.lua", inhalt)
+  local J = ganz({ testKennung = "MODELL_A" })
+  pruefe(J and J.wahl == "auto" and J.quelle == "SCRIPTS:/studio/MODELL_A.jet.lua", "m) S2: Modelldatei gewinnt vor Standard")
+  schreib(tmp .. "/SD/scripts/studio/Andere.jet.lua", inhalt)
+  J = ganz({ testKennung = "MODELL_B", studioWahl = "SD:/scripts/studio/Andere.jet.lua" })
+  pruefe(J and J.wahl == "menue" and J.quelle == "SD:/scripts/studio/Andere.jet.lua", "m) S3: Wahl im Menü gewinnt vor Standard")
+  J = ganz({ testKennung = "Standard" })
+  pruefe(J and J.wahl == "auto" and J.quelle == "SD:/scripts/studio/Standard.jet.lua", "m) Modell «Standard»: seine Datei gilt als Modelldatei (auto)")
+  os_remove(tmp .. "/SCRIPTS/studio/MODELL_A.jet.lua")
+end
+
 os.execute("rm -rf '" .. tmp .. "'")
 print = print_
 print(fehlerZahl == 0 and "ERGEBNIS: kein Fehler" or ("ERGEBNIS: " .. fehlerZahl .. " Fehler"))

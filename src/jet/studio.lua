@@ -2,7 +2,7 @@
 -- Wird nur geladen, solange ein Modell geladen wird bzw. eine Studio-Datei gilt. Alles in Schritten: Der Kern ruft
 -- M.schritt(w) je wakeup auf, bis es «fertig» meldet (Befehlsgrenze am Sender).
 -- Dateien: <Kennung>.jet.lua (schreibt nur das Studio; gesucht in SCRIPTS:/studio/, SD:/scripts/studio/,
--- RADIO:/scripts/studio/ oder im Menü gewählt), SCRIPTS:/studio/<Kennung>.jet.funke.lua (schreibt nur dieses Lua),
+-- RADIO:/scripts/studio/ oder im Menü gewählt; ohne sie Standard.jet.lua für alle Modelle, seit 0.7.0), SCRIPTS:/studio/<Kennung>.jet.funke.lua (schreibt nur dieses Lua),
 -- SCRIPTS:/studio/<Kennung>.jet.info.json (schreibt nur dieses Lua, liest nur das Studio).
 local M = {}
 local floor = math.floor
@@ -524,9 +524,18 @@ function M.schritt(w, F)
       d, grund = studioLaden(w.studioWahl, M.FORMAT)
     else
       J.wahl, grund = "auto", "fehlt"
-      for _, o in ipairs(M.orte()) do
+      local orte = M.orte()
+      for _, o in ipairs(orte) do
         d, grund = studioLaden(o[1] .. J.datei, M.FORMAT)
         if grund ~= "fehlt" then J.quelle = o[1] .. J.datei break end
+      end
+      -- 0.7.0: ohne Modelldatei gilt Standard.jet.lua (ein Layout für alle Modelle); .funke.lua bleibt je Modell
+      if grund == "fehlt" then
+        local std = "Standard." .. M.LUA .. ".lua"
+        for _, o in ipairs(orte) do
+          d, grund = studioLaden(o[1] .. std, M.FORMAT)
+          if grund ~= "fehlt" then J.quelle, J.wahl = o[1] .. std, "standard" break end
+        end
       end
     end
     if not d then

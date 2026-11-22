@@ -45,9 +45,12 @@ return function(w, F, fertig, suche, aktion, K)
   -- Studio-Layout: automatisch (Datei nach Modellnamen) oder eine Datei aus SCRIPTS:, SD: und RADIO: (Liste nur hier)
   local okL, ST = pcall(K.studioModul)
   local dateien = okL and ST and ST.liste() or {}
-  local wahlen, akt = { { T.mLayoutAuto or "automatisch", 0 } }, 0
+  -- «automatisch» zeigt in Klammern, was gerade gilt; Standard.jet.lua heisst «Standard (alle Modelle)»
+  local gilt = w.studioWahlArt == "standard" and "Standard" or (T.mModellname or "Modellname")
+  local wahlen, akt = { { string.format(T.mLayoutAuto or "automatisch (%s)", gilt), 0 } }, 0
   for i, d in ipairs(dateien) do
-    wahlen[#wahlen + 1] = { d[2], i }
+    local std = d[1]:match("[^/]*$") == "Standard.jet.lua"
+    wahlen[#wahlen + 1] = { std and ((T.mLayoutStd or "Standard") .. " " .. (d[2]:match("%(%a+%)$") or "")) or d[2], i }
     if d[1] == w.studioWahl then akt = i end
   end
   if akt == 0 and type(w.studioWahl) == "string" and w.studioWahl ~= "" then   -- gewählt, aber nicht mehr da

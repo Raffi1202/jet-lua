@@ -43,3 +43,10 @@ Example of a Studio file, compact 784 × 316 (German display)
 - **Any name:** if the file name does not match the model name, choose the file in the widget menu under **«Studio layout»** (list with the place in brackets). «automatic (model name)» takes `ModelName.jet.lua` as before. The menu choice wins.
 - **Any window size:** without a view for exactly this size, Jet scales the most similar view and shows «Studio: view 800x480 adapted» for 5 seconds. Slots that get too small are shown as a number or left out.
 - **Hint line:** if Jet shows the default display although there is a file, the reason is shown in the header (instead of the model name), e.g. «Studio: file faulty (…)» or «Studio: no matching view».
+
+## One layout for all models (from 0.7.0)
+
+- In Lua-Studio save the layout «For all models (Default)». It is then called `Standard.jet.lua` and lies in the same folder as the other Studio files.
+- Jet takes the choice in the menu «Studio layout» first, then the model file (`ModelName.jet.lua`), then `Standard.jet.lua`.
+- Changes on the radio stay per model.
+- If a model is called «Standard», `Standard.jet.lua` counts as its own model file.
