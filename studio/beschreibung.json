@@ -1,6 +1,6 @@
 {
   "lua": "jet",
-  "luaVersion": "0.5.6",
+  "luaVersion": "0.6.0",
   "formate": [
     1,
     2

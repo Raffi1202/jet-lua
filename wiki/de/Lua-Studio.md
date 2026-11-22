@@ -6,6 +6,8 @@
 
 Mit dem PC-Programm **Lua-Studio** gestaltest du die Anzeige je Modell frei: Für jeden Platz wählst du Wert, Darstellung (Zahl, Ring, Balken waagrecht oder senkrecht, Verlauf, Status), Titel, Bereich, Farben und Zusatzzeile (MIN, MAX oder Ø über den Lauf). Ab Version 0.3.0 (Studio-Format 2) kommen Symbole dazu (z. B. Turbine, Impeller, Tank, Pumpe, Temperatur, Akku), eine fette Einheit und Schmuck (Linien, Rahmen). Die Symbole liegen als Bilder in `scripts/studio/symbole/`; fehlt eines, zeigt Jet den Platz ohne Symbol und meldet «Symbole fehlen». Dateien im alten Format 1 laden weiter. Dazu kommen Einstellungen und Grenzwerte je Modell. Lua-Studio legt dafür auf der SD-Karte die Datei `scripts/studio/Modellname.jet.lua` an. Im Dateinamen stehen vom Modellnamen nur Buchstaben A–Z und Ziffern, alles andere wird zu `_` (aus «Jet 1» wird `Jet_1`); Lua-Studio rechnet das selbst. Jet liest die Datei beim Laden des Modells.
 
+> **Seit 0.6.0 zeigt Jet keine Symbole mehr** (Entscheid 22.11.2026: weniger Speicher und Rechenzeit). Symbole in älteren Studio-Dateien werden still überlesen, Schmuck (Linien, Rahmen, Texte) bleibt.
+
 - **Ohne diese Datei** arbeitet Jet genau wie bisher, ohne Hinweis.
 
 - **Ab Werk** sieht die Ansicht in Lua-Studio aus wie Jet ohne Datei: im Vollbild vier Tachos, STATUS und sechs Felder (LÄUFE bleibt fest unten links und öffnet die Flugliste), in der Kompaktansicht vier Tachos, STATUS und sieben Felder mit LÄUFE. Oben zeichnet Jet die Kopfleiste immer selbst.

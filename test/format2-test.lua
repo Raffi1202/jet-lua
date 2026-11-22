@@ -9,7 +9,8 @@
 -- Befehle je ganzem paint (auch im ersten paint, während S.schritt noch läuft) werden gemessen und als MESSUNG
 -- ausgegeben: die eingebaute Seite von Jet liegt schon ohne Studio-Datei darüber (wie Elektro 0.4.0, rund 8800 hier,
 -- läuft am X18RS seit 0.1.x ohne Abbruch). Fehler nur, wenn Format 2 das paint um mehr als die Referenz verteuert
--- (Vergleich mit derselben Datei als Format 1, Grenze 5000 Befehle; bis 0.5.5 3600. Angehoben in 0.5.6: Sendertest
+-- (Vergleich mit derselben Datei als Format 1, Grenze 3600 Befehle; 0.5.6 vorübergehend 5000 wegen der Symbole, seit
+-- 0.6.0 ohne Symbole wieder 3600. Begründung für 0.5.6: Sendertest
 -- X18RS 0.5.3–0.5.5 mit ~14 500 je paint ohne «Max instructions»; die Spitze entsteht nur beim Laden der Symbole
 -- (Platzköpfe werden bis zum Ende des Ladens je paint neu gewählt), der Dauerbetrieb danach liegt tiefer, siehe MESSUNG).
 local quelle = arg[0]:gsub("test/format2%-test%.lua$", "") .. "src/jet"
@@ -146,14 +147,14 @@ local function txt(z) return z[1] .. " / " .. z[2] .. " / " .. z[3] end
 
 -- Tests 1–10, 12, 15 (bei 800), 16, 17 je Testdatei, in beiden Ansichten von Jet mit Studio-Belegung
 local faelle = {
-  { "p00_bild.lua", { 6, 0, 0 } },
-  { "p01_kaputte_png.lua", { 2, 8, 0 } },
-  { "p06_100_symbole.lua", { 20, 0, 80 } },
-  { "p07_namen.lua", { 1, 1, 9 } },
-  { "p08_px.lua", { 1, 0, 7 } },
-  { "p09_deko.lua", { 1, 0, 18 } },
-  { "p10_symbol_ohne_eintrag.lua", { 1, 0, 3 } },
-  { "p12_voll.lua", { 20, 0, 0 } },
+  { "p00_bild.lua", { 0, 0, 0 } },
+  { "p01_kaputte_png.lua", { 0, 0, 0 } },
+  { "p06_100_symbole.lua", { 0, 0, 0 } },
+  { "p07_namen.lua", { 0, 0, 0 } },
+  { "p08_px.lua", { 0, 0, 0 } },
+  { "p09_deko.lua", { 0, 0, 15 } },
+  { "p10_symbol_ohne_eintrag.lua", { 0, 0, 0 } },
+  { "p12_voll.lua", { 0, 0, 0 } },
   { "p16_wertanpassungen.lua", { 0, 0, 0 } },
   { "p17_schmaltexte.lua", { 0, 0, 0 } },
 }
@@ -168,26 +169,10 @@ for _, fa in ipairs(faelle) do
       fa[1], fe[1], fe[2], maxW, maxP, maxS, maxD, tostring(ersterP)))
     if maxW > hoechstW then hoechstW = maxW end
     if maxP > hoechstP then hoechstP = maxP end
-    if fa[1] == "p01_kaputte_png.lua" and fe[1] == 800 then
-      local nur = #masken == 2
-      for _, p in ipairs(masken) do if not (p:find("akku_48.png", 1, true) or p:find("uhr_48.png", 1, true)) then nur = false end end
-      pruefe(nur, "1–5, 15: p01 loadMask nur für akku_48 und uhr_48 (" .. #masken .. " Aufrufe)")
-      local da = false
-      for _, zl in ipairs(zeilen) do if zl:find("Studio: 8 Symbole fehlen", 1, true) or zl:find("Studio: 8 symbols missing", 1, true) then da = true end end
-      pruefe(da, "1: p01 Hinweis «Studio: 8 Symbole fehlen»")
-      local je = 0
-      for _, zl in ipairs(zeilen) do if zl:find("^Studio%-Symbol") then je = je + 1 end end
-      pruefe(je >= 8, "1: p01 je kaputter Datei eine Zeile im Log (" .. je .. ")")
-    end
-    if fa[1] == "p07_namen.lua" and fe[1] == 800 then
-      local gut = true
-      for _, p in ipairs(geoeffnet) do
-        -- 0.5.6: zu jedem gültigen Namen auch die kleinen Stufen _12 und _16 (per Dateiname, nicht in der Liste)
-        local n = p:match("^SCRIPTS:/studio/symbole/(.-)_%d+%.png$")
-        if n ~= "aaaaaaaaaaaaaaaaaaaaaaaa" and n ~= "akku" then gut = false print_("  geöffnet: " .. p) end
-      end
-      pruefe(gut, "7: p07 io.open nur für die zwei gültigen Namen")
-    end
+    -- 0.6.0 (Entscheid User 22.11.): keine Symbole mehr: nie loadMask, nie eine Datei unter studio/symbole/ öffnen
+    local keine = #masken == 0
+    for _, p in ipairs(geoeffnet) do if p:find("/symbole/", 1, true) then keine = false print_("  geöffnet: " .. p) end end
+    pruefe(keine, string.format("0.6.0: %s %dx%d: keine Symboldatei geöffnet, kein loadMask", fa[1], fe[1], fe[2]))
     if fa[1] == "p16_wertanpassungen.lua" and fe[1] == 800 then
       -- Regel 7.2: werte, grenzen, einstellungen höchstens 48; 100 Wert-Anpassungen -> 52 verworfen mit Hinweis
       local n = 0
@@ -215,7 +200,7 @@ for _, d in ipairs({ "p12_voll.lua", "p06_100_symbole.lua", "p17_schmaltexte.lua
     bereite = function() local b = assert(io_open(ZIEL, "wb")) b:write(t1) b:close() end
     local w1, _, _, _, _, _, _, p1 = lauf(d, fe)
     bereite = altBereite
-    pruefe(w1.sym == nil and p2 - p1 <= 5000, string.format("12/17: %s %dx%d: paint Format 2 %d, als Format 1 %d, Mehrkosten %d (<= 5000)",
+    pruefe(w1.sym == nil and p2 - p1 <= 3600, string.format("12/17: %s %dx%d: paint Format 2 %d, als Format 1 %d, Mehrkosten %d (<= 3600)",
       d, fe[1], fe[2], p2, p1, p2 - p1))
   end
 end
@@ -228,7 +213,7 @@ pruefe(w11.studioZustand == "geladen" and w11.sym == nil and #masken == 0,
 -- Test 15 mit Displaybreite 640: alle 48-px-Dateien abgewiesen ausser fremdkante_48 (38 × 38)
 BREITE = 640
 local _, _, _, z15 = lauf("p01_kaputte_png.lua", { 630, 258 })
-pruefe(gleich(z15, { 1, 9, 0 }), "15: p01 bei 640 px: " .. txt(z15) .. " (erwartet 1 / 9 / 0)")
+pruefe(gleich(z15, { 0, 0, 0 }), "15: p01 bei 640 px: " .. txt(z15) .. " (erwartet 0 / 0 / 0, keine Symbole seit 0.6.0)")
 BREITE = 800
 
 -- Test 13: Modellwechsel 10 × hin und her (p12 64 px, p06 24 px): Lua-Speicher wächst nicht dauerhaft
@@ -256,7 +241,7 @@ do
   end
   local ga = a.sym and a.sym.zaehler() or 0
   local gb = b.sym and b.sym.zaehler() or 0
-  pruefe(ok and ga == 6 and gb == 6, "14: zwei Widgets mit p00: je " .. tostring(ga) .. " / " .. tostring(gb) .. " Symbole geladen")
+  pruefe(ok and ga == 0 and gb == 0, "14: zwei Widgets mit p00: je " .. tostring(ga) .. " / " .. tostring(gb) .. " Symbole (0 seit 0.6.0), kein Absturz")
 end
 
 -- fehlender Sensor in einem Studio-Platz zeichnet «---» (Format 1 und 2, alle Darstellungen ausser Status)
@@ -302,7 +287,7 @@ do
       end
       local g, fe2, v = 0, 0, 0
       if w.sym then g, fe2, v = w.sym.zaehler() end
-      pruefe(ok and w.studioZustand == "geladen" and w.studioFehler == 0 and g > 0 and fe2 == 0 and v == 0 and maxW < GRENZE,
+      pruefe(ok and w.studioZustand == "geladen" and w.studioFehler == 0 and g == 0 and fe2 == 0 and v == 0 and maxW < GRENZE,
         string.format("format2.jet.lua %dx%d: geladen, %d Fehler, Symbole %d / %d / %d, wakeup %d, paint %d", fe[1], fe[2],
           w.studioFehler or -1, g, fe2, v, maxW, maxP))
     end

@@ -3,7 +3,7 @@
 -- Für ein neues Lua ändern sich hier nur die vier Zeilen NAME, KEY, VERSION und INFO.
 local NAME = "Jet"         -- Anzeigename in Ethos und Vorsatz aller Meldungen
 local KEY = "jet"           -- Schlüssel des Widgets: kurz, klein, eindeutig; nach der ersten Abgabe nie mehr ändern
-local VERSION = "0.5.6"    -- die Versionsnummer steht nur hier (x.y.z); das Suite-Paket liest sie von hier
+local VERSION = "0.6.0"    -- die Versionsnummer steht nur hier (x.y.z); das Suite-Paket liest sie von hier
 local INFO = "Jet: Anzeige für Turbinen (JetCat, Xicoy, SportECU, VSpeak-Converter für Kingtech, Swiwin, PBS, evoJet, Hornet, Jakadofsky) mit Drehzahl, EGT, Kraftstoff, ECU-Akku, Statustexten, Alarmen, Ansagen, Flugliste und Einstellungsdatei für Lua-Studio, im Vollbild oder kompakt."   -- ein Satz für die FrSky Suite
 -- Den Kern halten nur die Widgets selbst (w.kern), hier steht er schwach: Nach einem Modellwechsel ohne Jet gibt
 -- Ethos die Widgets frei, dann räumt Lua auch den Kern mit allen Modulen weg (Auftrag Speicher freigeben, 21.11.2026;

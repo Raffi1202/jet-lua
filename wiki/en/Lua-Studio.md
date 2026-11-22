@@ -6,6 +6,8 @@
 
 With the PC program **Lua-Studio** you design the display per model: for each field you choose the value, the style (number, ring, horizontal or vertical bar, trend, status), title, range, colours and an extra line (MIN, MAX or Ø over the run). From version 0.3.0 (Studio format 2) there are symbols too (e.g. turbine, impeller, tank, pump, temperature, battery), a bold unit and decoration (lines, frames). The symbols are images in `scripts/studio/symbole/`; if one is missing, Jet shows the place without it and reports «symbols missing». Files in the old format 1 still load. Settings and limits per model come on top. Lua-Studio creates the file `scripts/studio/modelname.jet.lua` on the SD card. The file name keeps only the letters A–Z and digits of the model name, everything else becomes `_` («Jet 1» becomes `Jet_1`); Lua-Studio works this out itself. Jet reads the file when the model is loaded.
 
+> **Since 0.6.0 Jet shows no symbols** (decision 2026-11-22: less memory and processing time). Symbols in older Studio files are silently ignored; decorations (lines, frames, texts) stay.
+
 - **Without this file** Jet works exactly as before, with no message.
 
 - **By default** the view in Lua-Studio looks like Jet without a file: in full screen four gauges, STATUS and six fields (RUNS stays fixed at the bottom left and opens the run list), in the compact view four gauges, STATUS and seven fields including RUNS. Jet always draws the top bar itself.

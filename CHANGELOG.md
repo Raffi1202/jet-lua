@@ -4,6 +4,15 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.6.0 (2026-11-22)
+
+Symbols removed completely (decision 2026-11-22: less memory and processing time):
+- No symbols in the slot header and no symbol decorations; the menu line «Show symbols» is gone.
+- Older Studio files with `symbole`, `symbol`, `symbolPx` or decorations of type «symbol» are read without errors (silently ignored); an old `symbole=` entry in the data file is ignored.
+- Reference `studio_symbole.lua` from Electric 0.8.0 (5f53379): only decorations (lines, frames, texts) remain.
+- Titles normal size, unit small at the value, «unit in the title» rule unchanged.
+- Instruction count (Mac), p12_voll 800×480: paint 12 939 (before 15 493 while loading / 13 643 steady), Lua memory 363 → 334 KB. Extra cost of format 2 back below the old limit of 3 600 (1 930).
+
 ## 0.5.6 (2026-11-22)
 
 Symbols as high as the text (decision from the radio test):

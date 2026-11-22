@@ -1,5 +1,5 @@
 -- Jet: zeichnet die Plätze einer Ansicht aus der Studio-Datei (Lua-Studio-Format v1, Abschnitte 6.3 und 7; Format 2:
--- Symbole, fette Einheit und Schmuck über die Referenz studio_symbole.lua in w.sym).
+-- Schmuck (Linien, Rahmen, Texte) über die Referenz studio_symbole.lua in w.sym; Symbole gibt es seit 0.6.0 nicht mehr).
 -- Wird nur geladen, wenn zur Fenstergrösse eine Studio-Ansicht passt. Rechnet nichts aus: Werte kommen aus
 -- studio.lua (M.wert), Zustände aus den Grenzen (kern.lua bzw. studio.lua), Min/Max/Mittel und Kurven aus M.wecke.
 -- Ersetzt im Vollbild nur Seite 1; Seiten 2 (Turbinen) und 3 (Flugliste) bleiben wie ohne Studio-Datei.
@@ -109,7 +109,7 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
   local th = min(18, max(9, h * 0.2))                   -- Titelhöhe in Pixeln
   local pad = max(4, floor(6 * L.s))
   local d = q.darst
-  -- Format 2 (studio_symbole.lua): Symbol und fette Einheit oben links, Titel rückt ein; Einheit am Wert nur, wenn
+  -- Format 2 (studio_symbole.lua): ohne Symbole (0.6.0); Einheit klein am Wert, ausser wenn
   -- die Referenz es so sagt. Bei Laufzeit (Zeit) und Status gibt es keine Einheit.
   local ein, amWert = 0, true
   local SY = w.sym
@@ -129,7 +129,7 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
     if d == "status" then
       if q.s == "status" then local _, f = statusTF(w, C) sf = f else sf = C.grau end
     end
-    ein, amWert = SY.platz(r, x0, y0, sf, floor(th), y0 + pad)
+    ein, amWert = SY.platz(r)                            -- 0.6.0: keine Symbole mehr (Entscheid User 22.11.)
     if not amWert or zeitOderStatus or (eh ~= "" and imTitel(titel, eh)) then eh = "" end
   end
   local tx = max(pad, ein)                              -- Titel links: Abstand vom Rand des Platzes
@@ -235,7 +235,6 @@ function A.zeichne(w, L, Z, ans, ST)
   local SY = w.sym
   if SY then                                             -- Format 2: Schmuck nach dem Hintergrund, vor den Plätzen
     SY.bildAnfang()
-    if SY.symbole then SY.symbole(w.cfg.symbole ~= false) end   -- Schalter «Symbole anzeigen» (einmal je paint)
     if ans.roh then SY.deko(ans.roh, 0, 0, Z.C.titel, ans.sk) end
   end
   for i, q in ipairs(ans.plaetze) do
