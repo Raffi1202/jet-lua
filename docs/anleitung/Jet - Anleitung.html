@@ -47,7 +47,7 @@
 <body>
 
 <h1>Jet</h1>
-<div class="unter">Anzeige für Turbinen · Anleitung · Version 0.5.1 · Stand 21.11.2026</div>
+<div class="unter">Anzeige für Turbinen · Anleitung · Version 0.5.2 · Stand 21.11.2026</div>
 
 <div class="bild schmal">
   <img src="../bilder-simulator/Jet - Sim 800x480 04 Normal.png" alt="Jet auf dem Sender">
@@ -68,7 +68,7 @@ sagt Alarme und den Kraftstoff an und führt eine Liste deiner Läufe.</p>
   Die Einstellungsdatei aus Lua-Studio (neu in 0.2.0) hat mit 0.2.1 den Sendertest an der X18RS bestanden (laden, volle Ansicht mit 16 Plätzen, Sensor-Plätze,
   kaputte Datei). Noch nicht am Sender: zu neue Datei, Änderungen an der Funke und «Zurück», Kompaktansicht und Englisch mit Studio-Datei, eine selbst gestaltete Ansicht. Die Symbole (Studio-Format 2, neu in 0.3.0) haben den Sendertest an der X18RS bestanden (Symbole, fette Einheiten, Abschaltung, EGT-Alarm); noch offen: Belastung mit sehr vielen Symbolen und Schmuck, fehlendes Symbolbild.
   Die deutschen Statustexte sind eigene Übersetzungen der Herstellertexte. Die Sprachdateien sind erst teilweise am Sender abgehört;
-  fehlt eine Sprachdatei, kommt bei «Turbine läuft», «Turbine aus» und (mit «Ton bei Alarm») dem Abschaltgrund ein Ton, sonst bleibt es still; ein Alarm gibt immer einen Ton. Jet braucht rund 144 KB Lua-Speicher, mit Studio-Datei (im Simulator gemessen) rund 100–115 KB mehr. Wechselst du auf ein Modell ohne Jet, gibt Jet den Speicher bis auf rund 5 KB wieder frei (ab 0.5.1, im Simulator gemessen).
+  fehlt eine Sprachdatei, kommt bei «Turbine läuft», «Turbine aus» und (mit «Ton bei Alarm») dem Abschaltgrund ein Ton, sonst bleibt es still; ein Alarm gibt immer einen Ton. Jet braucht rund 144 KB Lua-Speicher, mit Studio-Datei (im Simulator gemessen) rund 100–115 KB mehr. Wechselst du auf ein Modell ohne Jet, gibt Jet den Speicher bis auf rund 5 KB wieder frei (ab 0.5.2, im Simulator gemessen).
 </div>
 
 <h2>1. Was du brauchst</h2>
@@ -80,7 +80,7 @@ sagt Alarme und den Kraftstoff an und führt eine Liste deiner Läufe.</p>
   <li>Am Modell die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).</li>
   <li>Die Grösse deines Tanks in ml, die Art und Zellenzahl deines ECU-Akkus.</li>
   <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
-  <li>Die Datei <code>Jet-0.5.1.zip</code>. Sie liegt neben dieser Anleitung in <code>Jet-0.5.1-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+  <li>Die Datei <code>Jet-0.5.2.zip</code>. Sie liegt neben dieser Anleitung in <code>Jet-0.5.2-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
 </ul>
 
 <h2>2. Installieren</h2>
@@ -89,7 +89,7 @@ sagt Alarme und den Kraftstoff an und führt eine Liste deiner Läufe.</p>
   <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
   <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
   <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
-  <li>Wähle die Datei <code>Jet-0.5.1.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Wähle die Datei <code>Jet-0.5.2.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
   <li>Ziehe das Kabel ab und starte den Sender neu.</li>
 </ol>
 <p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>jet</code> aus der ZIP in den
@@ -256,7 +256,7 @@ wieder startet; SF löscht sie nicht. Legst du SF erst nach dem Flammabriss um, 
 Grenzwert-Alarme (EGT, Kraftstoff, Akkus, Empfang) kommen auch bei SF «aus», ausser du nimmst bei einem Wert den Haken «Alarm auch bei Turbine aus» weg (siehe oben).</p>
 <div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 20 Abschaltung Flammabriss.png" alt="Abschaltung"></div>
 
-<h3>Studio-Layout finden (ab 0.5.1)</h3><ul><li><b>Orte:</b> Jet sucht die Studio-Datei in <code>SCRIPTS:/studio/</code>, <code>SD:/scripts/studio/</code> und <code>RADIO:/scripts/studio/</code>.</li><li><b>Name egal:</b> Passt der Dateiname nicht zum Modellnamen, im Widget-Menü unter <b>«Studio-Layout»</b> die Datei wählen (Liste mit Ort in Klammern). «automatisch (Modellname)» nimmt wie bisher <code>Modellname.jet.lua</code>. Die Wahl im Menü gewinnt.</li><li><b>Fenstergrösse egal:</b> Gibt es keine Ansicht für genau diese Grösse, rechnet Jet die ähnlichste Ansicht um und zeigt 5 Sekunden «Studio: Ansicht 800x480 angepasst». Zu kleine Plätze werden als Zahl gezeigt oder weggelassen.</li><li><b>Hinweiszeile:</b> Zeigt Jet trotz Datei die Standardanzeige, steht der Grund in der Kopfzeile (anstelle des Modellnamens), z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».</li></ul>
+<h3>Studio-Layout finden (ab 0.5.2)</h3><ul><li><b>Orte:</b> Jet sucht die Studio-Datei in <code>SCRIPTS:/studio/</code>, <code>SD:/scripts/studio/</code> und <code>RADIO:/scripts/studio/</code>.</li><li><b>Name egal:</b> Passt der Dateiname nicht zum Modellnamen, im Widget-Menü unter <b>«Studio-Layout»</b> die Datei wählen (Liste mit Ort in Klammern). «automatisch (Modellname)» nimmt wie bisher <code>Modellname.jet.lua</code>. Die Wahl im Menü gewinnt.</li><li><b>Fenstergrösse egal:</b> Gibt es keine Ansicht für genau diese Grösse, rechnet Jet die ähnlichste Ansicht um und zeigt 5 Sekunden «Studio: Ansicht 800x480 angepasst». Zu kleine Plätze werden als Zahl gezeigt oder weggelassen.</li><li><b>Hinweiszeile:</b> Zeigt Jet trotz Datei die Standardanzeige, steht der Grund in der Kopfzeile (anstelle des Modellnamens), z. B. «Studio: Datei fehlerhaft (…)» oder «Studio: keine passende Ansicht».</li></ul>
 <h2 class="neu">7. Bedienen</h2>
 <h3>Läufe erkennen</h3>
 <p>Ein Lauf beginnt, sobald die Turbine dreht: Die ECU meldet einen Start- oder Lauf-Status, oder ohne Statussensor (bzw. ohne bekannten Statustext) liegt die Drehzahl
@@ -429,7 +429,7 @@ rechnet das selbst. Jet liest die Datei beim Laden des Modells.</p>
   <div><img src="../bilder-simulator/Jet - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
   <div><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
 </div>
-<p class="klein">Jet Version 0.5.1 · 21.11.2026</p>
+<p class="klein">Jet Version 0.5.2 · 21.11.2026</p>
 
 </body>
 </html>

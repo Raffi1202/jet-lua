@@ -68,6 +68,24 @@ end
 
 local function zeichnePlatz(w, L, Z, q, ST, i)
   local C = Z.C
+  -- 0.5.2: die reservierte Läufe-Taste im Vollbild 800 × 480 (x 8–240, y 432–472) überdeckt keinen Platz: Platz kürzen
+  if L.W == 800 and L.H == 480 and q.x < 240 and q.y + q.h > 428 and q.x + q.b > 8 then
+    local k = q.kurzQ
+    if k == nil then
+      k = {}
+      for n, v in pairs(q) do k[n] = v end
+      if q.y < 428 - 30 then k.h = 428 - q.y
+      elseif q.x + q.b > 284 then k.b, k.x = q.x + q.b - 248, 248 end
+      if k.roh then
+        local r = {}
+        for n, v in pairs(k.roh) do r[n] = v end
+        r.x, r.y, r.b, r.h = k.x, k.y, k.b, k.h
+        k.roh = r
+      end
+      q.kurzQ = k
+    end
+    q = k
+  end
   local x0, y0, b, h = q.x, q.y, q.b, q.h
   if q.art == "leer" then kachel(Z, L, q, nil) return end
   local x, eh, dez, name = ST.wert(w, q.w, q.art, q.s, w.sp)
@@ -88,13 +106,24 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
   local SY = w.sym
   if SY and q.roh then
     local zeitOderStatus = q.s == "laufzeit" or d == "status"
-    q.roh._einheit = (not zeitOderStatus and eh ~= "") and eh or nil
+    -- 0.5.2 (Sendertest 22.11.): keine grosse, fette Einheit im Kopf. «fett» gilt wie «Einheit am Wert» (klein);
+    -- steht die Einheit schon im Titel (z. B. «Kraftstoff %»), entfällt sie ganz.
+    local r = q.rohK
+    if r == nil then
+      r = {}
+      for k, v in pairs(q.roh) do r[k] = v end
+      if r.einheitZeigen == "fett" then r.einheitZeigen = true end
+      q.rohK = r
+    end
+    r._einheit = nil
     local sf = fg
     if d == "status" then
       if q.s == "status" then local _, f = statusTF(w, C) sf = f else sf = C.grau end
     end
-    ein, amWert = SY.platz(q.roh, x0, y0, sf)
-    if not amWert then eh = "" end
+    ein, amWert = SY.platz(r, x0, y0, sf)
+    if not amWert or zeitOderStatus or (eh ~= "" and type(titel) == "string" and titel:find(eh, 1, true)) then eh = "" end
+    -- Symbol nie grösser als der Titeltext: Titel so hoch wie das Symbol (höchstens ein Drittel des Platzes)
+    if ein > 8 then th = min(ein - 8, max(th, h * 0.33)) end
   end
   local tx = max(pad, ein)                              -- Titel links: Abstand vom Rand des Platzes
   local tb = max(8, b - tx - pad)                       -- Titel links: verfügbare Breite (nie negativ)
@@ -211,6 +240,12 @@ function A.zeichne(w, L, Z, ans, ST)
   -- reservierte Fläche im Vollbild 800 × 480: Zahl der Läufe (öffnet die Flugliste), wie im eingebauten Standard
   if L.W == 800 and L.H == 480 then
     local C, T = Z.C, w.T
+    local r = 0                                          -- 0.5.2: Streifen unter gekürzten Plätzen frei (kein Schmuck)
+    for _, q in ipairs(ans.plaetze) do
+      local k = q.kurzQ
+      if k and k.h < q.h and k.x + k.b > r then r = k.x + k.b end
+    end
+    if r > 0 then Z.rechteck(0, 428, r + 2, 52, C.bg) end
     local g, fh = 8, 40
     local x, y, b = g, L.H - g - fh, 232
     Z.kachel(L, x, y, b, fh)

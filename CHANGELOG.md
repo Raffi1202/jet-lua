@@ -4,6 +4,15 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.5.2 (2026-11-22)
+
+Slot header like Electric 0.7.3 (wish from the radio test):
+- No large bold unit next to the symbol: «einheitZeigen = fett» is shown like «unit at the value» (small).
+- If the title already contains the unit (e.g. «Fuel %»), the unit is left out.
+- With a symbol the title is as high as the symbol (at most a third of the slot height).
+- The reserved RUNS button in full screen 800×480 never covers a slot: overlapping slots are shortened.
+- Instruction count (Mac): paint up to 13 824 with the stress files (radio test of 0.5.1 with ~13 800 passed).
+
 ## 0.5.1 (2026-11-22)
 
 - After the 5 s hint «Studio: view … adapted» no orange «!» stays in the header (the hint is one-off).
