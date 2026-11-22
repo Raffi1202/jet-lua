@@ -4,7 +4,8 @@
 
 The full list is in [CHANGELOG.md](../../CHANGELOG.md) (German). Releases: [GitHub Releases](https://github.com/Raffi1202/jet-lua/releases).
 
-- **0.5.3** (pre-release): slots moved below the header, unit in the title only as a whole word.
+- **0.5.4** (pre-release): common rule for «unit already in the title».
+- **0.5.3**: slots moved below the header, unit in the title only as a whole word.
 - **0.5.2**: slot header without large bold unit, title as high as the symbol, RUNS button covers no slot.
 - **0.5.1**: one-off adapt hint without «!», ZIP for sharing named `-share`.
 - **0.5.0**: Studio layout always found: 3 search places, choose any file in the menu «Studio layout», views scaled to any window size, hint line with the reason.

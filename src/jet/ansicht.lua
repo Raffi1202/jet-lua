@@ -66,6 +66,15 @@ local function statusTF(w, C)
   return t, f
 end
 
+-- 0.5.4 (gleich wie Electric 0.7.4): steht die Einheit schon im Titel? Nur als eigenes Wort: davor Anfang, Leerzeichen
+-- oder Klammer, danach Ende, Leerzeichen, Klammer oder «%» («Kraftstoff %» ja, «Höhe max» bei «m» nein).
+local function imTitel(titel, eh)
+  if type(titel) ~= "string" or eh == "" then return false end
+  local e = eh:gsub("[%^%$%(%)%%%.%[%]%*%+%-%?]", "%%%0")
+  return (" " .. titel .. " "):find("[%s%(%[]" .. e .. "[%s%)%]%%]") ~= nil
+end
+A.imTitel = imTitel
+
 local function zeichnePlatz(w, L, Z, q, ST, i)
   local C = Z.C
   -- 0.5.2: die reservierte Läufe-Taste im Vollbild 800 × 480 (x 8–240, y 432–472) überdeckt keinen Platz: Platz kürzen
@@ -121,8 +130,7 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
       if q.s == "status" then local _, f = statusTF(w, C) sf = f else sf = C.grau end
     end
     ein, amWert = SY.platz(r, x0, y0, sf)
-    if not amWert or zeitOderStatus or (eh ~= "" and type(titel) == "string"
-      and (" " .. titel:gsub("[%(%)%[%]/,:]", " ") .. " "):find(" " .. eh .. " ", 1, true)) then eh = "" end
+    if not amWert or zeitOderStatus or (eh ~= "" and imTitel(titel, eh)) then eh = "" end
     -- Symbol nie grösser als der Titeltext: Titel so hoch wie das Symbol (höchstens ein Drittel des Platzes)
     if ein > 8 then th = min(ein - 8, max(th, h * 0.33)) end
   end
