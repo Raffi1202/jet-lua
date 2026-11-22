@@ -14,7 +14,7 @@
 
 - Einen Computer mit der FrSky Suite und ein USB-Kabel.
 
-- Die Datei `Jet-0.5.4.zip`. Sie liegt neben dieser Anleitung in `Jet-0.5.4-share.zip`. Entpacke nur die äussere ZIP, die innere nicht.
+- Die Datei `Jet-0.5.5.zip`. Sie liegt neben dieser Anleitung in `Jet-0.5.5-share.zip`. Entpacke nur die äussere ZIP, die innere nicht.
 
 ## 2. Installieren
 
@@ -26,7 +26,7 @@
 
 - Klicke auf **Lua-Bibliothek**, dann auf **Von lokaler ZIP installieren**.
 
-- Wähle die Datei `Jet-0.5.4.zip`. Die Suite kopiert alles an den richtigen Ort.
+- Wähle die Datei `Jet-0.5.5.zip`. Die Suite kopiert alles an den richtigen Ort.
 
 - Ziehe das Kabel ab und starte den Sender neu.
 
@@ -55,7 +55,7 @@ Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner `jet` aus de
 
 Englisch: Sprache im Menü oder wie der Sender
 
-Jet Version 0.5.4 · 21.11.2026
+Jet Version 0.5.5 · 21.11.2026
 
 ---
 [← Start](../Home.md) | [Weiter →](Einrichten.md)

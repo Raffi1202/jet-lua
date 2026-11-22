@@ -4,7 +4,8 @@
 
 Die ganze Liste steht in [CHANGELOG.md](../../CHANGELOG.md). Releases: [GitHub Releases](https://github.com/Raffi1202/jet-lua/releases).
 
-- **0.5.4** (Vorabversion): gemeinsame Regel «Einheit steht schon im Titel».
+- **0.5.5** (Vorabversion): gekürzte Plätze über «Läufe» überlappen die Reihe darüber nicht mehr.
+- **0.5.4**: gemeinsame Regel «Einheit steht schon im Titel».
 - **0.5.3**: Plätze unter die Kopfzeile geschoben, Einheit im Titel nur als eigenes Wort.
 - **0.5.2**: Platzkopf ohne grosse fette Einheit, Titel so hoch wie das Symbol, Läufe-Taste überdeckt keinen Platz.
 - **0.5.1**: Hinweis «angepasst» ohne bleibendes «!», ZIP zum Teilen heisst `-share`.

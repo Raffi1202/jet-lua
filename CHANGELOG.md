@@ -4,6 +4,11 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.5.5 (2026-11-22)
+
+- Slots shortened above the RUNS button no longer overlap the row above after the view was moved below the header (the drawing cache of the old position was copied along).
+- Radio test X18RS (2026-11-22, 0.5.3/0.5.4, Jet stress files with 16 slots and 100 symbols): no «Max instructions», no Studio errors.
+
 ## 0.5.4 (2026-11-22)
 
 - «Unit already in the title» uses the common rule of all widgets (like Electric 0.7.4): before the unit start, space or bracket, after it end, space, bracket or «%». «Speed km/h» now matches, «Altitude max» does not match «m». Test: `test/titel-test.lua`.

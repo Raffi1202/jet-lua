@@ -14,7 +14,7 @@
 
 - A computer with FrSky Suite and a USB cable.
 
-- The file `Jet-0.5.4.zip`. It is inside `Jet-0.5.4-share.zip`. Unzip only the outer ZIP, not the inner one.
+- The file `Jet-0.5.5.zip`. It is inside `Jet-0.5.5-share.zip`. Unzip only the outer ZIP, not the inner one.
 
 ## 2. Install
 
@@ -26,7 +26,7 @@
 
 - Click **Lua library**, then **Install from local ZIP**.
 
-- Select `Jet-0.5.4.zip`. The Suite copies everything to the right place.
+- Select `Jet-0.5.5.zip`. The Suite copies everything to the right place.
 
 - Unplug the cable and restart the radio.
 
@@ -55,7 +55,7 @@ Without the Suite: connect the radio as «USB storage» and copy the folder `jet
 
 English: language in the menu or as the radio
 
-Jet version 0.5.4 · 21 Nov 2026
+Jet version 0.5.5 · 21 Nov 2026
 
 ---
 [← Home](../Home.md) | [Next →](Setup.md)

@@ -491,6 +491,9 @@ function M.anpassen(ansichten, W, H, kopf, kqFest)
     local oben = math.max(q.y, kq)
     local n = {}
     for k, v in pairs(q) do n[k] = v end
+    -- 0.5.5: Zwischenspeicher des Zeichnens (gekürzter Platz, Kopf-Kopie) gehören zur alten Lage: nicht mitnehmen
+    -- (sonst überlappt der um «Läufe» gekürzte Platz nach dem Verschieben unter die Kopfzeile die Reihe darüber)
+    n.kurzQ, n.rohK = nil, nil
     n.x = floor(q.x * fx + 0.5)
     n.y = floor(kz + (oben - kq) * fy + 0.5)
     n.b = math.min(floor(q.b * fx + 0.5), W - n.x)
