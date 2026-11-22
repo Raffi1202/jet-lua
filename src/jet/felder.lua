@@ -125,6 +125,8 @@ M.gruppen = {
     { "speedMA", "b", "Speed", true },
   } },
   { { "Anzeige", "Display" }, {
+    -- 0.5.6 (Wunsch User 22.11.): Symbole der Studio-Datei im Platzkopf an der Funke abschaltbar (Datendatei)
+    { "symbole", "b", { "Symbole anzeigen", "Show symbols" }, true },
     { "sprache", "w", "Sprache / Language", 0,
       { { { "wie der Sender", "as the radio" }, 0 }, { "Deutsch", 1 }, { "English", 2 } } },
   } },
@@ -167,7 +169,7 @@ M.folge = {
   "ansage", "warnAnsage", "wdh", "kraftStufen", "laufAns", "sgKraft", "sgZeit", "sgHoehe", "ton", "vibration",
   "t1", "t2", "t3", "t4", "f1", "f2", "f3", "f4", "f5", "f6", "maxRpm",
   "sprache",
-  "egtMA", "kraftMA", "ecuMA", "rxMA", "rssiMA", "hoeheMA", "speedMA",
+  "egtMA", "kraftMA", "ecuMA", "rxMA", "rssiMA", "hoeheMA", "speedMA", "symbole",
 }
 
 -- Speicherformat der Quellen im Widget-Speicher: Nummer -> Zahl der Quellen in diesem Format.
@@ -201,7 +203,7 @@ function M.studioEinstellung(name)
       local gname = type(g[1]) == "table" and g[1][1] or g[1]
       if gname ~= "Sensoren" and gname ~= "Felder" and gname:sub(1, 10) ~= "Grenzwerte" and gname:sub(1, 5) ~= "Alarm" then
         for _, f in ipairs(g[2]) do
-          if f[2] ~= "q" then STUDIO_GRUPPE[f[1]] = true end
+          if f[2] ~= "q" and f[1] ~= "symbole" then STUDIO_GRUPPE[f[1]] = true end   -- «symbole» nur an der Funke
         end
       end
     end

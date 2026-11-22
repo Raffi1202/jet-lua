@@ -46,7 +46,11 @@ local MAX_ANSICHTEN = 2
 local MAX_PLAETZE = 16
 local MAX_DATEI = 4096       -- Byte je Symboldatei (Abschnitt 4)
 local ORDNER = "SCRIPTS:/studio/symbole/"
-local PX = { [24] = true, [32] = true, [48] = true, [64] = true }
+local PX = { [12] = true, [16] = true, [24] = true, [32] = true, [48] = true, [64] = true }
+-- Platzkopf (22.11.2026, Entscheid User «Symbole gleich gross wie der Text»): Ethos 26.2 skaliert Masken nicht
+-- (drawMask übergeht Breite/Höhe, gemessen). Darum die Stufen 12 und 16 px; im Kopf gilt die grösste vorhandene Stufe,
+-- die nicht höher ist als die Titelschrift, sonst die kleinste vorhandene (alte Dateien ohne 12/16: bleibt 24).
+local STUFEN = { 12, 16, 24, 32, 48, 64 }
 local KENNUNG = "\137PNG\r\n\26\n\0\0\0\13IHDR"         -- Byte 1–16: PNG-Kennung, Länge 13, IHDR
 local ENDE = "\0\0\0\0IEND\174\66\96\130"                -- letzte 12 Byte jeder vollständigen PNG
 local ARTEN = { symbol = true, text = true, linie = true, rahmen = true }
@@ -141,6 +145,18 @@ local function pruefeListe()
         anzahl = anzahl + 1
         masken[k] = { k = kanteVon(e.px), p = ORDNER .. k .. ".png" }
         laden[#laden + 1] = k
+      end
+    end
+    -- 0.7.5: kleine Stufen 12 und 16 px stehen nicht in der Liste (Grenze 20, alte Luas lesen die Datei unverändert).
+    -- Lua-Studio überträgt name_12.png und name_16.png zu jedem Symbol: per Dateiname nachladen, je einmal; fehlt eine
+    -- oder ist sie ungültig, still weglassen (dann gilt die nächstgrössere Stufe).
+    if k then
+      for _, s in ipairs({ 12, 16 }) do
+        local kk = e.name .. "_" .. s
+        if not masken[kk] then
+          masken[kk] = { k = kanteVon(s), p = ORDNER .. kk .. ".png", klein = true }
+          laden[#laden + 1] = kk
+        end
       end
     end
   end
@@ -272,7 +288,8 @@ local function ladeDateien()
       local ok, m = pcall(lcd.loadMask, e.p)
       if ok and m ~= nil then e.m = m geladen = geladen + 1 else grund = "loadMask fehlgeschlagen" end
     end
-    if grund then fehlend = fehlend + 1 meldung(e.p .. ": " .. grund .. ", kein Symbol") end
+    if grund and e.klein then masken[laden[pos]] = nil   -- kleine Stufe fehlt: still, nächstgrössere gilt
+    elseif grund then fehlend = fehlend + 1 meldung(e.p .. ": " .. grund .. ", kein Symbol") end
     pos, n = pos + 1, n + 1
   end
   return pos > #laden
@@ -302,9 +319,16 @@ function S.schritt()
   return fertig
 end
 
+local neueInfos = 0           -- Platzköpfe, die in diesem paint zum ersten Mal ausgewählt werden (Befehlsgrenze)
+local JE_BILD_INFO = 4
+local ohneSymbole = false     -- Schalter «Symbole anzeigen» des Luas (S.symbole), Standard: Symbole an
+
 function S.bildAnfang()
-  ersteImBild, wartet = 0, false
+  ersteImBild, wartet, neueInfos = 0, false, 0
 end
+
+-- Schalter des Luas (Menü «Symbole anzeigen»): false = im Platzkopf kein Symbol, nur der Titel
+function S.symbole(an) ohneSymbole = an == false end
 
 -- Maske zeichnen (ohne pcall, der Aufrufer schützt), höchstens JE_BILD zum ersten Mal je paint; true = gezeichnet
 local function zeichne(e, x, y)
@@ -332,22 +356,47 @@ function S.einheitFett(text, x, y, farbe, kante)
 end
 
 -- Platz einmal auswerten und merken: [p] = { e = Maske oder false, z = einheitZeigen }
-local function platzInfo(p)
+local function platzInfo(p, hoch)
   local zeigen = p.einheitZeigen
   if zeigen ~= false and zeigen ~= "fett" then zeigen = true end
   local px = (ganz(p.symbolPx) and PX[p.symbolPx]) and p.symbolPx or 24
   local k = p.symbol ~= nil and schluessel(p.symbol, px) or nil
-  local info = { e = k and masken[k] or false, z = zeigen }
-  if phase ~= 1 then plaetze[p] = info end   -- erst merken, wenn die Liste symbole geprüft ist
+  local e = k and masken[k] or false
+  -- Platzkopf: Stufe passend zur Titelschrift (Höhe hoch in Pixeln). Erst wenn die Liste symbole geprüft ist
+  -- (vorher wird nichts gemerkt und in jedem paint neu gesucht: Befehlsgrenze).
+  if p.symbol ~= nil and hoch and phase ~= 1 then
+    local best, klein = nil, nil
+    local gut = schluessel(p.symbol, 24) ~= nil         -- Name einmal prüfen, dann nur noch nachschlagen
+    for _, s in ipairs(STUFEN) do
+      local m = gut and masken[p.symbol .. "_" .. s]
+      if m and m.m then                           -- nur geladene Masken (eine fehlende _12/_16 fällt später weg)
+        klein = klein or m
+        if m.k <= hoch then best = m end
+      end
+    end
+    e = best or klein or e
+  end
+  local info = { e = e, z = zeigen, h = hoch }
+  -- merken erst, wenn alles geladen ist (phase 0); vorher kann eine gewählte Stufe noch wegfallen (Befund Jet 22.11.)
+  if phase == 0 or (phase ~= 1 and not hoch) then plaetze[p] = info end   -- erst merken, wenn die Liste symbole geprüft ist
   return info
 end
 
-local function platzRoh(p, x, y, farbe)
-  local info = plaetze[p] or platzInfo(p)
+local function platzRoh(p, x, y, farbe, hoch, ty)
+  local info = plaetze[p]
+  if info == nil or info.h ~= hoch then
+    if neueInfos >= JE_BILD_INFO then wartet = true return 0, p.einheitZeigen ~= false and p.einheitZeigen ~= "fett" end
+    neueInfos = neueInfos + 1
+    info = platzInfo(p, hoch)
+  end
   local e, ein, kante = info.e, 0, nil
+  if ohneSymbole then e = nil end
   if e and e.m then
     lcd.color(farbe)
-    if zeichne(e, x + rand, y + rand) then kante = e.k ein = rand + kante + rand end
+    -- mit Titelzeile (ty = deren Oberkante): Symbol mittig auf dieser Zeile, sonst wie bisher oben links
+    -- grösser als die Zeile (alte Datei ohne 12/16 px): oben links im Platz wie bisher, nie über den Rand
+    local sy = (ty and hoch and e.k <= hoch) and (ty + (hoch - e.k) // 2) or (y + rand)
+    if zeichne(e, x + rand, sy) then kante = e.k ein = rand + kante + rand end
   end
   if info.z == "fett" then
     local t = p._einheit
@@ -359,9 +408,9 @@ local function platzRoh(p, x, y, farbe)
   return ein, info.z == true
 end
 
-function S.platz(p, x, y, farbe)
+function S.platz(p, x, y, farbe, hoch, ty)
   if not daten or type(p) ~= "table" then return 0, true end
-  local ok, ein, amWert = pcall(platzRoh, p, x, y, farbe)
+  local ok, ein, amWert = pcall(platzRoh, p, x, y, farbe, hoch, ty)
   -- Fehler: Einheit nur dann neben den Wert, wenn der Platz das so will (direkt aus p, unabhängig von der Prüfphase)
   if not ok then return 0, p.einheitZeigen ~= false and p.einheitZeigen ~= "fett" end
   return ein, amWert

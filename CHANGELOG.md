@@ -4,6 +4,16 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.5.6 (2026-11-22)
+
+Symbols as high as the text (decision from the radio test):
+- Titles have the normal title size again, with or without a symbol.
+- The slot header takes the largest symbol size up to the title height (12, 16 or 24 px; Lua-Studio 0.10.6 adds 12/16 px files), centred on the title line; without 12/16 px files it stays at 24 px.
+- New menu line «Show symbols» (on by default, stored in the model data file, not settable by Studio files).
+- Reference `studio_symbole.lua` from Electric 0.7.6 (f755472), including the fix for symbols that disappeared when a 12/16 px file was missing.
+- Unit rule and shortening at the RUNS button unchanged.
+- Instruction count (Mac), p12_voll 800×480: peak while loading symbols 15 493, steady state after loading 13 643. Radio test pending.
+
 ## 0.5.5 (2026-11-22)
 
 - Slots shortened above the RUNS button no longer overlap the row above after the view was moved below the header (the drawing cache of the old position was copied along).

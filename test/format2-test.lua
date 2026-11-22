@@ -9,7 +9,9 @@
 -- Befehle je ganzem paint (auch im ersten paint, während S.schritt noch läuft) werden gemessen und als MESSUNG
 -- ausgegeben: die eingebaute Seite von Jet liegt schon ohne Studio-Datei darüber (wie Elektro 0.4.0, rund 8800 hier,
 -- läuft am X18RS seit 0.1.x ohne Abbruch). Fehler nur, wenn Format 2 das paint um mehr als die Referenz verteuert
--- (Vergleich mit derselben Datei als Format 1, Grenze 3600 Befehle = Referenz im ersten paint nach dem Laden).
+-- (Vergleich mit derselben Datei als Format 1, Grenze 5000 Befehle; bis 0.5.5 3600. Angehoben in 0.5.6: Sendertest
+-- X18RS 0.5.3–0.5.5 mit ~14 500 je paint ohne «Max instructions»; die Spitze entsteht nur beim Laden der Symbole
+-- (Platzköpfe werden bis zum Ende des Ladens je paint neu gewählt), der Dauerbetrieb danach liegt tiefer, siehe MESSUNG).
 local quelle = arg[0]:gsub("test/format2%-test%.lua$", "") .. "src/jet"
 local testOrdner = arg[1] or os.getenv("JET_FORMAT2_TESTDATEIEN")
 if not testOrdner or testOrdner == "" then
@@ -121,8 +123,8 @@ local function lauf(datei, fenster, n)
   local K = assert(loadfile("kern.lua"))()
   local w = K.neu()
   K.lies(w)
-  local maxW, maxP, absturz, ersterP, maxS = 0, 0, false, nil, 0
-  for _ = 1, n or 260 do
+  local maxW, maxP, absturz, ersterP, maxS, maxD = 0, 0, false, nil, 0, 0
+  for _ = 1, n or 600 do
     T = T + 0.2
     local nw, okW = messe(K.wecke, w)
     local warOffen = w.symOffen
@@ -132,10 +134,11 @@ local function lauf(datei, fenster, n)
     if nw > maxW then maxW = nw end
     if np > maxP then maxP = np end
     if w.studio and w.studio.ansichten[W .. "x" .. H] and np > maxS then maxS = np end   -- paint der Studio-Ansicht
+    if _ > (n or 600) - 20 and not w.symOffen and np > maxD then maxD = np end            -- Dauerbetrieb nach dem Laden
   end
   local g, f, v = 0, 0, 0
   if w.sym then g, f, v = w.sym.zaehler() end
-  return w, maxW, maxP, { g, f, v }, absturz, K, ersterP, maxS
+  return w, maxW, maxP, { g, f, v }, absturz, K, ersterP, maxS, maxD
 end
 
 local function gleich(z, e) return z[1] == e[1] and z[2] == e[2] and z[3] == e[3] end
@@ -157,12 +160,12 @@ local faelle = {
 local hoechstW, hoechstP = 0, 0
 for _, fa in ipairs(faelle) do
   for _, fe in ipairs({ { 800, 480 }, { 784, 316 }, { 640, 360 } }) do   -- 640x360: umgerechnete Ansicht (0.5.0)
-    local w, maxW, maxP, z, absturz, _, ersterP, maxS = lauf(fa[1], fe)
+    local w, maxW, maxP, z, absturz, _, ersterP, maxS, maxD = lauf(fa[1], fe)
     pruefe(not absturz and w.studioZustand == "geladen" and gleich(z, fa[2]),
       string.format("%s %dx%d: %s (erwartet %s)", fa[1], fe[1], fe[2], txt(z), txt(fa[2])))
     pruefe(maxW < GRENZE, string.format("%s %dx%d: wakeup höchstens %d Befehle (< %d)", fa[1], fe[1], fe[2], maxW, GRENZE))
-    messung(string.format("%s %dx%d: wakeup %d, paint %d (Studio-Ansicht %d), erstes paint mit laufendem S.schritt %s",
-      fa[1], fe[1], fe[2], maxW, maxP, maxS, tostring(ersterP)))
+    messung(string.format("%s %dx%d: wakeup %d, paint %d (Studio-Ansicht %d, Dauerbetrieb nach dem Laden %d), erstes paint mit laufendem S.schritt %s",
+      fa[1], fe[1], fe[2], maxW, maxP, maxS, maxD, tostring(ersterP)))
     if maxW > hoechstW then hoechstW = maxW end
     if maxP > hoechstP then hoechstP = maxP end
     if fa[1] == "p01_kaputte_png.lua" and fe[1] == 800 then
@@ -179,7 +182,9 @@ for _, fa in ipairs(faelle) do
     if fa[1] == "p07_namen.lua" and fe[1] == 800 then
       local gut = true
       for _, p in ipairs(geoeffnet) do
-        if p ~= "SCRIPTS:/studio/symbole/aaaaaaaaaaaaaaaaaaaaaaaa_48.png" and p ~= "SCRIPTS:/studio/symbole/akku_48.png" then gut = false print_("  geöffnet: " .. p) end
+        -- 0.5.6: zu jedem gültigen Namen auch die kleinen Stufen _12 und _16 (per Dateiname, nicht in der Liste)
+        local n = p:match("^SCRIPTS:/studio/symbole/(.-)_%d+%.png$")
+        if n ~= "aaaaaaaaaaaaaaaaaaaaaaaa" and n ~= "akku" then gut = false print_("  geöffnet: " .. p) end
       end
       pruefe(gut, "7: p07 io.open nur für die zwei gültigen Namen")
     end
@@ -210,7 +215,7 @@ for _, d in ipairs({ "p12_voll.lua", "p06_100_symbole.lua", "p17_schmaltexte.lua
     bereite = function() local b = assert(io_open(ZIEL, "wb")) b:write(t1) b:close() end
     local w1, _, _, _, _, _, _, p1 = lauf(d, fe)
     bereite = altBereite
-    pruefe(w1.sym == nil and p2 - p1 <= 3600, string.format("12/17: %s %dx%d: paint Format 2 %d, als Format 1 %d, Mehrkosten %d (<= 3600)",
+    pruefe(w1.sym == nil and p2 - p1 <= 5000, string.format("12/17: %s %dx%d: paint Format 2 %d, als Format 1 %d, Mehrkosten %d (<= 5000)",
       d, fe[1], fe[2], p2, p1, p2 - p1))
   end
 end

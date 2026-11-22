@@ -129,10 +129,8 @@ local function zeichnePlatz(w, L, Z, q, ST, i)
     if d == "status" then
       if q.s == "status" then local _, f = statusTF(w, C) sf = f else sf = C.grau end
     end
-    ein, amWert = SY.platz(r, x0, y0, sf)
+    ein, amWert = SY.platz(r, x0, y0, sf, floor(th), y0 + pad)
     if not amWert or zeitOderStatus or (eh ~= "" and imTitel(titel, eh)) then eh = "" end
-    -- Symbol nie grösser als der Titeltext: Titel so hoch wie das Symbol (höchstens ein Drittel des Platzes)
-    if ein > 8 then th = min(ein - 8, max(th, h * 0.33)) end
   end
   local tx = max(pad, ein)                              -- Titel links: Abstand vom Rand des Platzes
   local tb = max(8, b - tx - pad)                       -- Titel links: verfügbare Breite (nie negativ)
@@ -237,6 +235,7 @@ function A.zeichne(w, L, Z, ans, ST)
   local SY = w.sym
   if SY then                                             -- Format 2: Schmuck nach dem Hintergrund, vor den Plätzen
     SY.bildAnfang()
+    if SY.symbole then SY.symbole(w.cfg.symbole ~= false) end   -- Schalter «Symbole anzeigen» (einmal je paint)
     if ans.roh then SY.deko(ans.roh, 0, 0, Z.C.titel, ans.sk) end
   end
   for i, q in ipairs(ans.plaetze) do
