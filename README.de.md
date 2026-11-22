@@ -26,7 +26,7 @@ Deutsch und Englisch.
 - **Sensoren** werden beim ersten Start automatisch zugewiesen. Die Werte von JetCat (0x5000–0x53FF), Xicoy und
   SportECU, für die Ethos keine Sensoren anlegt, liest Jet selbst aus der Telemetrie.
 - **Lua-Studio (neu in 0.2.0):** Eine Einstellungsdatei je Modell aus dem PC-Programm Lua-Studio belegt die Plätze
-  frei (Zahl, Ring, Balken, Verlauf oder Status, eigene Farben; ab 0.3.0 Format 2 mit Symbolen wie Turbine,
+  frei (Zahl, Ring, Balken, Verlauf oder Status, eigene Farben; ab 0.3.0 Format 2, Symbole ab 0.6.0 entfernt; früher Symbole wie Turbine,
   Tank, Pumpe, fetter Einheit und Schmuck) und setzt Einstellungen und Grenzwerte. Die
   Sicherheitslogik bleibt fest: Abschaltung mit Grund auch bei SF «aus», Grenzwert-Alarme auch bei SF «aus» (ab 0.6.0
   je Wert abwählbar: «Alarm auch bei Turbine aus»). Ohne
@@ -155,4 +155,4 @@ luac5.4 -p src/jet/*.lua
 ## Lizenz
 
 GPL-3.0, siehe [LICENSE](LICENSE). Das Modul `src/jet/studio_symbole.lua` stammt aus Lua-Studio (gleicher Autor, gleiche
-Lizenz). Die Test-Symbole in `test/studio/symbole/` beruhen teils auf Tabler Icons (MIT, © Paweł Kuna), Lizenztext dort.
+Lizenz; seit 0.6.0 zeichnet es nur noch Schmuck, keine Symbole). Die Test-Symbole in `test/studio/symbole/` (nur noch zur Prüfung, dass ältere Dateien laden) beruhen teils auf Tabler Icons (MIT, © Paweł Kuna), Lizenztext dort.

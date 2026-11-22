@@ -354,9 +354,7 @@ Find sensors (empty only), Version, Detected, Reassign turbine values (after the
 <h3>Lua-Studio (settings file per model)</h3>
 <p>With the PC program <b>Lua-Studio</b> you design the display per model: for each field you choose the value,
 the style (number, ring, horizontal or vertical bar, trend, status), title, range, colours and an extra line (MIN,
-MAX or Ø over the run). From version 0.3.0 (Studio format 2) there are symbols too (e.g. turbine, impeller, tank,
-pump, temperature, battery), a bold unit and decoration (lines, frames). The symbols are images in
-<code>scripts/studio/symbole/</code>; if one is missing, Jet shows the place without it and reports «symbols missing». Files in
+MAX or Ø over the run). From version 0.3.0 (Studio format 2) decorations are added (lines, frames, texts). Symbols and bold units existed from 0.3.0 to 0.5.6; since 0.6.0 they are removed. Files in
 the old format 1 still load. Settings and limits per model come on top. Lua-Studio creates the file
 <code>scripts/studio/modelname.jet.lua</code> on the SD card. The file name keeps only the letters A–Z and digits of
 the model name, everything else becomes <code>_</code> («Jet 1» becomes <code>Jet_1</code>); Lua-Studio works this out

@@ -20,7 +20,7 @@ runs. Display, menu and voice are in German and English.
 - **Alarm also with turbine off** (new in 0.6.0): per value, on by default. ECU error codes and shutdown reasons always come.
 - **Contradicting sources** (new in 0.6.0): a warning if the assigned sensor clearly differs from the ECU telemetry.
 - **Lua-Studio:** a settings file per model (`scripts/studio/<id>.jet.lua`) places values freely (number, ring, bar,
-  trend or status, symbols, own colours) and sets settings and limits. Without it Jet shows its built-in display.
+  trend or status, own colours; symbols were removed in 0.6.0) and sets settings and limits. Without it Jet shows its built-in display.
 
 **Status:** public pre-release (public beta). 0.6.0 is tested in the Ethos simulator (26.2.0); the transmitter test on
 the X18RS follows. Earlier versions passed radio tests on an X18RS with simulated JetCat telemetry. **Never tested with
@@ -64,4 +64,4 @@ Without them you can check the syntax: `luac5.4 -p src/jet/*.lua`.
 ## License
 
 GPL-3.0, see [LICENSE](LICENSE). The module `src/jet/studio_symbole.lua` comes from Lua-Studio (same author, same
-license). The test symbols in `test/studio/symbole/` are partly based on Tabler Icons (MIT, © Paweł Kuna), license text there.
+license; since 0.6.0 it only draws decorations, no symbols). The test symbols in `test/studio/symbole/` (only used to check that older files still load) are partly based on Tabler Icons (MIT, © Paweł Kuna), license text there.
