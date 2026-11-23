@@ -18,6 +18,11 @@ body:
     validations:
       required: true
   - type: input
+    id: receiver
+    attributes:
+      label: Receiver
+      description: e.g. Archer SR10+, TD R10 (2.4 GHz + 900 MHz), TW R6 (two 2.4 GHz bands)
+  - type: input
     id: version
     attributes:
       label: Jet version

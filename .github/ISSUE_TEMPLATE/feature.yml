@@ -13,3 +13,18 @@ body:
     id: why
     attributes:
       label: Why, and how would you use it?
+  - type: input
+    id: radio
+    attributes:
+      label: Radio
+      description: e.g. X18RS, X20S, Twin X Lite
+  - type: input
+    id: ethos
+    attributes:
+      label: Ethos version
+      description: e.g. 26.2.0 (System › Info)
+  - type: input
+    id: receiver
+    attributes:
+      label: Receiver
+      description: e.g. Archer SR10+, TD R10 (2.4 GHz + 900 MHz), TW R6 (two 2.4 GHz bands)
