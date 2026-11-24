@@ -63,7 +63,7 @@ Without them you can check the syntax: `luac5.4 -p src/jet/*.lua`.
 
 ## Support
 
-This project is free. If you would like to support the work, you can do so via PayPal: https://paypal.me/Raffi1202. Thank you!
+This project is free. If you would like to support the work, you can do so via PayPal: https://paypal.me/RaphaelHunziker. Thank you!
 
 ## License
 

@@ -154,7 +154,7 @@ luac5.4 -p src/jet/*.lua
 
 ## Unterstützen
 
-Dieses Projekt ist kostenlos. Wer die Arbeit unterstützen möchte, kann das über PayPal tun: https://paypal.me/Raffi1202. Vielen Dank!
+Dieses Projekt ist kostenlos. Wer die Arbeit unterstützen möchte, kann das über PayPal tun: https://paypal.me/RaphaelHunziker. Vielen Dank!
 
 ## Lizenz
 
