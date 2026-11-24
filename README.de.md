@@ -156,6 +156,8 @@ luac5.4 -p src/jet/*.lua
 
 Dieses Projekt ist kostenlos. Wer die Arbeit unterstützen möchte, kann das über PayPal tun: https://paypal.me/RaphaelHunziker. Vielen Dank!
 
+[![Spenden mit PayPal](https://img.shields.io/badge/PayPal-Spenden-003087?logo=paypal&logoColor=white)](https://paypal.me/RaphaelHunziker)
+
 ## Lizenz
 
 GPL-3.0, siehe [LICENSE](LICENSE). Das Modul `src/jet/studio_symbole.lua` stammt aus Lua-Studio (gleicher Autor, gleiche

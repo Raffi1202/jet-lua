@@ -65,6 +65,8 @@ Without them you can check the syntax: `luac5.4 -p src/jet/*.lua`.
 
 This project is free. If you would like to support the work, you can do so via PayPal: https://paypal.me/RaphaelHunziker. Thank you!
 
+[![Donate with PayPal](https://img.shields.io/badge/PayPal-Donate-003087?logo=paypal&logoColor=white)](https://paypal.me/RaphaelHunziker)
+
 ## License
 
 GPL-3.0, see [LICENSE](LICENSE). The module `src/jet/studio_symbole.lua` comes from Lua-Studio (same author, same
