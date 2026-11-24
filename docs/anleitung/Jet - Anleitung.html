@@ -47,7 +47,7 @@
 <body>
 
 <h1>Jet</h1>
-<div class="unter">Anzeige für Turbinen · Anleitung · Version 0.7.0 · Stand 22.11.2026</div>
+<div class="unter">Anzeige für Turbinen · Anleitung · Version 0.7.1 · Stand 24.11.2026</div>
 
 <div class="bild schmal">
   <img src="../bilder-simulator/Jet - Sim 800x480 04 Normal.png" alt="Jet auf dem Sender">
@@ -80,7 +80,7 @@ sagt Alarme und den Kraftstoff an und führt eine Liste deiner Läufe.</p>
   <li>Am Modell die Sensoren schon gesucht (Modell › Telemetrie › Sensoren suchen).</li>
   <li>Die Grösse deines Tanks in ml, die Art und Zellenzahl deines ECU-Akkus.</li>
   <li>Einen Computer mit der FrSky Suite und ein USB-Kabel.</li>
-  <li>Die Datei <code>Jet-0.7.0.zip</code>. Sie liegt neben dieser Anleitung in <code>Jet-0.7.0-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
+  <li>Die Datei <code>Jet-0.7.1.zip</code>. Sie liegt neben dieser Anleitung in <code>Jet-0.7.1-share.zip</code>. Entpacke nur die äussere ZIP, die innere nicht.</li>
 </ul>
 
 <h2>2. Installieren</h2>
@@ -89,7 +89,7 @@ sagt Alarme und den Kraftstoff an und führt eine Liste deiner Läufe.</p>
   <li>Am Sender erscheint eine Auswahl. Wähle <b>Ethos Suite</b>.</li>
   <li>Öffne am Computer die <b>FrSky Suite</b>. Der Sender wird oben angezeigt.</li>
   <li>Klicke auf <b>Lua-Bibliothek</b>, dann auf <b>Von lokaler ZIP installieren</b>.</li>
-  <li>Wähle die Datei <code>Jet-0.7.0.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
+  <li>Wähle die Datei <code>Jet-0.7.1.zip</code>. Die Suite kopiert alles an den richtigen Ort.</li>
   <li>Ziehe das Kabel ab und starte den Sender neu.</li>
 </ol>
 <p class="klein">Ohne Suite: Sender als «USB-Speicher» anschliessen und den Ordner <code>jet</code> aus der ZIP in den
@@ -337,6 +337,7 @@ die Nummer wählen) und <b>Ganze Liste löschen</b>, jeweils mit Rückfrage.</p>
   <tr><td>Schalter 1 / Schalter 2</td><td>leer</td><td>Eigene Schalter, die in der Kopfzeile erscheinen, solange sie eingeschaltet sind.</td></tr>
   <tr><td>Schalter 1 Name / Schalter 2 Name</td><td>STABI / FAHRWERK</td><td>Höchstens 12 Zeichen: Buchstaben, Ziffern, Leerzeichen, Punkt, Bindestrich.</td></tr>
   <tr><td>Gaskanal</td><td>leer</td><td>Kanal des Gases, für das Feld «Gas %», wenn kein Gas-Sensor zugewiesen ist.</td></tr>
+  <tr><td>Gas umkehren</td><td>aus</td><td>Für «Gas Reverse» (Vollgas = Knüppel hinten): Jet zeigt 100 % − Kanal. Nur für den Gaskanal; «Gas %» von der ECU bleibt, wie die ECU es meldet. Ab 0.7.1.</td></tr>
   <tr><td rowspan="10">Ansagen</td><td>Alarme ansagen</td><td>ein</td><td>Aus: bei Alarm nur Ton und Anzeige.</td></tr>
   <tr><td>Warnung auch ansagen</td><td>aus</td><td>Ein: auch die orange Warnung wird angesagt.</td></tr>
   <tr><td>Alarm wiederholen alle</td><td>10 s</td><td>3 bis 300 s.</td></tr>
@@ -428,7 +429,7 @@ rechnet das selbst. Jet liest die Datei beim Laden des Modells.</p>
   <div><img src="../bilder-simulator/Jet - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): gekürzte Titel</div></div>
   <div><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="Englisch"><div class="t">Englisch: Sprache im Menü oder wie der Sender</div></div>
 </div>
-<p class="klein">Jet Version 0.7.0 · 22.11.2026</p>
+<p class="klein">Jet Version 0.7.1 · 24.11.2026</p>
 
 </body>
 </html>

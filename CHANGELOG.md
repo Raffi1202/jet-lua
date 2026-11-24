@@ -4,6 +4,11 @@ The version number is in `src/jet/main.lua` (`local VERSION`). It is the same in
 here. The top section appears as release note in the FrSky Suite. From 0.4.0 on the changelog is in English;
 **older entries in German**.
 
+## 0.7.1 (2026-11-24)
+
+- New setting «Reverse throttle» (group Switches, directly below «Throttle channel», off by default) for pilots who fly throttle reverse (full throttle = stick back). Jet then uses 100 % − channel for «Throttle %» everywhere (display, Studio value `gas_proz`). «Throttle %» from the ECU telemetry stays as the ECU reports it. Jet has no flight detection by throttle (run time follows RPM and status).
+- Stored in the model data file (key `gasInv`, Studio `gas_inv`), no change to the widget storage; updating from 0.7.0 keeps all settings, the new setting is off.
+
 ## 0.7.0 (2026-11-22)
 
 One layout for all models:

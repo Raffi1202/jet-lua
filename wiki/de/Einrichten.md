@@ -106,6 +106,7 @@ Menü öffnen: Modell › Bildschirme › den Bildschirm wählen › Widget anti
 | Schalter | Schalter 1 / Schalter 2 | leer | Eigene Schalter, die in der Kopfzeile erscheinen, solange sie eingeschaltet sind. |
 | Schalter | Schalter 1 Name / Schalter 2 Name | STABI / FAHRWERK | Höchstens 12 Zeichen: Buchstaben, Ziffern, Leerzeichen, Punkt, Bindestrich. |
 | Schalter | Gaskanal | leer | Kanal des Gases, für das Feld «Gas %», wenn kein Gas-Sensor zugewiesen ist. |
+| Schalter | Gas umkehren | aus | Für «Gas Reverse» (Vollgas = Knüppel hinten): Jet zeigt 100 % − Kanal. Nur für den Gaskanal; «Gas %» von der ECU bleibt, wie die ECU es meldet. Ab 0.7.1. |
 | Ansagen | Alarme ansagen | ein | Aus: bei Alarm nur Ton und Anzeige. |
 | Ansagen | Warnung auch ansagen | aus | Ein: auch die orange Warnung wird angesagt. |
 | Ansagen | Alarm wiederholen alle | 10 s | 3 bis 300 s. |

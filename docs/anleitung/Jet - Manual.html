@@ -47,7 +47,7 @@
 <body>
 
 <h1>Jet</h1>
-<div class="unter">Display for turbines · Manual · Version 0.7.0 · 22 Nov 2026</div>
+<div class="unter">Display for turbines · Manual · Version 0.7.1 · 24 Nov 2026</div>
 
 <div class="bild schmal"><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="Jet on the radio"></div>
 
@@ -78,7 +78,7 @@ a list of your runs. The pictures in this manual show the German display except 
   <li>The model's sensors already discovered (Model › Telemetry › Discover sensors).</li>
   <li>Your tank size in ml, the type and cell count of your ECU battery.</li>
   <li>A computer with FrSky Suite and a USB cable.</li>
-  <li>The file <code>Jet-0.7.0.zip</code>. It is inside <code>Jet-0.7.0-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
+  <li>The file <code>Jet-0.7.1.zip</code>. It is inside <code>Jet-0.7.1-share.zip</code>. Unzip only the outer ZIP, not the inner one.</li>
 </ul>
 
 <h2>2. Install</h2>
@@ -87,7 +87,7 @@ a list of your runs. The pictures in this manual show the German display except 
   <li>The radio shows a choice. Select <b>Ethos Suite</b>.</li>
   <li>Open <b>FrSky Suite</b> on the computer. The radio appears at the top.</li>
   <li>Click <b>Lua library</b>, then <b>Install from local ZIP</b>.</li>
-  <li>Select <code>Jet-0.7.0.zip</code>. The Suite copies everything to the right place.</li>
+  <li>Select <code>Jet-0.7.1.zip</code>. The Suite copies everything to the right place.</li>
   <li>Unplug the cable and restart the radio.</li>
 </ol>
 <p class="klein">Without the Suite: connect the radio as «USB storage» and copy the folder <code>jet</code> from the ZIP into
@@ -333,6 +333,7 @@ number at «Run no. to delete») and <b>Delete whole list</b>, each with a confi
   <tr><td>Switch 1 / Switch 2</td><td>empty</td><td>Your own switches, shown in the header while they are on.</td></tr>
   <tr><td>Switch 1 name / Switch 2 name</td><td>STABI / FAHRWERK</td><td>At most 12 characters: letters, digits, space, dot, hyphen.</td></tr>
   <tr><td>Throttle channel</td><td>empty</td><td>Throttle channel, for the field «Throttle %» when no throttle sensor is assigned.</td></tr>
+  <tr><td>Reverse throttle</td><td>off</td><td>For «throttle reverse» (full throttle = stick back): Jet shows 100 % − channel. Only the throttle channel; «Throttle %» from the ECU stays as the ECU reports it. From 0.7.1.</td></tr>
   <tr><td rowspan="10">Announcements</td><td>Announce alarms</td><td>on</td><td>Off: on alarm only tone and display.</td></tr>
   <tr><td>Announce warnings too</td><td>off</td><td>On: the orange warning is announced as well.</td></tr>
   <tr><td>Repeat alarm every</td><td>10 s</td><td>3 to 300 s.</td></tr>
@@ -425,7 +426,7 @@ itself. Jet reads the file when the model is loaded.</p>
   <div><img src="../bilder-simulator/Jet - Sim 480x320 06 Alarm.png" alt="480x320"><div class="t">480 × 320 (X18): shortened titles</div></div>
   <div><img src="../bilder-simulator/Jet - Sim 800x480 12 Englisch.png" alt="English"><div class="t">English: language in the menu or as the radio</div></div>
 </div>
-<p class="klein">Jet version 0.7.0 · 22 Nov 2026</p>
+<p class="klein">Jet version 0.7.1 · 24 Nov 2026</p>
 
 </body>
 </html>

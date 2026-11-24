@@ -4,7 +4,8 @@
 
 The full list is in [CHANGELOG.md](../../CHANGELOG.md) (German). Releases: [GitHub Releases](https://github.com/Raffi1202/jet-lua/releases).
 
-- **0.7.0** (pre-release): one layout for all models (`Standard.jet.lua`).
+- **0.7.1** (pre-release): setting «Reverse throttle» for throttle reverse (full throttle = stick back).
+- **0.7.0**: one layout for all models (`Standard.jet.lua`).
 - **0.6.1**: leftover symbol code removed, common reference file.
 - **0.6.0**: symbols removed completely (less memory and processing time).
 - **0.5.6**: symbols as high as the title text, menu line «Show symbols».

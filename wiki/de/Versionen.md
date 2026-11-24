@@ -4,7 +4,8 @@
 
 Die ganze Liste steht in [CHANGELOG.md](../../CHANGELOG.md). Releases: [GitHub Releases](https://github.com/Raffi1202/jet-lua/releases).
 
-- **0.7.0** (Vorabversion): ein Layout für alle Modelle (`Standard.jet.lua`).
+- **0.7.1** (Vorabversion): Einstellung «Gas umkehren» für Gas Reverse (Vollgas = Knüppel hinten).
+- **0.7.0**: ein Layout für alle Modelle (`Standard.jet.lua`).
 - **0.6.1**: restlicher Symbol-Code entfernt, einheitliche Referenzdatei.
 - **0.6.0**: Symbole ganz entfernt (weniger Speicher und Rechenzeit).
 - **0.5.6**: Symbole so hoch wie der Titeltext, Menüzeile «Symbole anzeigen».

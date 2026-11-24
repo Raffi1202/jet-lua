@@ -106,6 +106,7 @@ Open the menu: Model › Screens › select the screen › tap the widget. Every
 | Switches | Switch 1 / Switch 2 | empty | Your own switches, shown in the header while they are on. |
 | Switches | Switch 1 name / Switch 2 name | STABI / FAHRWERK | At most 12 characters: letters, digits, space, dot, hyphen. |
 | Switches | Throttle channel | empty | Throttle channel, for the field «Throttle %» when no throttle sensor is assigned. |
+| Switches | Reverse throttle | off | For «throttle reverse» (full throttle = stick back): Jet shows 100 % − channel. Only the throttle channel; «Throttle %» from the ECU stays as the ECU reports it. From 0.7.1. |
 | Announcements | Announce alarms | on | Off: on alarm only tone and display. |
 | Announcements | Announce warnings too | off | On: the orange warning is announced as well. |
 | Announcements | Repeat alarm every | 10 s | 3 to 300 s. |

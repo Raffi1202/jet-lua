@@ -485,6 +485,8 @@ local function lesen(w, now, dt)
   v.welle, v.strom, v.gasS, v.rssi, v.rx = s(c.welle), s(c.strom), s(c.gasQ), s(c.rssi), s(c.rx)
   v.aus, v.ansageSw, v.sw1, v.sw2 = aktiv(c.swAus), aktiv(c.swAnsage), aktiv(c.sw1), aktiv(c.sw2)
   v.gasP = prozent(c.gas)
+  -- «Gas umkehren» (Gas Reverse): nur der Gaskanal; Gas % aus der ECU-Telemetrie (gasQ) kommt schon richtig
+  if v.gasP and c.gasInv then v.gasP = 100 - v.gasP end
   v.sender = zahl(w.qSender)
   -- Frische Rahmenwerte (JetCat, Xicoy, SportECU) gelten vor zugewiesenen Sensoren. Zeigt ein zugewiesener
   -- Sensor dabei deutlich anderes (z. B. Rahmen 500C gegen Temperatursensor 0400), wird das als Warnung angezeigt

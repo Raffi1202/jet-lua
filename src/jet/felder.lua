@@ -86,6 +86,8 @@ M.gruppen = {
     { "sw2", "q", { "Schalter 2", "Switch 2" } },
     { "sw2Name", "t", { "Schalter 2 Name", "Switch 2 name" }, "FAHRWERK" },
     { "gas", "q", { "Gaskanal", "Throttle channel" } },
+    -- 0.7.1: Gas Reverse (Vollgas = Knüppel hinten): Gas % = 100 − Gas % des Kanals (Werk aus)
+    { "gasInv", "b", { "Gas umkehren", "Reverse throttle" }, false },
   } },
   { { "Ansagen", "Announcements" }, {
     { "ansage", "b", { "Alarme ansagen", "Announce alarms" }, true },
@@ -167,7 +169,7 @@ M.folge = {
   "ansage", "warnAnsage", "wdh", "kraftStufen", "laufAns", "sgKraft", "sgZeit", "sgHoehe", "ton", "vibration",
   "t1", "t2", "t3", "t4", "f1", "f2", "f3", "f4", "f5", "f6", "maxRpm",
   "sprache",
-  "egtMA", "kraftMA", "ecuMA", "rxMA", "rssiMA", "hoeheMA", "speedMA",
+  "egtMA", "kraftMA", "ecuMA", "rxMA", "rssiMA", "hoeheMA", "speedMA", "gasInv",
 }
 
 -- Speicherformat der Quellen im Widget-Speicher: Nummer -> Zahl der Quellen in diesem Format.
