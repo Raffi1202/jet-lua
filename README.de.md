@@ -2,6 +2,10 @@
 
 [English](README.md) · **Deutsch** · Dokumentation: [Wiki (Deutsch)](wiki/de/Installation.md) · [Wiki (English)](wiki/en/Installation.md)
 
+Dieses Projekt ist Open Source und kostenlos. Wenn es dir gefällt, kannst du es mit einer Spende unterstützen:
+
+<a href="https://paypal.me/RaphaelHunziker"><img src=".github/paypal-spenden.png" alt="Spenden mit PayPal" width="200"></a>
+
 > **Am PC einrichten mit [Lua-Studio](https://github.com/Raffi1202/lua-studio)**: Bildschirm einteilen, Werte und Alarme wählen, auf die Funke übertragen.
 
 Ethos-Widget für Jets mit Turbine auf FrSky-Sendern mit Farbdisplay. Es zeigt auf einem Bildschirm Drehzahl,
@@ -151,12 +155,6 @@ luac5.4 -p src/jet/*.lua
 | [Glider](https://github.com/Raffi1202/glider-lua) | Ethos-Widget für Segler (Vario, Thermik) |
 | [Gas Engine ECU / Carb](https://github.com/Raffi1202/gas-engine-lua) | Ethos-Widgets für Verbrennungsmotoren |
 | [Lua-Studio](https://github.com/Raffi1202/lua-studio) | PC-Programm zum Einrichten der Widgets (Mac/Windows) |
-
-## Unterstützen
-
-Dieses Projekt ist kostenlos. Wer die Arbeit unterstützen möchte, kann das über PayPal tun: https://paypal.me/RaphaelHunziker. Vielen Dank!
-
-[![Spenden mit PayPal](https://img.shields.io/badge/PayPal-Spenden-003087?logo=paypal&logoColor=white)](https://paypal.me/RaphaelHunziker)
 
 ## Lizenz
 
